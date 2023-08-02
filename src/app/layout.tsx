@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { cookies } from "next/headers";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -20,16 +21,17 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const theme = cookies().get("theme")?.value ?? "";
   return (
-    <ClerkProvider>
-      <html lang="en" className={inter.variable}>
-        <body className="flex min-h-screen flex-col bg-neutral-900 text-neutral-50">
-          <Header />
-          <main className="mx-auto h-full max-w-[90rem] sm:px-6 lg:px-8">
+    <ClerkProvider appearance={{ elements: { colorBackground: "bg-black" } }}>
+      <html lang="en" className={inter.variable + " " + theme}>
+        <body className="scroll flex min-h-screen flex-col bg-zinc-50 bg-scroll text-zinc-950 scrollbar-thin dark:bg-zinc-950 dark:text-zinc-50">
+          <Header theme={theme} />
+          <main className="flex h-full flex-grow items-center justify-center scrollbar sm:px-6 lg:px-8">
             {children}
           </main>
-          <footer className="mt-auto border-t border-neutral-700/50 bg-neutral-950 py-10">
-            <div className="mx-auto flex h-full max-w-[90rem] items-center justify-center sm:px-6 lg:px-8">
+          <footer className="mt-auto w-full max-w-[95rem] self-center border-t border-zinc-200 py-4 dark:border-zinc-800">
+            <div className="mx-auto flex h-full w-full items-center justify-center sm:px-6 lg:px-8">
               © 2023 Buy Stuff Inc. All rights reserved.
             </div>
           </footer>

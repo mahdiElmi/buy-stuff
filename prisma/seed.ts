@@ -3,6 +3,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  // const clothing = await prisma.category.upsert({
+  //   where: { name: "clothing" },
+  //   update: {},
+  //   create: {
+  //     name: "clothing",
+  //     description: "any piece of clothing",
+  //   },
+  // });
   const vibrod = await prisma.vendor.upsert({
     where: {
       name: "Vibrod Prod tm",
@@ -17,6 +25,7 @@ async function main() {
     where: { id: "a" },
     update: {},
     create: {
+      id: "a",
       averageRating: 0,
       name: "Vibrat pro",
       description:

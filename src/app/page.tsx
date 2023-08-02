@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import Link from "next/link";
-import { prisma } from "@/db";
+import { prisma } from "@/lib/db";
 
 export default async function Home() {
   // const vendor = await prisma.vendor.findFirst({
@@ -19,7 +19,7 @@ export default async function Home() {
   //   });
   // }
   return (
-    <section className="flex h-screen flex-col items-center justify-center gap-5 bg-neutral-800">
+    <section className="flex h-screen flex-col items-center justify-center gap-5 ">
       <h1 className="w-fit text-8xl font-black underline decoration-red-500 decoration-8">
         BUY STUFF
       </h1>
@@ -33,7 +33,7 @@ export default async function Home() {
       </p>
       <Link
         href="/products"
-        className="rounded-sm bg-fuchsia-500 p-1 text-center text-3xl font-medium hover:invert"
+        className="rounded-sm bg-emerald-600 p-1 text-center text-3xl font-medium hover:invert"
       >
         START BUYING
       </Link>

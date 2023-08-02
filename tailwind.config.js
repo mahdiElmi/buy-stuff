@@ -2,6 +2,7 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 module.exports = {
+  darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
@@ -17,5 +18,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms"), require('@tailwindcss/container-queries'), require('tailwind-scrollbar')],
 };

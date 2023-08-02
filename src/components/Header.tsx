@@ -1,32 +1,45 @@
 import Link from "next/link";
 import { auth, clerkClient, UserButton } from "@clerk/nextjs";
+import ThemeToggle from "./ThemeToggle";
 
-function Header() {
+function Header({ theme }: { theme: string }) {
   return (
-    <header className="sticky top-0 border-b border-neutral-600 bg-black bg-opacity-50 py-1 backdrop-blur-lg ">
-      <div className="mx-auto flex max-w-[90rem] items-center justify-between sm:px-6 lg:px-8 ">
+    <header className="sticky top-0 z-50 bg-zinc-50 bg-opacity-50 px-3 backdrop-blur-lg dark:bg-zinc-950 xl:px-0 ">
+      <div className="mx-auto flex max-w-[95rem] items-center gap-5 border-b border-zinc-200 py-1 dark:border-zinc-800 ">
         <Link
           href="/"
-          className="h-min w-min break-words rounded-md p-[1px] text-4xl font-black leading-none hover:bg-neutral-500"
+          className="h-min w-min break-words rounded-sm p-[1px] text-3xl font-black leading-none transition-transform 
+          hover:shadow-white hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
         >
           BUY STUFF
         </Link>
         <Link
           href="/products"
-          className="h-min w-min break-words rounded-md p-[1px] text-4xl leading-none hover:bg-neutral-500"
+          className="h-min w-min rounded-sm p-[1px] text-2xl font-medium capitalize leading-none transition-transform 
+          hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
         >
-          Products
+          products
         </Link>
         <Link
           href="/about"
-          className="h-min w-min break-words rounded-md p-[1px] text-4xl leading-none hover:bg-neutral-500"
+          className="h-min w-min rounded-sm p-[1px] text-2xl font-medium capitalize leading-none transition-transform 
+          hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
         >
-          About
+          about
         </Link>
-        <div className="flex items-center space-x-5">
+        <Link
+          href="/blog"
+          className="h-min w-min rounded-sm p-[1px] text-2xl font-medium capitalize leading-none transition-transform 
+          hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
+        >
+          blog
+        </Link>
+        <div className="ms-auto flex items-center space-x-5">
+          <ThemeToggle theme={theme} />
           <Link
             href="/shopping-cart"
-            className="h-min w-min break-words rounded-md p-[1px] text-4xl leading-none hover:bg-neutral-500"
+            className="h-min w-min rounded-sm p-[1px] text-2xl font-medium leading-none transition-transform 
+            hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
           >
             <svg
               fill="none"
@@ -35,7 +48,7 @@ function Header() {
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
-              className="h-w-12 w-12"
+              className="h-8 w-8"
             >
               <path
                 strokeLinecap="round"
@@ -47,7 +60,7 @@ function Header() {
 
           {/* <Link
             href="/profile"
-            className="h-min w-min break-words rounded-md p-[1px] text-4xl leading-none hover:bg-neutral-500"
+            className="h-min w-min rounded-sm p-[1px] text-2xl font-medium leading-none hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
           >
             Profile
           </Link> */}
@@ -58,7 +71,7 @@ function Header() {
           ) : (
             <Link
               href="/sign-in"
-              className="h-min w-min break-words rounded-md p-[1px] text-4xl leading-none hover:bg-neutral-500"
+              className="h-min rounded-xl bg-rose-800 p-2 text-2xl font-medium leading-none text-zinc-50 hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
             >
               Sign In
             </Link>

@@ -1,9 +1,12 @@
-"use client";
 import BossStats from "@/components/BossStats";
 import Image from "next/image";
 import { Suspense } from "react";
 
 async function About() {
+  // const data = await fetch('https://fakestoreapi.com/products')
+  //         .then(res=>res.json())
+  //         .then(json=>console.log(json))
+  // console.log(data);
   return (
     <div className="mt-5">
       <h1 className="mb-4 text-center text-3xl font-bold">About</h1>
@@ -14,10 +17,9 @@ async function About() {
         had the audacity to try to tackle such a project and the rest is history
         as you know.
       </p>
-      <Suspense fallback={<>Loading Powerful Stats...</>}>
-        {/* @ts-expect-error Server Component */}
+      {/* <Suspense fallback={<>Loading Powerful Stats...</>}>
         <BossStats />
-      </Suspense>
+      </Suspense> */}
     </div>
   );
 }
