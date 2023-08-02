@@ -355,6 +355,5 @@ export default function Products() {
   //     </div>
   //   </div>
   // );
-  // @ts-expect-error Server Component
   return <ProductGrid />;
 }
