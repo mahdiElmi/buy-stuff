@@ -1,8 +1,20 @@
 import Link from "next/link";
-import { auth, clerkClient, UserButton } from "@clerk/nextjs";
-import ThemeToggle from "./ThemeToggle";
+import {
+  currentUser,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/nextjs";
 
-function Header({ theme }: { theme: string }) {
+import ThemeToggle from "./ThemeToggle";
+import Image from "next/image";
+import { Menu } from "@headlessui/react";
+import UserProfileButton from "./UserProfileButton";
+
+async function Header({ theme }: { theme: string }) {
+  const user = await currentUser();
+  console.log("3942358234958043958439058", user?.emailAddresses);
   return (
     <header className="sticky top-0 z-50 bg-zinc-50 bg-opacity-50 px-3 backdrop-blur-lg dark:bg-zinc-950 xl:px-0 ">
       <div className="mx-auto flex max-w-[95rem] items-center gap-5 border-b border-zinc-200 py-1 dark:border-zinc-800 ">
@@ -57,25 +69,32 @@ function Header({ theme }: { theme: string }) {
               />
             </svg>
           </Link>
-
-          {/* <Link
-            href="/profile"
-            className="h-min w-min rounded-sm p-[1px] text-2xl font-medium leading-none hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
-          >
-            Profile
-          </Link> */}
-          {auth().userId ? (
-            <div>
-              <UserButton afterSignOutUrl="/" />
-            </div>
-          ) : (
-            <Link
-              href="/sign-in"
-              className="h-min rounded-xl bg-rose-800 p-2 text-2xl font-medium leading-none text-zinc-50 hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
+          {/* <div className="bg-gray-500"> */}
+          <SignedIn>
+            {/* <Link
+              href="/dashboard"
+              className="h-min w-min rounded-sm p-[1px] text-2xl font-medium leading-none hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
             >
-              Sign In
-            </Link>
-          )}
+              Dashboard
+            </Link> */}
+            {/* <UserButton afterSignOutUrl="/" /> */}
+            <UserProfileButton
+              profileImageUrl={user!.imageUrl}
+              username={user!.firstName! + " " + user!.lastName!}
+              userEmail={user!.emailAddresses}
+            />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button
+                className="h-min w-max rounded-xl bg-gradient-to-bl from-rose-400 to-rose-800 p-2 text-2xl font-medium leading-none 
+              text-zinc-50 drop-shadow-[0px_0px_1px_#be123c] hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
+              >
+                Sign In
+              </button>
+            </SignInButton>
+          </SignedOut>
+          {/* </div> */}
         </div>
       </div>
     </header>

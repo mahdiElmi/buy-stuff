@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { cookies } from "next/headers";
 const inter = Inter({
   variable: "--font-inter",
@@ -23,7 +24,11 @@ export default function RootLayout({
 }) {
   const theme = cookies().get("theme")?.value ?? "";
   return (
-    <ClerkProvider appearance={{ elements: { colorBackground: "bg-black" } }}>
+    <ClerkProvider
+      appearance={{
+        baseTheme: theme === "dark" ? dark : undefined,
+      }}
+    >
       <html lang="en" className={inter.variable + " " + theme}>
         <body className="scroll flex min-h-screen flex-col bg-zinc-50 bg-scroll text-zinc-950 scrollbar-thin dark:bg-zinc-950 dark:text-zinc-50">
           <Header theme={theme} />

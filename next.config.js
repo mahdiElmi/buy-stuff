@@ -15,6 +15,10 @@ const nextConfig = {
         hostname: "uploadthing.com",
         pathname: "/f/**",
       },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+      },
     ],
   },
 };
