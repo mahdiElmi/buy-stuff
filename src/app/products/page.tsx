@@ -9,6 +9,7 @@ import {
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 import ProductGrid from "@/components/ProductGrid";
+import { prisma } from "@/lib/db";
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -65,6 +66,9 @@ const filters = [
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
+const products = await prisma.product.findMany({
+  take: 20,
+});
 
 export default function Products() {
   // const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -355,5 +359,5 @@ export default function Products() {
   //     </div>
   //   </div>
   // );
-  return <ProductGrid />;
+  return <ProductGrid products={products} />;
 }

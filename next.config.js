@@ -2,7 +2,6 @@
 const nextConfig = {
   experimental: {
     typedRoutes: true,
-    serverActions: true,
   },
   // webpack: (config) => {
   //   config.experiments = { ...config.experiments, topLevelAwait: true };
@@ -17,8 +16,9 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "img.clerk.com",
-      },
+        hostname: "avatars.githubusercontent.com",
+        pathname: "/u/**",
+      }
     ],
   },
 };

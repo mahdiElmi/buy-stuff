@@ -1,18 +1,3 @@
-import { authMiddleware } from "@clerk/nextjs";
-import { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+export { default } from "next-auth/middleware";
 
-export default authMiddleware({
-  publicRoutes: [
-    "/",
-    "/about",
-    "/products",
-    "/blog",
-    "/product",
-    "/product/(.*)",
-  ],
-});
-
-export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
-};
+export const config = { matcher: ["/dashboard", "/about"] };

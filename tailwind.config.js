@@ -10,7 +10,9 @@ module.exports = {
   ],
   theme: {
     extend: {
-      fontFamily: { sans: ["var(--font-inter)", ...fontFamily.sans] },
+      fontFamily: {
+        sans: ["var(--font-inter)", ...fontFamily.sans]
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -18,5 +20,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms"), require('@tailwindcss/container-queries'), require('tailwind-scrollbar')],
+  plugins: [
+    require("@tailwindcss/forms"),
+    require('@tailwindcss/container-queries'),
+    require('tailwind-scrollbar')
+  ],
 };

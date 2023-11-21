@@ -1,17 +1,25 @@
 "use server";
 import { prisma } from "@/lib/db";
 import ProductItem from "@/components/productItem";
+import { Product } from "@prisma/client";
 
-async function getProducts() {
-  const products = await prisma.product.findMany({
-    take: 20,
-  });
-  return products;
-}
+// async function getProducts() {
+//   const products = await prisma.product.findMany({
+//     take: 20,
+//   });
+//   return products;
+// }
 
-export default async function Products() {
-  const allProducts = await getProducts();
-  const productElements = allProducts.map((product) => {
+export default async function ProductGrid({
+  products,
+}: {
+  products: Product[];
+}) {
+  // const allProducts = await getProducts();
+  // const productElements = allProducts.map((product) => {
+  //   return <ProductItem product={product} key={product.id} />;
+  // });
+  const productElements = products.map((product) => {
     return <ProductItem product={product} key={product.id} />;
   });
   return (

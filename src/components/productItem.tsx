@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function ProductItem({ product }: { product: Product }) {
   return (
-    <div className="w-full @container/1">
+    <div className=" w-full rounded-md border-2 border-transparent @container/1 hover:border-black dark:hover:border-white">
       <Link href={`/product/${product.id}`}>
         <div
           key={product.id}

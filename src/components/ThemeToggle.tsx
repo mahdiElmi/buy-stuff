@@ -2,18 +2,18 @@
 import { Fragment, useState, useEffect } from "react";
 import { Listbox } from "@headlessui/react";
 // import { setThemeCookie } from "./themeAction";
-import cookieCutter from "@boiseitguru/cookie-cutter";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 function ThemeToggle({ theme }: { theme: string }) {
   const router = useRouter();
   const [themeSetting, setThemeSetting] = useState(
-    cookieCutter.get("theme") ? "system" : theme || "system",
+    Cookies.get("theme") ? "system" : theme || "system",
   );
 
   useEffect(() => {
-    const isSystem = cookieCutter.get("isSystem");
-    const currentTheme = cookieCutter.get("theme");
+    const isSystem = Cookies.get("isSystem");
+    const currentTheme = Cookies.get("theme");
     if (isSystem || !currentTheme) {
       let themeToSet: string;
       if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -27,17 +27,17 @@ function ThemeToggle({ theme }: { theme: string }) {
         document.documentElement.classList.add("light");
         themeToSet = "light";
       }
-      if (!isSystem) cookieCutter.set("isSystem", "true");
-      cookieCutter.set("theme", themeToSet);
+      if (!isSystem) Cookies.set("isSystem", "true");
+      Cookies.set("theme", themeToSet);
       if (currentTheme !== themeToSet) router.refresh();
     }
   }, []);
 
   function changeThemeSetting(selectedTheme: string) {
     if (themeSetting === selectedTheme) return;
-    console.log("changeThemeSetting happened");
+    // console.log("changeThemeSetting happened");
     let themeToSet = "";
-    const currentTheme = cookieCutter.get("theme");
+    const currentTheme = Cookies.get("theme");
 
     switch (selectedTheme) {
       case "light":
@@ -46,7 +46,7 @@ function ThemeToggle({ theme }: { theme: string }) {
         // setThemeCookie("light");
         setThemeSetting("light");
         themeToSet = "light";
-        cookieCutter.set("isSystem", "", { expires: new Date(0) });
+        Cookies.set("isSystem", "", { expires: new Date(0) });
         break;
 
       case "dark":
@@ -55,7 +55,7 @@ function ThemeToggle({ theme }: { theme: string }) {
         // setThemeCookie("dark");
         setThemeSetting("dark");
         themeToSet = "dark";
-        cookieCutter.set("isSystem", "", { expires: new Date(0) });
+        Cookies.set("isSystem", "", { expires: new Date(0) });
         break;
 
       case "system":
@@ -71,15 +71,15 @@ function ThemeToggle({ theme }: { theme: string }) {
           themeToSet = "light";
         }
         setThemeSetting("system");
-        cookieCutter.set("isSystem", "true");
+        Cookies.set("isSystem", "true");
         // deleteThemeCookie();
         // setThemeCookie("system");
         break;
     }
     if (themeToSet === "")
       console.error("this shouldn't be happening themeToSet was Empty!");
-    cookieCutter.set("theme", themeToSet);
-    console.log("set theme to ", themeToSet);
+    Cookies.set("theme", themeToSet);
+    // console.log("set theme to ", themeToSet);
     if (currentTheme !== themeToSet) router.refresh();
   }
 
@@ -89,26 +89,26 @@ function ThemeToggle({ theme }: { theme: string }) {
     <div className="relative">
       <Listbox value={themeSetting} onChange={changeThemeSetting}>
         <Listbox.Label className="sr-only">Theme</Listbox.Label>
-        <Listbox.Button type="button">
+        <Listbox.Button type="button" className="flex items-center">
           <span className="dark:hidden">
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="h-8 fill-yellow-500 drop-shadow-[0px_0px_15px_#eab308]  "
+                className="h-8 fill-black drop-shadow-[0px_0px_15px_#111]"
               >
                 <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
               </svg>
             </div>
           </span>
           <span className="hidden dark:inline">
-            <div className="relative drop-shadow-[0px_0px_25px_#3b82f6]">
+            <div className="relative ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="h-8 fill-blue-500 "
+                className="h-8 fill-white"
               >
                 <path
                   fillRule="evenodd"
@@ -120,7 +120,7 @@ function ThemeToggle({ theme }: { theme: string }) {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="absolute right-0 top-0 h-4 fill-blue-500 sm:h-4"
+                className="absolute right-0 top-0 h-4 fill-white sm:h-4"
               >
                 <path
                   fillRule="evenodd"

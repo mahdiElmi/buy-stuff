@@ -1,7 +1,6 @@
 "use server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
 const productSchema = z.object({
   name: z
     .string()
@@ -19,10 +18,10 @@ const productSchema = z.object({
     .pipe(z.number().min(1).finite()),
 });
 export async function addProduct(formData: FormData) {
-  const { userId } = auth();
-  if (!userId) {
-    throw new Error("You must be signed in to add a product");
-  }
+  // const { userId } = auth();
+  // if (!userId) {
+  //   throw new Error("You must be signed in to add a product");
+  // }
   const parsedFormData = productSchema.parse(
     Object.fromEntries(formData.entries()),
   );
