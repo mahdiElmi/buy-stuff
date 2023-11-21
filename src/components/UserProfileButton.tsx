@@ -148,8 +148,8 @@ function UserProfileButton() {
   return (
     <button
       onClick={() => signIn()}
-      className="h-min w-max rounded-xl bg-gradient-to-bl from-rose-400 to-rose-800 p-2 text-2xl font-medium leading-none 
-              text-zinc-50 drop-shadow-[0px_0px_1px_#be123c] hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
+      className="h-min w-max rounded-xl p-2 text-2xl font-medium leading-none 
+              text-zinc-950 dark:text-zinc-50 dark:hover:text-white "
     >
       Sign In
     </button>

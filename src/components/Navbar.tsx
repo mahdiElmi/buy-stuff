@@ -3,13 +3,14 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import UserProfileButton from "./UserProfileButton";
 import { usePathname } from "next/navigation";
+import SearchBar from "./SearchBar";
 
 function Navbar({ theme }: { theme: string }) {
   const pathname = usePathname();
   // console.log(pathname, pathname === "/blog" ? "yes" : "no");
   return (
     <nav className="sticky top-0 z-50 bg-zinc-50 bg-opacity-50 px-3 backdrop-blur-lg dark:bg-zinc-950 xl:px-0 ">
-      <div className="mx-auto flex max-w-[95rem] items-center gap-5 border-b border-zinc-200 py-1 dark:border-zinc-800 ">
+      <div className="mx-auto flex max-w-[95rem] flex-row items-center gap-5  border-zinc-200 py-1 dark:border-zinc-800 ">
         <Link
           href="/"
           className="h-min w-min break-words rounded-sm p-[1px] text-3xl font-black leading-none transition-transform "
@@ -43,12 +44,13 @@ function Navbar({ theme }: { theme: string }) {
         >
           blog
         </Link>
+        <SearchBar />
         <div className="ms-auto flex items-center space-x-5">
           <ThemeToggle theme={theme} />
           <Link
             href="/shopping-cart"
             className="h-min w-min rounded-sm p-[1px] text-2xl font-medium leading-none transition-transform 
-            hover:ring hover:ring-zinc-950 dark:hover:ring-zinc-50"
+            "
           >
             <svg
               fill="none"
