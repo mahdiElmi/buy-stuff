@@ -2,10 +2,10 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 function SearchBar() {
   return (
-    <div className="relative mx-auto flex w-1/2 flex-row justify-center">
+    <div className="relative mx-auto flex w-1/2 min-w-fit flex-row justify-center">
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
         <MagnifyingGlassIcon
-          className="h-5 w-5 text-zinc-400"
+          className="h-5 w-5 flex-shrink-0 text-zinc-400"
           aria-hidden="true"
         />
       </div>

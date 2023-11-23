@@ -1,12 +1,14 @@
-import BossStats from "@/components/BossStats";
-import Image from "next/image";
-import { Suspense } from "react";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/server/auth";
 
 async function About() {
   // const data = await fetch('https://fakestoreapi.com/products')
   //         .then(res=>res.json())
   //         .then(json=>console.log(json))
   // console.log(data);
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/api/auth/signin");
   return (
     <div className="mt-5">
       <h1 className="mb-4 text-center text-3xl font-bold">About</h1>

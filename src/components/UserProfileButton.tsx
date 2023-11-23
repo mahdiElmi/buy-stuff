@@ -8,16 +8,16 @@ import { signIn, signOut, useSession } from "next-auth/react";
 function UserProfileButton() {
   console.log("bruhhhhhhh", useSession());
   const { data: session } = useSession();
-  if (session) {
+  if (session && session.user) {
     const {
       name: username,
       email: userEmail,
       image: profileImageUrl,
-    } = session.user!; // TODO: maybe get rid of the exclamation mark?
+    } = session.user;
     return (
       <Menu as="div" className="relative inline-block text-left">
         <div>
-          <Menu.Button className="ring-zinc-30 rounded-full shadow-sm ring-1 ring-inset">
+          <Menu.Button className="ring-zinc-30 w-9 rounded-full shadow-sm ring-1 ring-inset">
             <Image
               className="rounded-full bg-zinc-500"
               src={profileImageUrl ? profileImageUrl : ""}

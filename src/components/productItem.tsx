@@ -23,7 +23,11 @@ export default function ProductItem({ product }: { product: Product }) {
           <div className="flex flex-col p-2">
             <div className="flex items-center justify-between">
               <h2 className="text-3xl font-bold">{product.name}</h2>
-              <span>{product.stock} in stock</span>
+              {product.stock < 5 && (
+                <span className="text-sm">
+                  <span>{product.stock}</span> left
+                </span>
+              )}
             </div>
             <p className="line-clamp-3 font-medium text-zinc-700 dark:text-zinc-300">
               {product.description}, Lorem, ipsum dolor sit amet consectetur
