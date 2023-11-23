@@ -44,7 +44,7 @@ async function main() {
     update: {},
     create: {
       email: "mahdi@gmail.com",
-      firstName: "Mahdi",
+      name: "Mahdi",
       lastName: "Elmi",
       reviews: {
         create: {
