@@ -16,8 +16,38 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "utfs.io",
+        pathname: "/f/**",
+      },
+      {
+        protocol: "http",
+        hostname: "www.gravatar.com",
+        pathname: "/avatar/**",
+      },
+      {
+        protocol: "https",
         hostname: "avatars.githubusercontent.com",
         pathname: "/u/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.dummyjson.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "loremflickr.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cloudflare-ipfs.com",
+        pathname: "/ipfs/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.imgur.com",
+        pathname: "/**",
       }
     ],
   },

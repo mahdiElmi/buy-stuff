@@ -1,40 +1,62 @@
 "use server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-const productSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .max(100, { message: "must be fewer than 100 characters long" }),
-  description: z.string().max(1000),
-  categories: z.string().optional(),
-  price: z
-    .string()
-    .transform((val) => parseInt(val))
-    .pipe(z.number().min(0).finite()),
-  quantity: z
-    .string()
-    .transform((val) => parseInt(val))
-    .pipe(z.number().min(1).finite()),
-});
-export async function addProduct(formData: FormData) {
-  // const { userId } = auth();
-  // if (!userId) {
-  //   throw new Error("You must be signed in to add a product");
-  // }
-  const parsedFormData = productSchema.parse(
-    Object.fromEntries(formData.entries()),
-  );
+import { productSchema } from "@/lib/zodSchemas";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/server/auth";
+import { redirect } from "next/navigation";
+import { Image } from "@prisma/client";
+type ProductFields = z.infer<typeof productSchema>;
 
-  console.log("🐸🐸🐸");
-  console.log(parsedFormData);
-  // prisma.product.create({
-  //   data: {
-  //     name: parsedFormData.name,
-  //     description: parsedFormData.description,
-  //     price: parsedFormData.price,
-  //     stock: parsedFormData.quantity,
+export async function addProduct(values: ProductFields) {
+  const validationResult = productSchema.safeParse(values);
 
-  //   },
-  // });
+  if (validationResult.success) {
+    const session = await getServerSession(authOptions);
+    if (session && session.user && session.user.email) {
+      const user = await prisma.user.findUnique({
+        where: {
+          email: session.user.email,
+        },
+        include: {
+          vendor: true,
+        },
+      });
+      const urls = values.imgUrls.map((imgUrl) => ({
+        url: imgUrl,
+      }));
+      if (user && user.vendor) {
+        const newProduct = await prisma.product.create({
+          data: {
+            name: values.name,
+            description: values.description,
+            price: values.price,
+            stock: values.stock,
+            images: {
+              createMany: {
+                data: urls,
+              },
+            },
+            vendor: {
+              connect: {
+                id: user.vendor.id,
+              },
+            },
+          },
+        });
+        redirect(`/product/${newProduct.id}`);
+      } else {
+        return {
+          success: false,
+          cause: "notVendor",
+        };
+      }
+    }
+  } else {
+    return {
+      success: false,
+      error: validationResult.error,
+      cause: "validation",
+    };
+  }
 }

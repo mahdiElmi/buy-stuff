@@ -24,6 +24,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -32,6 +33,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -45,16 +48,43 @@ model VerificationToken {
 model User {
   id                String             @id @default(cuid())
   name              String
+  firstName         String?
   lastName          String?
   email             String             @unique
   emailVerified     DateTime?
   createdAt         DateTime           @default(now())
-  image             String?
+  image             String             @default("http://www.gravatar.com/avatar/?d=mp") @db.VarChar(2048)
   reviews           Review[]
+  reviewVotes       Vote[]
   shippingAddresses ShippingAddress[]
   shoppingCartItem  ShoppingCartItem[]
   accounts          Account[]
   sessions          Session[]
+  vendor            Vendor?
+}
+
+model Vote {
+  // id       String  @id @default(cuid())
+  isVoteUp Boolean
+  user     User    @relation(fields: [userId], references: [id])
+  review   Review  @relation(fields: [reviewId], references: [id])
+  userId   String
+  reviewId String
+
+  @@id([userId, reviewId])
+  @@index([userId])
+  @@index([reviewId])
+}
+
+model Vendor {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String    @db.Text
+  imageURL    String?   @db.VarChar(2048)
+  createdAt   DateTime  @default(now())
+  products    Product[]
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @unique
 }
 
 model ShippingAddress {
@@ -71,6 +101,8 @@ model ShippingAddress {
   updatedAt   DateTime @updatedAt
   userId      String
   User        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 model Product {
@@ -78,16 +110,29 @@ model Product {
   name              String
   price             Float
   stock             Int
-  description       String
+  description       String             @db.Text
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
-  imageURL          String?
+  images            Image[]
   averageRating     Float              @default(0)
   vendorId          String
   categories        Category[]
   vendor            Vendor             @relation(fields: [vendorId], references: [id])
   reviews           Review[]
   shoppingCartItems ShoppingCartItem[]
+
+  @@index([vendorId])
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  width     Int?
+  height    Int?
+  url       String   @db.VarChar(2048)
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+
+  @@index([productId])
 }
 
 model ShoppingCartItem {
@@ -97,21 +142,15 @@ model ShoppingCartItem {
   userId    String
   product   Product @relation(fields: [productId], references: [id])
   user      User    @relation(fields: [userId], references: [id])
+
+  @@index([productId])
+  @@index([userId])
 }
 
 model Category {
   id          String    @id @unique @default(cuid())
-  name        String
-  description String?
-  products    Product[]
-}
-
-model Vendor {
-  id          String    @id @default(cuid())
   name        String    @unique
-  description String
-  createdAt   DateTime  @default(now())
-  imageURL    String?
+  description String?   @db.Text
   products    Product[]
 }
 
@@ -119,7 +158,7 @@ model Review {
   id          String   @id @default(cuid())
   title       String
   rating      Int
-  body        String
+  body        String   @db.Text
   upvoteCount Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -127,6 +166,10 @@ model Review {
   productId   String
   reviewedBy  User     @relation(fields: [userId], references: [id])
   reviewed    Product  @relation(fields: [productId], references: [id])
+  Vote        Vote[]
+
+  @@index([userId])
+  @@index([productId])
 }
 
 model CategoryToProduct {

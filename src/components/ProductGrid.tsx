@@ -1,7 +1,5 @@
-"use server";
-import { prisma } from "@/lib/db";
 import ProductItem from "@/components/productItem";
-import { Product } from "@prisma/client";
+import { ProductWithImages } from "@/lib/types";
 
 // async function getProducts() {
 //   const products = await prisma.product.findMany({
@@ -13,7 +11,7 @@ import { Product } from "@prisma/client";
 export default async function ProductGrid({
   products,
 }: {
-  products: Product[];
+  products: ProductWithImages[];
 }) {
   // const allProducts = await getProducts();
   // const productElements = allProducts.map((product) => {

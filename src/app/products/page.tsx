@@ -13,7 +13,7 @@ import { prisma } from "@/lib/db";
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
+  { name: "Best CustomRating", href: "#", current: false },
   { name: "Newest", href: "#", current: false },
   { name: "Price: Low to High", href: "#", current: false },
   { name: "Price: High to Low", href: "#", current: false },
@@ -63,11 +63,10 @@ const filters = [
   },
 ];
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
 const products = await prisma.product.findMany({
   take: 20,
+  orderBy: { createdAt: "asc" },
+  include: { images: true },
 });
 
 export default function Products() {
@@ -235,7 +234,7 @@ export default function Products() {
   //                         {({ active }) => (
   //                           <a
   //                             href={option.href}
-  //                             className={classNames(
+  //                             className={cn(
   //                               option.current
   //                                 ? "font-medium text-zinc-900 dark:text-zinc-50"
   //                                 : "dark: text-zinc-500 dark:text-zinc-400",

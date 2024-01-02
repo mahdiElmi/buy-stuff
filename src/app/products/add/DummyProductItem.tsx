@@ -1,16 +1,19 @@
 "use client";
+import { productSchema } from "@/lib/zodSchemas";
 import Image from "next/image";
-import { ProductData } from "./page";
-
+import { z } from "zod";
+// import { ProductData } from "./page";
+type ProductData = z.infer<typeof productSchema>;
 export default function DummyProductItem({
   product,
 }: {
   product: ProductData;
 }) {
   return (
-    <div className="w-full max-w-min @container/1">
+    <div className="w-full max-w-sm place-self-center @container/1">
+      <h2 className="py-2 text-2xl font-bold">Product Card Preview</h2>
       <div
-        className="flex w-fit flex-col overflow-hidden rounded-md border-zinc-300 bg-gradient-to-t from-zinc-300 from-20% to-white shadow-md 
+        className="flex w-full flex-col overflow-hidden rounded-md border-zinc-300 bg-gradient-to-t from-zinc-300 from-20% to-white shadow-md 
           drop-shadow-sm transition-transform duration-75 @5xl/1:p-6 dark:border-zinc-700 dark:from-zinc-700 dark:to-zinc-950"
       >
         {product.imgUrls.length > 0 ? (
@@ -22,7 +25,7 @@ export default function DummyProductItem({
             alt="product Image"
           />
         ) : (
-          <div className="h-[400px] w-[400px]  bg-gradient-to-tr from-zinc-400/50 to-zinc-600/50"></div>
+          <div className="aspect-square bg-gradient-to-tr from-zinc-400/50 to-zinc-600/50"></div>
         )}
         <div className="flex flex-col gap-4 p-2">
           <div className="flex items-center justify-between">
@@ -46,9 +49,16 @@ export default function DummyProductItem({
             </div>
           )}
           <div className="flex justify-between">
-            <span className="text-lg font-medium">{product.price} $</span>
+            {product.price === 0 ? (
+              <span className="text-lg font-medium">Free</span>
+            ) : (
+              <span className="text-xl font-extrabold tracking-tighter">
+                {product.price}
+                <span className="text-xs ">$</span>
+              </span>
+            )}
             <span className="text-lg font-medium">
-              <span className="font-semibold">{product.quantity}</span> in stock
+              <span className="font-semibold">{product.stock}</span> in stock
             </span>
           </div>
         </div>

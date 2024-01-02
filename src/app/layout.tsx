@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import { getServerSession } from "next-auth";
 import SessionProvider from "../components/SessionProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,12 +36,13 @@ export default async function RootLayout({
             <main className="flex h-full flex-grow items-center justify-center scrollbar sm:px-6 lg:px-8">
               {children}
             </main>
-            <footer className="mt-auto w-full max-w-[95rem] self-center border-t border-zinc-200 py-4 dark:border-zinc-800">
+            <footer className="mt-auto w-full max-w-8xl self-center border-t border-zinc-200 py-4 dark:border-zinc-800">
               <div className="mx-auto flex h-full w-full items-center justify-center sm:px-6 lg:px-8">
                 © 2023 Buy Stuff Inc. All rights reserved.
               </div>
             </footer>
           </SessionProvider>
+          <Toaster />
         </body>
       </html>
     </NextAuthProvider>

@@ -2,19 +2,10 @@
 import { Tab } from "@headlessui/react";
 import React from "react";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { Image as ImageType } from "@prisma/client";
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
-type Images = {
-  id: number;
-  name: string;
-  src: string;
-  alt: string;
-}[];
-
-export default function ImageGroup({ images }: { images: Images }) {
+export default function ImageGroup({ images }: { images: ImageType[] }) {
   return (
     <Tab.Group as="div" className="flex flex-col-reverse">
       {/* Image selector */}
@@ -27,16 +18,18 @@ export default function ImageGroup({ images }: { images: Images }) {
             >
               {({ selected }) => (
                 <>
-                  <span className="sr-only">{image.name}</span>
+                  {/* <span className="sr-only">{}</span> */}
                   <span className="absolute inset-0 overflow-hidden rounded-md">
                     <Image
-                      src={image.src}
+                      src={image.url}
+                      width={image.width || 200}
+                      height={image.height || 200}
                       alt=""
-                      className="h-full w-full object-cover object-center"
+                      className=" h-full w-full object-cover object-center"
                     />
                   </span>
                   <span
-                    className={classNames(
+                    className={cn(
                       selected ? "ring-indigo-500" : "ring-transparent",
                       "pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2",
                     )}
@@ -53,9 +46,11 @@ export default function ImageGroup({ images }: { images: Images }) {
         {images.map((image) => (
           <Tab.Panel key={image.id}>
             <Image
-              src={image.src}
-              alt={image.alt}
-              className="h-full w-full object-cover object-center sm:rounded-lg"
+              src={image.url}
+              width={image.width || 700}
+              height={image.height || 700}
+              alt=""
+              className="h-[600px] w-[600px] object-cover object-center sm:rounded-lg"
             />
           </Tab.Panel>
         ))}

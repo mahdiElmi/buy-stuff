@@ -16,8 +16,8 @@ async function About() {
         We here at BS believe not being able to Buy Stuff is BS 😉 so in 2023 we
         decided that it&apos;s enough. someone has to make a place for people to
         buy and sell STUFF and that&apos;s when our genius CEO, Mr. Mahdi Elmi
-        had the audacity to try to tackle such a project and the rest is history
-        as you know.
+        had the audacity to tackle such a project and the rest is history as you
+        know.
       </p>
       {/* <Suspense fallback={<>Loading Powerful Stats...</>}>
         <BossStats />

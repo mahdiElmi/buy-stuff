@@ -1,15 +1,11 @@
 "use client";
 // You need to import our styles for the button to look right. Best to import in the root /layout.tsx but this is fine
 import "@uploadthing/react/styles.css";
-
-import { UploadButton, UploadDropzone } from "@uploadthing/react";
-
-import { OurFileRouter } from "@/app/api/uploadthing/core";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { ProductData } from "@/app/products/add/page";
 import Image from "next/image";
 import { TrashIcon } from "@heroicons/react/24/solid";
-
+import { UploadButton } from "@/lib/uploadthing";
 export default function ImageUpload({
   setProductData,
   imgUrls,
@@ -23,11 +19,11 @@ export default function ImageUpload({
   ) {
     console.log("deleted: ", imgUrl.split("/f/")[1]);
   }
-  // const [imageUrls, setImageUrls] = useState<string[]>([]);
+  // const [images, setimages] = useState<string[]>([]);
   return (
     <main className="flex flex-col justify-center gap-5">
       <div className="rounded-lg bg-zinc-200 px-2 pb-2 dark:bg-zinc-900">
-        {/* <UploadButton<OurFileRouter>
+        {/* <UploadDropzone<OurFileRouter>
           endpoint="imageUploader"
           onClientUploadComplete={(res) => {
             // Do something with the response
@@ -36,25 +32,21 @@ export default function ImageUpload({
               ...oldProductData,
               imgUrls: [...oldProductData.imgUrls, res![0].fileUrl],
             }));
+            alert("Upload Completed");
+          }}
+          onUploadError={(error: Error) => {
+            alert(`ERROR! ${error.message}`);
+          }}
+        /> */}
+        <UploadButton
+          endpoint="imageUploader"
+          onClientUploadComplete={(res) => {
+            // Do something with the response
+            console.log("Files: ", res);
             alert("Upload Completed");
           }}
           onUploadError={(error: Error) => {
             // Do something with the error.
-            alert(`ERROR! ${error.message}`);
-          }}
-        /> */}
-        <UploadDropzone<OurFileRouter>
-          endpoint="imageUploader"
-          onClientUploadComplete={(res) => {
-            // Do something with the response
-            console.log("Files: ", res);
-            setProductData((oldProductData) => ({
-              ...oldProductData,
-              imgUrls: [...oldProductData.imgUrls, res![0].fileUrl],
-            }));
-            alert("Upload Completed");
-          }}
-          onUploadError={(error: Error) => {
             alert(`ERROR! ${error.message}`);
           }}
         />
