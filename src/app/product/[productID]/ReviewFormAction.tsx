@@ -4,12 +4,16 @@ import { z } from "zod";
 import { ReviewSchema } from "@/lib/zodSchemas";
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { checkAuth } from "@/lib/utils";
 type ReviewFields = z.infer<typeof ReviewSchema>;
 export default async function SubmitReview(
   values: ReviewFields,
   userId: string,
   productId: string,
 ) {
+  const result = await checkAuth(userId);
+  if (!result.success) return result;
+
   const validationResult = ReviewSchema.safeParse(values);
   if (validationResult.success) {
     const product = await prisma.product.findUnique({
@@ -18,7 +22,6 @@ export default async function SubmitReview(
     });
     if (product?.vendor.id === userId)
       return { success: false, cause: "Reviewer is vendor" };
-    // #TODO   does it even throw?
     try {
       await prisma.review.create({
         data: {

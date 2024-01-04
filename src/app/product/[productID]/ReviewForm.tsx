@@ -21,6 +21,7 @@ import SubmitReview from "./ReviewFormAction";
 import { LucideRotateCw } from "lucide-react";
 import CustomRating from "@/components/ui/CustomRating";
 import { toast } from "sonner";
+import Link from "next/link";
 
 function ReviewForm({ user, productId }: { user: User; productId: string }) {
   const [isPending, startTransition] = useTransition();
@@ -33,13 +34,21 @@ function ReviewForm({ user, productId }: { user: User; productId: string }) {
     },
   });
   function onSubmit(values: z.infer<typeof ReviewSchema>) {
+    if (!user) {
+      toast.info(
+        <div>
+          You are not <Link href="/sign-in">Logged In!</Link>
+        </div>,
+      );
+      return;
+    }
     console.log(values);
     startTransition(async () => {
       const result = await SubmitReview(values, user.id, productId);
       if (result.success) {
         form.reset();
       } else {
-        toast.error("Something went wrong!");
+        toast.error(result.cause);
       }
     });
   }

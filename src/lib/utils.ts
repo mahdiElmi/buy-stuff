@@ -1,5 +1,9 @@
+import { authOptions } from "@/server/auth";
 import { type ClassValue, clsx } from "clsx";
+import { getServerSession } from "next-auth";
 import { twMerge } from "tailwind-merge";
+import { prisma } from "./db";
+import { User } from "@prisma/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -39,4 +43,19 @@ export function abbrNum(number: number, decPlaces: number) {
   }
 
   return abbreviatedNum || number;
+}
+
+// checks wether current user is logged in and wether the same with the one that sent the request.
+export async function checkAuth(userId: string) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user)
+    return { success: false, cause: "User is not authenticated." };
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) return { success: false, cause: "User doesn't exist." };
+  if (user.email !== session.user.email)
+    return {
+      success: false,
+      cause: "User who made the request isn't the same as the user logged in.",
+    };
+  return { success: true, cause: "" };
 }

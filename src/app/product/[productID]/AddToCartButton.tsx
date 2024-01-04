@@ -18,7 +18,7 @@ function AddToCartButton({ quantity }: { quantity: number }) {
     <div className="mt-5 flex gap-3">
       {quantity ? (
         <Select onValueChange={setSelectedQty} value={selectedQty}>
-          <SelectTrigger className="w-fit">
+          <SelectTrigger className="w-16">
             <SelectValue placeholder="quantity" />
           </SelectTrigger>
           <SelectContent>
