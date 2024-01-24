@@ -1,11 +1,13 @@
 import { prisma } from "@/lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { NextAuthOptions } from "next-auth";
+import { Adapter } from "next-auth/adapters";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+export const authOptions = {
+  adapter: PrismaAdapter(prisma) as Adapter,
+  session: { strategy: "database" },
   // session: {
   //   strategy: "jwt",
   // },
@@ -48,4 +50,4 @@ export const authOptions: NextAuthOptions = {
     //     return true;
     //   },
   },
-};
+} satisfies NextAuthOptions;
