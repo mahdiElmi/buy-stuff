@@ -1,18 +1,11 @@
 "use client";
 // You need to import our styles for the button to look right. Best to import in the root /layout.tsx but this is fine
 import "@uploadthing/react/styles.css";
-import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
-import { ProductData } from "@/app/products/add/page";
+import { MouseEvent } from "react";
 import Image from "next/image";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { UploadButton } from "@/lib/uploadthing";
-export default function ImageUpload({
-  setProductData,
-  imgUrls,
-}: {
-  setProductData: Dispatch<SetStateAction<ProductData>>;
-  imgUrls: string[];
-}) {
+export default function ImageUpload({ imgUrls }: { imgUrls: string[] }) {
   function deletePhoto(
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
     imgUrl: string,
