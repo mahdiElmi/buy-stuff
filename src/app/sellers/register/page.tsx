@@ -21,9 +21,6 @@ import { useTransition } from "react";
 import { vendorSchema } from "@/lib/zodSchemas";
 import { z } from "zod";
 
-export function ProfileForm() {
-  // 1. Define your form.
-}
 function page() {
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof vendorSchema>>({
