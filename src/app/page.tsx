@@ -19,7 +19,7 @@ export default async function Home() {
   //   });
   // }
   return (
-    <section className="flex h-screen flex-col items-center justify-center gap-5 ">
+    <section className="flex h-full flex-col items-center justify-center gap-5 ">
       <h1 className="w-fit text-8xl font-black underline decoration-red-500 decoration-8">
         BUY STUFF
       </h1>

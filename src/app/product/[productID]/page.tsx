@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import { Prisma, Review, User, Vote } from "@prisma/client";
+import { Prisma, Vote } from "@prisma/client";
 
 import { StarIcon } from "@heroicons/react/20/solid";
 import ImageGroup from "./ImageGroup";
@@ -208,7 +208,12 @@ export default async function Product({
                 Additional details
               </h2>
             </section> */}
-            <AddToCartButton quantity={product.stock} />
+
+            <AddToCartButton
+              quantity={product.stock}
+              userId={user && user.id}
+              product={product}
+            />
           </div>
         </div>
       </div>

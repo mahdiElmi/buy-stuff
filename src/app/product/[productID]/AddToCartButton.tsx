@@ -8,31 +8,133 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useMemo, useState, useTransition } from "react";
+import addToCart from "./AddToCartAction";
+import { LocalShoppingCartItem, ProductWithImages } from "@/lib/types";
+import { cartAtom } from "@/lib/atoms";
+import { useAtom, useSetAtom } from "jotai";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { toast } from "sonner";
 
-function AddToCartButton({ quantity }: { quantity: number }) {
+function AddToCartButton({
+  quantity,
+  userId,
+  product,
+}: {
+  quantity: number;
+  userId: string | null;
+  product: ProductWithImages;
+}) {
+  const [isPending, startTransition] = useTransition();
   const [selectedQty, setSelectedQty] = useState("1");
+  const [localCart, setLocalCart] = useAtom(cartAtom);
+  const productFromCart: LocalShoppingCartItem | undefined = useMemo(
+    () => localCart[product.id],
+    [localCart, product],
+  );
+
+  const cartAdjustedQuantity = productFromCart
+    ? quantity - productFromCart.quantity
+    : quantity;
+
+  function handleSubmit() {
+    const cartLocalStateSnapshot = localCart;
+    const selectedQtyNum = parseInt(selectedQty);
+    setLocalCart((oldCart) => {
+      if (productFromCart)
+        return {
+          ...oldCart,
+          [product.id]: {
+            ...oldCart[product.id],
+            quantity: oldCart[product.id].quantity + selectedQtyNum,
+          },
+        };
+      else {
+        return {
+          ...oldCart,
+          [product.id]: {
+            productId: product.id,
+            name: product.name,
+            quantity: selectedQtyNum,
+            image: product.images[0].url,
+            price: product.price,
+            stock: quantity,
+          },
+        };
+      }
+    });
+    setSelectedQty("1");
+    toast.success(
+      `added ${selectedQtyNum > 1 ? `(${selectedQtyNum})` : ""} ${product.name} to cart.`,
+    );
+    if (userId) {
+      startTransition(async () => {
+        const result = await addToCart(userId, selectedQtyNum, product.id);
+        console.log(result);
+        if (!result.success) {
+          setLocalCart(cartLocalStateSnapshot);
+          toast.error(
+            `Something went wrong when adding ${selectedQtyNum > 1 ? `(${selectedQtyNum})` : ""} ${product.name} to cart.`,
+            { description: result.cause },
+          );
+        }
+      });
+    }
+  }
 
   return (
-    <div className="mt-5 flex gap-3">
-      {quantity ? (
-        <Select onValueChange={setSelectedQty} value={selectedQty}>
+    <div className="mt-5 flex w-fit gap-3">
+      {quantity > 0 ? (
+        <Select
+          disabled={cartAdjustedQuantity <= 0}
+          onValueChange={setSelectedQty}
+          value={selectedQty}
+        >
           <SelectTrigger className="w-16">
             <SelectValue placeholder="quantity" />
           </SelectTrigger>
-          <SelectContent>
-            {new Array(quantity).fill(1).map((_, i) => (
-              <SelectItem value={`${i + 1}`}>{i + 1}</SelectItem>
+          <SelectContent className="cursor-default">
+            {new Array(cartAdjustedQuantity || 1).fill(1).map((_, i) => (
+              <SelectItem key={i + 1} value={`${i + 1}`}>
+                {i + 1}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
       ) : (
-        <span className="text-red-600">Out of Stock!</span>
+        <span className="text-red-600 dark:text-red-700">Out of Stock!</span>
       )}
-      <Button disabled={quantity <= 0} className=" text-base tracking-tight">
-        Add to Cart
-      </Button>
+      <TooltipProvider delayDuration={300}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={handleSubmit}
+              disabled={cartAdjustedQuantity <= 0}
+              className={cn(" text-base tracking-tight", {
+                "cursor-not-allowed": cartAdjustedQuantity <= 0,
+              })}
+            >
+              Add to Cart
+            </Button>
+          </TooltipTrigger>
+          {cartAdjustedQuantity <= 0 && (
+            <TooltipContent>
+              <span>
+                You can't add more. You have the entire stock in your cart.
+              </span>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
+      <span className="self-end text-lg tracking-tighter text-zinc-700 dark:text-zinc-400">
+        {productFromCart !== undefined && `${productFromCart.quantity} In Cart`}
+      </span>
     </div>
   );
 }

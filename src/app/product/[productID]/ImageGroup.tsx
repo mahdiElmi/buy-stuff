@@ -46,6 +46,7 @@ export default function ImageGroup({ images }: { images: ImageType[] }) {
         {images.map((image) => (
           <Tab.Panel key={image.id}>
             <Image
+              priority={true}
               src={image.url}
               width={image.width || 700}
               height={image.height || 700}

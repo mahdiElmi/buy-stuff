@@ -45,7 +45,7 @@ export function abbrNum(number: number, decPlaces: number) {
   return abbreviatedNum || number;
 }
 
-// checks wether current user is logged in and wether the same with the one that sent the request.
+// checks wether current user is logged in and wether the same with the one who sent the request.
 export async function checkAuth(userId: string) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user)
@@ -57,5 +57,5 @@ export async function checkAuth(userId: string) {
       success: false,
       cause: "User who made the request isn't the same as the user logged in.",
     };
-  return { success: true, cause: "" };
+  return { success: true, cause: "", user };
 }

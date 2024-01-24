@@ -57,7 +57,7 @@ model User {
   reviews           Review[]
   reviewVotes       Vote[]
   shippingAddresses ShippingAddress[]
-  shoppingCartItem  ShoppingCartItem[]
+  shoppingCartItems ShoppingCartItem[]
   accounts          Account[]
   sessions          Session[]
   vendor            Vendor?
@@ -143,6 +143,7 @@ model ShoppingCartItem {
   product   Product @relation(fields: [productId], references: [id])
   user      User    @relation(fields: [userId], references: [id])
 
+  @@unique([productId, userId])
   @@index([productId])
   @@index([userId])
 }
