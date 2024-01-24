@@ -5,7 +5,8 @@ import { cookies } from "next/headers";
 import { getServerSession } from "next-auth";
 import SessionProvider from "../components/SessionProvider";
 import { Toaster } from "@/components/ui/sonner";
-import { Provider } from "jotai";
+import { Provider as JotaiProvider } from "jotai";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -25,18 +26,24 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const theme = cookies().get("theme")?.value ?? "";
   const session = await getServerSession();
   return (
-    <html lang="en" className={`${inter.variable} ${theme} h-full`}>
+    <html lang="en" className={`${inter.variable} h-full`}>
       <body className="scroll flex h-full  flex-col bg-zinc-50 bg-scroll text-zinc-950 scrollbar-thin dark:bg-zinc-950 dark:text-zinc-50">
         <SessionProvider session={session}>
-          <Provider>
-            <Navbar theme={theme} />
-            <main className="flex flex-grow items-center justify-center scrollbar sm:px-6 lg:px-8">
-              {children}
-            </main>
-          </Provider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <JotaiProvider>
+              <Navbar />
+              <main className="flex flex-grow items-center justify-center scrollbar sm:px-6 lg:px-8">
+                {children}
+              </main>
+            </JotaiProvider>
+          </ThemeProvider>
         </SessionProvider>
         <footer className="mt-auto w-full max-w-8xl self-center border-t border-zinc-200 py-4 dark:border-zinc-800">
           <div className="mx-auto flex h-full w-full items-center justify-center sm:px-6 lg:px-8">

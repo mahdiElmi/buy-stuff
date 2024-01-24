@@ -12,7 +12,7 @@ import {
   UserWithShoppingCart,
 } from "@/lib/types";
 
-async function Navbar({ theme }: { theme: string }) {
+async function Navbar() {
   const session = await getServerSession(authOptions);
   let user: UserWithShoppingCart | null = null;
   const shoppingCartItems: LocalShoppingCartItems = {};
@@ -79,7 +79,7 @@ async function Navbar({ theme }: { theme: string }) {
         </Link>
         <SearchBar />
         <div className="ms-auto flex items-center gap-5">
-          <ThemeToggle theme={theme} />
+          <ThemeToggle />
           <ShoppingCart cartItemsFromServer={shoppingCartItems} />
           {user ? (
             <UserProfileButton user={user} />
