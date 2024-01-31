@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function ProductItem({
   product,
 }: {
-  product: ProductWithImages;
+  product: ProductWithImages & { _averageRating?: number };
 }) {
   return (
     <div className="h-full w-full rounded-md border-2 border-transparent @container/1 ">
@@ -27,7 +27,7 @@ export default function ProductItem({
           )}
           <div className="flex h-full flex-col justify-between pt-2">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">{product.name}</h2>
+              <h2 className="text-lg font-bold">{product.name}</h2>
             </div>
             <p className="line-clamp-3 font-medium text-zinc-700 dark:text-zinc-300">
               {product.description}, Lorem, ipsum dolor sit amet consectetur
@@ -39,16 +39,19 @@ export default function ProductItem({
               {product.price === 0 ? (
                 <span className="text-lg font-medium">Free</span>
               ) : (
-                <span className="text-xl font-extrabold tracking-tighter">
+                <span className="text-lg font-semibold tracking-tighter">
                   {product.price}
                   <span className="text-xs font-medium"> $</span>
                 </span>
               )}
               {product.stock < 5 && (
-                <span className="min-w-fit text-base font-bold text-zinc-300 dark:text-zinc-200">
-                  Only <span>{product.stock}</span> left in stock!
+                <span className="min-w-fit text-base font-bold text-zinc-600 dark:text-zinc-200">
+                  <span>{product.stock}</span> left!
                 </span>
               )}
+              <span className="min-w-fit text-base font-bold text-zinc-300 dark:text-zinc-200">
+                {product._averageRating?.toFixed(1)}
+              </span>
               {/* <span className="my-1 font-medium">{product.price}$</span> */}
               {/* <Link
                 href={`/product/${product.id}`}

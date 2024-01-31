@@ -1,7 +1,6 @@
 import Navbar from "../components/Navbar";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { cookies } from "next/headers";
 import { getServerSession } from "next-auth";
 import SessionProvider from "../components/SessionProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -28,8 +27,8 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession();
   return (
-    <html lang="en" className={`${inter.variable} h-full`}>
-      <body className="scroll flex h-full  flex-col bg-zinc-50 bg-scroll text-zinc-950 scrollbar-thin dark:bg-zinc-950 dark:text-zinc-50">
+    <html lang="en" className={`${inter.variable}`}>
+      <body className="scroll flex min-h-[100dvh] flex-col bg-zinc-50 bg-scroll text-zinc-950 scrollbar-thin dark:bg-zinc-950 dark:text-zinc-50">
         <SessionProvider session={session}>
           <ThemeProvider
             attribute="class"
@@ -39,7 +38,7 @@ export default async function RootLayout({
           >
             <JotaiProvider>
               <Navbar />
-              <main className="flex flex-grow items-center justify-center scrollbar sm:px-6 lg:px-8">
+              <main className="flex h-full flex-grow items-center justify-center scrollbar sm:px-6 lg:px-8">
                 {children}
               </main>
             </JotaiProvider>

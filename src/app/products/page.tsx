@@ -1,362 +1,158 @@
-// import { Fragment, useState } from "react";
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  FunnelIcon,
-  MinusIcon,
-  PlusIcon,
-  Squares2X2Icon,
-} from "@heroicons/react/20/solid";
 import ProductGrid from "@/components/ProductGrid";
 import { prisma } from "@/lib/db";
+import { ProductWithImages } from "@/lib/types";
+import { Prisma, Product } from "@prisma/client";
+import SortBy from "./SortBy";
+import PaginationWrapper from "@/components/PaginationWrapper";
+import FilterBy from "./FilterBy";
 
-const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best CustomRating", href: "#", current: false },
-  { name: "Newest", href: "#", current: false },
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
-];
-const subCategories = [
-  { name: "Totes", href: "#" },
-  { name: "Backpacks", href: "#" },
-  { name: "Travel Bags", href: "#" },
-  { name: "Hip Bags", href: "#" },
-  { name: "Laptop Sleeves", href: "#" },
-];
-const filters = [
-  {
-    id: "color",
-    name: "Color",
-    options: [
-      { value: "white", label: "White", checked: false },
-      { value: "beige", label: "Beige", checked: false },
-      { value: "blue", label: "Blue", checked: true },
-      { value: "brown", label: "Brown", checked: false },
-      { value: "green", label: "Green", checked: false },
-      { value: "purple", label: "Purple", checked: false },
-    ],
-  },
-  {
-    id: "category",
-    name: "Category",
-    options: [
-      { value: "new-arrivals", label: "New Arrivals", checked: false },
-      { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: true },
-      { value: "organization", label: "Organization", checked: false },
-      { value: "accessories", label: "Accessories", checked: false },
-    ],
-  },
-  {
-    id: "size",
-    name: "Size",
-    options: [
-      { value: "2l", label: "2L", checked: false },
-      { value: "6l", label: "6L", checked: false },
-      { value: "12l", label: "12L", checked: false },
-      { value: "18l", label: "18L", checked: false },
-      { value: "20l", label: "20L", checked: false },
-      { value: "40l", label: "40L", checked: true },
-    ],
-  },
-];
+type ParamsType = {
+  page: string | undefined;
+  sort: "new" | "old" | "price-to-low" | "price-to-high" | "rating" | undefined;
+  price: `${string}to${string}` | undefined;
+  rating: `${string}to${string}` | undefined;
+};
 
-const products = await prisma.product.findMany({
-  take: 20,
-  orderBy: { createdAt: "asc" },
-  include: { images: true },
-});
+export default async function Products({
+  searchParams,
+}: {
+  searchParams: ParamsType;
+}) {
+  const {
+    sort = "new",
+    page = "1",
+    price = "0toInfinity",
+    rating = "0to5",
+  } = searchParams;
+  // extract price bounds
+  const [minPriceString, maxPriceString] = price.split("to");
+  let minPrice = parseFloat(minPriceString);
+  if (minPrice < 0 || isNaN(minPrice)) minPrice = 0;
+  let maxPrice = parseFloat(maxPriceString);
+  if (maxPrice < 0 || isNaN(maxPrice)) maxPrice = Infinity;
 
-export default function Products() {
-  // const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  // extract rating bounds
+  const [minRatingString, maxRatingString] = rating.split("to");
+  let minRating = parseFloat(minRatingString);
+  if (minRating < 0 || isNaN(minRating)) minRating = 0;
+  let maxRating = parseFloat(maxRatingString);
+  if (maxRating < 0 || isNaN(maxRating)) maxRating = 5;
 
-  // return (
-  //   <div className="w-full self-start justify-self-start">
-  //     <div>
-  //       {/* Mobile filter dialog */}
-  //       <Transition.Root show={mobileFiltersOpen} as={Fragment}>
-  //         <Dialog
-  //           as="div"
-  //           className="relative z-50 lg:hidden"
-  //           onClose={setMobileFiltersOpen}
-  //         >
-  //           <Transition.Child
-  //             as={Fragment}
-  //             enter="transition-opacity ease-linear duration-300"
-  //             enterFrom="opacity-0"
-  //             enterTo="opacity-100"
-  //             leave="transition-opacity ease-linear duration-300"
-  //             leaveFrom="opacity-100"
-  //             leaveTo="opacity-0"
-  //           >
-  //             <div className="fixed inset-0 bg-black bg-opacity-25" />
-  //           </Transition.Child>
+  let p = parseInt(page);
+  if (p <= 0 || isNaN(p)) p = 1;
 
-  //           <div className="fixed inset-0 z-40 flex">
-  //             <Transition.Child
-  //               as={Fragment}
-  //               enter="transition ease-in-out duration-300 transform"
-  //               enterFrom="translate-x-full"
-  //               enterTo="translate-x-0"
-  //               leave="transition ease-in-out duration-300 transform"
-  //               leaveFrom="translate-x-0"
-  //               leaveTo="translate-x-full"
-  //             >
-  //               <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl dark:bg-zinc-900">
-  //                 <div className="flex items-center justify-between px-4">
-  //                   <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-50">
-  //                     Filters
-  //                   </h2>
-  //                   <button
-  //                     type="button"
-  //                     className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-zinc-400 dark:bg-zinc-900 dark:text-zinc-300"
-  //                     onClick={() => setMobileFiltersOpen(false)}
-  //                   >
-  //                     <span className="sr-only">Close menu</span>
-  //                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-  //                   </button>
-  //                 </div>
+  const PRODUCTS_PER_PAGE = 12 as const;
+  const pageOffset = p > 1 ? (p - 1) * PRODUCTS_PER_PAGE : 0;
+  let orderByObject: { createdAt: "asc" | "desc" } | { price: "asc" | "desc" } =
+    { createdAt: "desc" };
 
-  //                 {/* Filters */}
-  //                 <form className="mt-4 border-t border-zinc-200 dark:border-zinc-700 dark:bg-zinc-900">
-  //                   <h3 className="sr-only">Categories</h3>
-  //                   <ul
-  //                     role="list"
-  //                     className="px-2 py-3 font-medium text-black dark:bg-zinc-900 dark:text-zinc-100"
-  //                   >
-  //                     {subCategories.map((category) => (
-  //                       <li key={category.name}>
-  //                         <a href={category.href} className="block px-2 py-3">
-  //                           {category.name}
-  //                         </a>
-  //                       </li>
-  //                     ))}
-  //                   </ul>
+  switch (sort) {
+    case "old":
+      orderByObject = { createdAt: "asc" };
+      break;
+    case "new":
+      orderByObject = { createdAt: "desc" };
+      break;
+    case "price-to-low":
+      orderByObject = { price: "desc" };
+      break;
+    case "price-to-high":
+      orderByObject = { price: "asc" };
+      break;
+  }
 
-  //                   {filters.map((section) => (
-  //                     <Disclosure
-  //                       as="div"
-  //                       key={section.id}
-  //                       className="border-t border-zinc-200 px-4 py-6 dark:border-zinc-700"
-  //                     >
-  //                       {({ open }) => (
-  //                         <>
-  //                           <h3 className="-mx-2 -my-3 flow-root">
-  //                             <Disclosure.Button
-  //                               className="flex w-full items-center justify-between bg-white px-2 py-3 text-zinc-400
-  //                             hover:text-zinc-500 dark:bg-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-400"
-  //                             >
-  //                               <span className="font-medium text-zinc-900 dark:text-zinc-100">
-  //                                 {section.name}
-  //                               </span>
-  //                               <span className="ml-6 flex items-center">
-  //                                 {open ? (
-  //                                   <MinusIcon
-  //                                     className="h-5 w-5"
-  //                                     aria-hidden="true"
-  //                                   />
-  //                                 ) : (
-  //                                   <PlusIcon
-  //                                     className="h-5 w-5"
-  //                                     aria-hidden="true"
-  //                                   />
-  //                                 )}
-  //                               </span>
-  //                             </Disclosure.Button>
-  //                           </h3>
-  //                           <Disclosure.Panel className="pt-6">
-  //                             <div className="space-y-6">
-  //                               {section.options.map((option, optionIdx) => (
-  //                                 <div
-  //                                   key={option.value}
-  //                                   className="flex items-center"
-  //                                 >
-  //                                   <input
-  //                                     id={`filter-mobile-${section.id}-${optionIdx}`}
-  //                                     name={`${section.id}[]`}
-  //                                     defaultValue={option.value}
-  //                                     type="checkbox"
-  //                                     defaultChecked={option.checked}
-  //                                     className="h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-950"
-  //                                   />
-  //                                   <label
-  //                                     htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-  //                                     className="ml-3 min-w-0 flex-1 text-zinc-500 dark:text-zinc-300"
-  //                                   >
-  //                                     {option.label}
-  //                                   </label>
-  //                                 </div>
-  //                               ))}
-  //                             </div>
-  //                           </Disclosure.Panel>
-  //                         </>
-  //                       )}
-  //                     </Disclosure>
-  //                   ))}
-  //                 </form>
-  //               </Dialog.Panel>
-  //             </Transition.Child>
-  //           </div>
-  //         </Dialog>
-  //       </Transition.Root>
+  let products: (ProductWithImages & {
+    _averageRating?: number;
+  })[] = [];
+  let productCount: number;
+  let maxPageNum: number;
 
-  //       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-  //         <div className="flex items-baseline justify-between border-b border-zinc-200 pb-6 pt-24 dark:border-zinc-700">
-  //           <h1 className="text-4xl font-bold tracking-tight">New Arrivals</h1>
+  if (sort !== "rating") {
+    const productCountToFlush = prisma.product.count({
+      where: {
+        price:
+          maxPrice === Infinity
+            ? { gte: minPrice }
+            : { gte: minPrice, lte: maxPrice },
+      },
+    });
+    const productsToFlush = prisma.product.findMany({
+      where: {
+        price:
+          maxPrice === Infinity
+            ? { gte: minPrice }
+            : { gte: minPrice, lte: maxPrice },
+      },
+      take: PRODUCTS_PER_PAGE,
+      orderBy: orderByObject,
+      include: { images: { select: { url: true } } },
+      skip: pageOffset,
+    });
+    const [returnedProducts, productCountFromDB] = await prisma.$transaction([
+      productsToFlush,
+      productCountToFlush,
+    ]);
+    products = returnedProducts;
+    productCount = productCountFromDB;
+  } else {
+    const rawProductsSortedByRatingToFlush: Prisma.PrismaPromise<
+      (Product & {
+        image_urls: string;
+        _averageRating: number;
+        _count: number;
+      })[]
+    > = prisma.$queryRaw`        
+    SELECT
+        p.*,
+        AVG(r.rating) AS _averageRating,
+        GROUP_CONCAT(i.url) AS image_urls
+    FROM
+        Product p
+    LEFT JOIN
+        Review r ON p.id = r.productId
+    LEFT JOIN
+        Image i ON p.id = i.productId
+    WHERE p.price > ${minPrice} AND p.price < ${maxPrice === Infinity ? 999999999999999 : maxPrice}
+    GROUP BY
+        p.id
+    HAVING AVG(r.rating) > ${minRating} AND AVG(r.rating) < ${maxRating}
+    ORDER BY
+        _averageRating DESC
+    Limit ${pageOffset}, ${PRODUCTS_PER_PAGE}`;
 
-  //           <div className="flex items-center">
-  //             <Menu as="div" className="relative inline-block text-left">
-  //               <div>
-  //                 <Menu.Button className="group inline-flex justify-center text-sm font-medium text-zinc-800 hover:text-zinc-900 dark:text-zinc-200 dark:hover:text-zinc-100">
-  //                   Sort
-  //                   <ChevronDownIcon
-  //                     className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-zinc-400 group-hover:text-zinc-500 dark:text-zinc-200 dark:group-hover:text-zinc-100"
-  //                     aria-hidden="true"
-  //                   />
-  //                 </Menu.Button>
-  //               </div>
+    const productCountToFlush: Prisma.PrismaPromise<number> = prisma.$queryRaw`
+    SELECT COUNT(*)
+    FROM Product p
+    LEFT JOIN Review r ON p.id = r.productId
+    WHERE p.price > ${minPrice} AND p.price < ${maxPrice === Infinity ? 999999999999999 : maxPrice} 
+    HAVING AVG(r.rating) > ${minRating} AND AVG(r.rating) < ${maxRating} `;
+    const [rawProductsSortedByRating, productCountFromDB] =
+      await prisma.$transaction([
+        rawProductsSortedByRatingToFlush,
+        productCountToFlush,
+      ]);
 
-  //               <Transition
-  //                 as={Fragment}
-  //                 enter="transition ease-out duration-100"
-  //                 enterFrom="transform opacity-0 scale-95"
-  //                 enterTo="transform opacity-100 scale-100"
-  //                 leave="transition ease-in duration-75"
-  //                 leaveFrom="transform opacity-100 scale-100"
-  //                 leaveTo="transform opacity-0 scale-95"
-  //               >
-  //                 <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950">
-  //                   <div className="py-1">
-  //                     {sortOptions.map((option) => (
-  //                       <Menu.Item key={option.name}>
-  //                         {({ active }) => (
-  //                           <a
-  //                             href={option.href}
-  //                             className={cn(
-  //                               option.current
-  //                                 ? "font-medium text-zinc-900 dark:text-zinc-50"
-  //                                 : "dark: text-zinc-500 dark:text-zinc-400",
-  //                               active ? "bg-zinc-100 dark:bg-zinc-900" : "",
-  //                               "block px-4 py-2 text-sm"
-  //                             )}
-  //                           >
-  //                             {option.name}
-  //                           </a>
-  //                         )}
-  //                       </Menu.Item>
-  //                     ))}
-  //                   </div>
-  //                 </Menu.Items>
-  //               </Transition>
-  //             </Menu>
+    productCount = productCountFromDB;
 
-  //             <button
-  //               type="button"
-  //               className="-m-2 ml-5 p-2 text-zinc-400 hover:text-zinc-500 dark:hover:text-zinc-300 sm:ml-7"
-  //             >
-  //               <span className="sr-only">View grid</span>
-  //               <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
-  //             </button>
-  //             <button
-  //               type="button"
-  //               className="-m-2 ml-4 p-2 text-zinc-400 hover:text-zinc-500 sm:ml-6 lg:hidden"
-  //               onClick={() => setMobileFiltersOpen(true)}
-  //             >
-  //               <span className="sr-only">Filters</span>
-  //               <FunnelIcon className="h-5 w-5" aria-hidden="true" />
-  //             </button>
-  //           </div>
-  //         </div>
+    products = rawProductsSortedByRating.map((row) => {
+      const imageUrls = row.image_urls.split(",").map((url) => ({ url }));
+      const newObj = {
+        images: imageUrls,
+        ...row,
+      };
+      return newObj;
+    });
+  }
+  maxPageNum = Math.ceil(productCount / PRODUCTS_PER_PAGE);
 
-  //         <section aria-labelledby="products-heading" className="pb-24 pt-6">
-  //           <h2 id="products-heading" className="sr-only">
-  //             Products
-  //           </h2>
-
-  //           <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-  //             {/* Filters */}
-  //             <form className="hidden lg:block">
-  //               <h3 className="sr-only">Categories</h3>
-  //               <ul
-  //                 role="list"
-  //                 className="space-y-4 border-b border-zinc-200 pb-6 text-sm font-medium text-black dark:border-zinc-800 dark:text-zinc-100"
-  //               >
-  //                 {subCategories.map((category) => (
-  //                   <li key={category.name}>
-  //                     <a href={category.href}>{category.name}</a>
-  //                   </li>
-  //                 ))}
-  //               </ul>
-
-  //               {filters.map((section) => (
-  //                 <Disclosure
-  //                   as="div"
-  //                   key={section.id}
-  //                   className="border-b border-zinc-200 py-6 dark:border-zinc-800"
-  //                 >
-  //                   {({ open }) => (
-  //                     <>
-  //                       <h3 className="-my-3 flow-root">
-  //                         <Disclosure.Button className="flex w-full items-center justify-between py-3 text-sm text-zinc-500 hover:text-zinc-600 dark:text-zinc-300 dark:hover:text-zinc-200">
-  //                           <span className="font-medium text-zinc-900 dark:text-zinc-100">
-  //                             {section.name}
-  //                           </span>
-  //                           <span className="ml-6 flex items-center">
-  //                             {open ? (
-  //                               <MinusIcon
-  //                                 className="h-5 w-5"
-  //                                 aria-hidden="true"
-  //                               />
-  //                             ) : (
-  //                               <PlusIcon
-  //                                 className="h-5 w-5"
-  //                                 aria-hidden="true"
-  //                               />
-  //                             )}
-  //                           </span>
-  //                         </Disclosure.Button>
-  //                       </h3>
-  //                       <Disclosure.Panel className="pt-6">
-  //                         <div className="space-y-4">
-  //                           {section.options.map((option, optionIdx) => (
-  //                             <div
-  //                               key={option.value}
-  //                               className="flex items-center"
-  //                             >
-  //                               <input
-  //                                 id={`filter-${section.id}-${optionIdx}`}
-  //                                 name={`${section.id}[]`}
-  //                                 defaultValue={option.value}
-  //                                 type="checkbox"
-  //                                 defaultChecked={option.checked}
-  //                                 className="h-4 w-4 rounded border-zinc-300 text-indigo-600 checked:bg-indigo-600 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-950 dark:checked:bg-indigo-600"
-  //                               />
-  //                               <label
-  //                                 htmlFor={`filter-${section.id}-${optionIdx}`}
-  //                                 className="ml-3 text-sm text-zinc-500 dark:text-zinc-300"
-  //                               >
-  //                                 {option.label}
-  //                               </label>
-  //                             </div>
-  //                           ))}
-  //                         </div>
-  //                       </Disclosure.Panel>
-  //                     </>
-  //                   )}
-  //                 </Disclosure>
-  //               ))}
-  //             </form>
-
-  //             <div className="lg:col-span-3">
-  //               <ProductGrid />
-  //             </div>
-  //           </div>
-  //         </section>
-  //       </main>
-  //     </div>
-  //   </div>
-  // );
-  return <ProductGrid products={products} />;
+  return (
+    <div className="relative flex w-full flex-grow gap-1 self-start py-5">
+      <FilterBy filters={{ minPrice, maxPrice, minRating, maxRating }} />
+      <div className="h-full w-full flex-grow rounded-md bg-zinc-200 p-2 dark:bg-zinc-900">
+        <ProductGrid products={products} />
+        <PaginationWrapper p={p} maxPageNum={maxPageNum} />
+      </div>
+      <SortBy currentSort={sort} />
+    </div>
+  );
 }

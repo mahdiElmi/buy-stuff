@@ -12,6 +12,7 @@ export default async function SubmitReview(
   productId: string,
 ) {
   const result = await checkAuth(userId);
+  // #TODO: rewrite this if result returning user is useful
   if (!result.success) return result;
 
   const validationResult = ReviewSchema.safeParse(values);

@@ -98,8 +98,8 @@ function BigCart({
     );
 
   return (
-    <div className="flex h-full w-full max-w-7xl flex-col gap-4">
-      <div className="flex justify-between gap-5 py-5">
+    <div className="mt-10 flex h-full w-full max-w-3xl flex-col gap-4 self-start">
+      <div className="flex justify-between gap-5 pb-5">
         <h1 className=" text-4xl font-bold">Shopping Cart</h1>
         <Button
           onClick={handleDeleteAll}

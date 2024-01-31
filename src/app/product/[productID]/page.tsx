@@ -28,12 +28,12 @@ type UserWithReviewerVotes = Prisma.UserGetPayload<
 export default async function Product({
   params,
 }: {
-  params: { productID: string };
+  params: { productId: string };
 }) {
-  const { productID } = params;
+  const { productId } = params;
   const product = await prisma.product.findUnique({
     where: {
-      id: productID,
+      id: productId,
     },
     include: {
       reviews: {
@@ -298,7 +298,7 @@ export default async function Product({
           </div>
           <div className="flex-grow">
             {user !== null && !isAuthor ? (
-              <ReviewForm user={user} productId={productID} />
+              <ReviewForm user={user} productId={productId} />
             ) : (
               <div className="flex h-full  items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-900/20">
                 <Button

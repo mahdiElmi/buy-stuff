@@ -48,37 +48,37 @@ async function Navbar() {
     }
   }
   return (
-    <nav className="sticky top-0 z-50 bg-zinc-50 bg-opacity-50 px-3 backdrop-blur-lg dark:bg-zinc-950 xl:px-0 ">
-      <div className="mx-auto flex max-w-[95rem] flex-row items-center gap-5  border-zinc-200 py-1 dark:border-zinc-800 ">
+    <nav className="sticky top-0 z-50 bg-zinc-50 bg-opacity-50 px-3 backdrop-blur-lg dark:bg-zinc-950">
+      <div className="mx-auto flex max-w-[95rem] flex-row items-center gap-5 py-1">
         <Link
           href="/"
-          className="h-min w-min break-words rounded-sm p-[1px] text-3xl font-black leading-none opacity-85 transition-transform "
+          className="flex h-min w-min flex-col text-2xl font-black leading-none sm:text-2xl "
         >
-          BUY STUFF
+          <span className="h-min leading-none">BUY!!!</span>
+          <span className="-mt-1 h-min leading-none">STUFF</span>
         </Link>
-        <Link
-          href="/products"
-          className=" h-min w-min rounded-sm p-[1px] text-2xl font-medium capitalize leading-none opacity-85 transition-transform 
-          hover:opacity-100"
-        >
-          products
-        </Link>
-        <Link
-          href="/about"
-          className=" h-min w-min rounded-sm p-[1px] text-2xl font-medium capitalize leading-none opacity-85 transition-transform 
-          hover:opacity-100"
-        >
-          about
-        </Link>
-        <Link
-          href="/blog"
-          className="h-min w-min rounded-sm p-[1px] text-2xl font-medium capitalize leading-none opacity-85 transition-transform 
-          hover:opacity-100"
-        >
-          blog
-        </Link>
+        <div className="lg:gp-5 hidden md:flex md:items-center md:gap-3">
+          <Link
+            href="/products?page=1"
+            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-800 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"
+          >
+            products
+          </Link>
+          <Link
+            href="/about"
+            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-800 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"
+          >
+            about
+          </Link>
+          <Link
+            href="/blog"
+            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-800 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"
+          >
+            blog
+          </Link>
+        </div>
         <SearchBar />
-        <div className="ms-auto flex items-center gap-5">
+        <div className="ms-auto flex items-center gap-2 md:gap-5">
           <ThemeToggle />
           <ShoppingCart cartItemsFromServer={shoppingCartItems} />
           {user ? (

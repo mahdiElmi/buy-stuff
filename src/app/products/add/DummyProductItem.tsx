@@ -27,10 +27,10 @@ export default function DummyProductItem({
         ) : (
           <div className="aspect-square bg-gradient-to-tr from-zinc-400/50 to-zinc-600/50"></div>
         )}
-        <div className="flex flex-col gap-4 p-2">
+        <div className="flex flex-col gap-2 p-2">
           <div className="flex items-center justify-between">
             {product.name !== "" ? (
-              <h2 className="w-96 break-words text-3xl font-bold">
+              <h2 className="w-96 break-words text-lg font-bold">
                 {product.name}
               </h2>
             ) : (

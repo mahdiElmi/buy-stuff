@@ -1,8 +1,9 @@
 import { Prisma } from "@prisma/client";
 
 const productWithImages = Prisma.validator<Prisma.ProductDefaultArgs>()({
-  include: { images: true },
+  include: { images: { select: { url: true } } },
 });
+
 export type ProductWithImages = Prisma.ProductGetPayload<
   typeof productWithImages
 >;
@@ -22,10 +23,9 @@ export type LocalShoppingCartItem = {
   name: string;
   image: string;
   price: number;
-  stock:number
+  stock: number;
 };
 
 export interface LocalShoppingCartItems {
-  [index:string]: LocalShoppingCartItem
+  [index: string]: LocalShoppingCartItem;
 }
-
