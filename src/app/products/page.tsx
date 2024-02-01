@@ -1,6 +1,6 @@
 import ProductGrid from "@/components/ProductGrid";
 import { prisma } from "@/lib/db";
-import { ProductWithImages } from "@/lib/types";
+import { ProductWithImagesAndVendor } from "@/lib/types";
 import { Prisma, Product } from "@prisma/client";
 import SortBy from "./SortBy";
 import PaginationWrapper from "@/components/PaginationWrapper";
@@ -61,7 +61,7 @@ export default async function Products({
       break;
   }
 
-  let products: (ProductWithImages & {
+  let products: (ProductWithImagesAndVendor & {
     _averageRating?: number;
   })[] = [];
   let productCount: number;
@@ -85,7 +85,10 @@ export default async function Products({
       },
       take: PRODUCTS_PER_PAGE,
       orderBy: orderByObject,
-      include: { images: { select: { url: true } } },
+      include: {
+        images: { select: { url: true } },
+        vendor: { select: { name: true } },
+      },
       skip: pageOffset,
     });
     const [returnedProducts, productCountFromDB] = await prisma.$transaction([
@@ -98,13 +101,15 @@ export default async function Products({
     const rawProductsSortedByRatingToFlush: Prisma.PrismaPromise<
       (Product & {
         image_urls: string;
+        vendorName: string;
         _averageRating: number;
         _count: number;
       })[]
     > = prisma.$queryRaw`        
     SELECT
         p.*,
-        AVG(r.rating) AS _averageRating,
+        v.name AS vendorName,
+        COALESCE(AVG(r.rating), 0) AS _averageRating,
         GROUP_CONCAT(i.url) AS image_urls
     FROM
         Product p
@@ -112,37 +117,53 @@ export default async function Products({
         Review r ON p.id = r.productId
     LEFT JOIN
         Image i ON p.id = i.productId
-    WHERE p.price > ${minPrice} AND p.price < ${maxPrice === Infinity ? 999999999999999 : maxPrice}
+    LEFT JOIN
+        Vendor v ON p.vendorId = v.id
+    WHERE p.price >= ${minPrice} AND p.price <= ${maxPrice === Infinity ? 999999999999999 : maxPrice}
     GROUP BY
         p.id
-    HAVING AVG(r.rating) > ${minRating} AND AVG(r.rating) < ${maxRating}
+    HAVING _averageRating >= ${minRating} AND _averageRating <= ${maxRating}
     ORDER BY
         _averageRating DESC
     Limit ${pageOffset}, ${PRODUCTS_PER_PAGE}`;
 
-    const productCountToFlush: Prisma.PrismaPromise<number> = prisma.$queryRaw`
-    SELECT COUNT(*)
-    FROM Product p
-    LEFT JOIN Review r ON p.id = r.productId
-    WHERE p.price > ${minPrice} AND p.price < ${maxPrice === Infinity ? 999999999999999 : maxPrice} 
-    HAVING AVG(r.rating) > ${minRating} AND AVG(r.rating) < ${maxRating} `;
+    // COUNT QUERY
+    const productCountToFlush: Prisma.PrismaPromise<
+      [{ product_count: bigint }]
+    > = prisma.$queryRaw`
+    SELECT COUNT(*) AS product_count
+    FROM (
+      SELECT 
+        p.id,
+        COALESCE(AVG(r.rating), 0) AS _averageRating  
+      FROM Product p
+      LEFT JOIN Review r ON p.id = r.productId
+      WHERE p.price >= ${minPrice} AND p.price <= ${maxPrice === Infinity ? 999999999999999 : maxPrice} 
+      GROUP BY p.id
+      HAVING _averageRating >= ${minRating} AND _averageRating <= ${maxRating}
+    ) AS subquery;`;
     const [rawProductsSortedByRating, productCountFromDB] =
       await prisma.$transaction([
         rawProductsSortedByRatingToFlush,
         productCountToFlush,
       ]);
-
-    productCount = productCountFromDB;
+    console.log({ productCountFromDB });
+    productCount = Number(productCountFromDB[0].product_count);
 
     products = rawProductsSortedByRating.map((row) => {
       const imageUrls = row.image_urls.split(",").map((url) => ({ url }));
       const newObj = {
-        images: imageUrls,
         ...row,
+        images: imageUrls,
+        vendor: { name: row.vendorName },
       };
       return newObj;
     });
   }
+  console.log(
+    { productCount, PRODUCTS_PER_PAGE },
+    productCount / PRODUCTS_PER_PAGE,
+  );
   maxPageNum = Math.ceil(productCount / PRODUCTS_PER_PAGE);
 
   return (

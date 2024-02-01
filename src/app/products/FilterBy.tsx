@@ -130,6 +130,10 @@ function FilterBy({
     },
   });
 
+  let isRestedDisabled = false;
+  if (searchParams.get("rating") === null && searchParams.get("price") === null)
+    isRestedDisabled = true;
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
     router.push(
       `?sort=${sortParam}&price=${data.priceFrom}to${data.priceTo}&rating=${data.ratingFrom}to${data.ratingTo}`,
@@ -250,7 +254,12 @@ function FilterBy({
               className="mt-3"
               asChild
             >
-              <Link href={`?sort=${sortParam}`}>
+              <Link
+                href={`?sort=${sortParam}`}
+                className={cn(
+                  isRestedDisabled && "pointer-events-none opacity-50",
+                )}
+              >
                 <RotateCcw className="me-1 h-4 w-4" /> Reset
               </Link>
             </Button>

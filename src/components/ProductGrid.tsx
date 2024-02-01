@@ -1,10 +1,10 @@
 import ProductItem from "@/components/productItem";
-import { ProductWithImages } from "@/lib/types";
+import { ProductWithImagesAndVendor } from "@/lib/types";
 
 export default async function ProductGrid({
   products,
 }: {
-  products: (ProductWithImages & { _averageRating?: number })[];
+  products: (ProductWithImagesAndVendor & { _averageRating?: number })[];
 }) {
   if (products.length <= 0)
     return (

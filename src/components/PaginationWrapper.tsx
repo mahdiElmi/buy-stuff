@@ -19,6 +19,7 @@ function PaginationWrapper({
   p: number;
   maxPageNum: number;
 }) {
+  console.log({ p, maxPageNum });
   const searchParams = useSearchParams();
   let allOtherSearchParams = "";
   for (let [key, value] of searchParams.entries()) {
@@ -83,7 +84,7 @@ function PaginationWrapper({
             <PaginationEllipsis />
           </PaginationItem>
         )}
-        {p < maxPageNum - 1 && (
+        {p < maxPageNum - 2 && (
           <PaginationItem>
             <PaginationLink href={`?${allOtherSearchParams}page=${maxPageNum}`}>
               {maxPageNum}

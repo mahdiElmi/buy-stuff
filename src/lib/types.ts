@@ -7,6 +7,18 @@ const productWithImages = Prisma.validator<Prisma.ProductDefaultArgs>()({
 export type ProductWithImages = Prisma.ProductGetPayload<
   typeof productWithImages
 >;
+const productWithImagesAndVendor =
+  Prisma.validator<Prisma.ProductDefaultArgs>()({
+    include: {
+      images: { select: { url: true } },
+      vendor: { select: { name: true } },
+    },
+  });
+
+export type ProductWithImagesAndVendor = Prisma.ProductGetPayload<
+  typeof productWithImagesAndVendor
+>;
+
 const userWithShoppingCart = Prisma.validator<Prisma.UserDefaultArgs>()({
   include: {
     shoppingCartItems: { include: { product: { include: { images: true } } } },

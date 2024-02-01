@@ -63,7 +63,7 @@ function SortBy({
 
   return (
     <aside className="sticky top-[4.5rem] flex h-fit w-max flex-col text-nowrap break-keep rounded-md bg-zinc-200 p-2 dark:bg-zinc-900">
-      <h2 className="flex gap-2 text-2xl  font-bold">
+      <h2 className="mb-1 flex gap-2 text-2xl font-bold">
         <ArrowUpDown className=" h-7 w-7 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
         Sort
       </h2>
