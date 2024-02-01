@@ -27,7 +27,7 @@ function PaginationWrapper({
     allOtherSearchParams = `${allOtherSearchParams}${key}=${value}&`;
   }
   return (
-    <Pagination className=" mt-3">
+    <Pagination className={cn("mt-3", maxPageNum <= 0 && "hidden")}>
       <PaginationContent>
         <PaginationItem
           className={cn(p <= 1 && "pointer-events-none opacity-60")}

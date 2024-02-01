@@ -11,6 +11,7 @@ type ParamsType = {
   sort: "new" | "old" | "price-to-low" | "price-to-high" | "rating" | undefined;
   price: `${string}to${string}` | undefined;
   rating: `${string}to${string}` | undefined;
+  q: string | undefined;
 };
 
 export default async function Products({
@@ -23,6 +24,7 @@ export default async function Products({
     page = "1",
     price = "0toInfinity",
     rating = "0to5",
+    q,
   } = searchParams;
   // extract price bounds
   const [minPriceString, maxPriceString] = price.split("to");
@@ -74,6 +76,7 @@ export default async function Products({
           maxPrice === Infinity
             ? { gte: minPrice }
             : { gte: minPrice, lte: maxPrice },
+        name: { contains: q },
       },
     });
     const productsToFlush = prisma.product.findMany({
@@ -82,6 +85,7 @@ export default async function Products({
           maxPrice === Infinity
             ? { gte: minPrice }
             : { gte: minPrice, lte: maxPrice },
+        name: { contains: q },
       },
       take: PRODUCTS_PER_PAGE,
       orderBy: orderByObject,
@@ -147,7 +151,6 @@ export default async function Products({
         rawProductsSortedByRatingToFlush,
         productCountToFlush,
       ]);
-    console.log({ productCountFromDB });
     productCount = Number(productCountFromDB[0].product_count);
 
     products = rawProductsSortedByRating.map((row) => {
@@ -160,16 +163,15 @@ export default async function Products({
       return newObj;
     });
   }
-  console.log(
-    { productCount, PRODUCTS_PER_PAGE },
-    productCount / PRODUCTS_PER_PAGE,
-  );
   maxPageNum = Math.ceil(productCount / PRODUCTS_PER_PAGE);
 
   return (
     <div className="relative flex w-full flex-grow gap-1 self-start py-5">
       <FilterBy filters={{ minPrice, maxPrice, minRating, maxRating }} />
       <div className="h-full w-full flex-grow rounded-md bg-zinc-200 p-2 dark:bg-zinc-900">
+        {q && (
+          <h1 className="mb-2 text-3xl font-black">Search results for "{q}"</h1>
+        )}
         <ProductGrid products={products} />
         <PaginationWrapper p={p} maxPageNum={maxPageNum} />
       </div>
