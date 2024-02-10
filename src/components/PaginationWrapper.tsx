@@ -19,7 +19,6 @@ function PaginationWrapper({
   p: number;
   maxPageNum: number;
 }) {
-  console.log({ p, maxPageNum });
   const searchParams = useSearchParams();
   let allOtherSearchParams = "";
   for (let [key, value] of searchParams.entries()) {

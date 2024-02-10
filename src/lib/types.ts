@@ -7,11 +7,13 @@ const productWithImages = Prisma.validator<Prisma.ProductDefaultArgs>()({
 export type ProductWithImages = Prisma.ProductGetPayload<
   typeof productWithImages
 >;
+// #TODO change name to have reviews as well
 const productWithImagesAndVendor =
   Prisma.validator<Prisma.ProductDefaultArgs>()({
     include: {
       images: { select: { url: true } },
       vendor: { select: { name: true } },
+      _count: { select: { reviews: true } },
     },
   });
 
@@ -41,3 +43,11 @@ export type LocalShoppingCartItem = {
 export interface LocalShoppingCartItems {
   [index: string]: LocalShoppingCartItem;
 }
+
+export type ParamsType = {
+  page: string | undefined;
+  sort: "new" | "old" | "price-to-low" | "price-to-high" | "rating" | undefined;
+  price: `${string}to${string}` | undefined;
+  rating: `${string}to${string}` | undefined;
+  q: string | undefined;
+};

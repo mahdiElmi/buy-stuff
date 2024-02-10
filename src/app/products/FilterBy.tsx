@@ -1,6 +1,4 @@
 "use client";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,52 +15,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Eraser, Filter, RotateCcw, Trash } from "lucide-react";
-const subCategories = [
-  { name: "Totes", href: "#" },
-  { name: "Backpacks", href: "#" },
-  { name: "Travel Bags", href: "#" },
-  { name: "Hip Bags", href: "#" },
-  { name: "Laptop Sleeves", href: "#" },
-];
+import { ChevronDown, Filter, RotateCcw, Trash } from "lucide-react";
 
-const filters = [
-  {
-    id: "color",
-    name: "Color",
-    options: [
-      { value: "white", label: "White", checked: false },
-      { value: "beige", label: "Beige", checked: false },
-      { value: "blue", label: "Blue", checked: true },
-      { value: "brown", label: "Brown", checked: false },
-      { value: "green", label: "Green", checked: false },
-      { value: "purple", label: "Purple", checked: false },
-    ],
-  },
-  {
-    id: "category",
-    name: "Category",
-    options: [
-      { value: "new-arrivals", label: "New Arrivals", checked: false },
-      { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: true },
-      { value: "organization", label: "Organization", checked: false },
-      { value: "accessories", label: "Accessories", checked: false },
-    ],
-  },
-  {
-    id: "size",
-    name: "Size",
-    options: [
-      { value: "2l", label: "2L", checked: false },
-      { value: "6l", label: "6L", checked: false },
-      { value: "12l", label: "12L", checked: false },
-      { value: "18l", label: "18L", checked: false },
-      { value: "20l", label: "20L", checked: false },
-      { value: "40l", label: "40L", checked: true },
-    ],
-  },
-];
+import { Slider } from "@/components/ui/slider";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 const FormSchema = z
   .object({
@@ -98,6 +63,42 @@ const FormSchema = z
         return num;
       })
       .or(z.number()),
+    price: z.tuple([
+      z
+        .string()
+        .transform((val) => {
+          let num = parseFloat(val);
+          if (num <= 0 || isNaN(num)) num = 0;
+          return num;
+        })
+        .or(z.number()),
+      z
+        .string()
+        .transform((val) => {
+          let num = parseFloat(val);
+          if (num <= 0 || isNaN(num)) num = Infinity;
+          return num;
+        })
+        .or(z.number()),
+    ]),
+    rating: z.tuple([
+      z
+        .string()
+        .transform((val) => {
+          let num = parseFloat(val);
+          if (num <= 0 || isNaN(num)) num = 0;
+          return num;
+        })
+        .or(z.number()),
+      z
+        .string()
+        .transform((val) => {
+          let num = parseFloat(val);
+          if (num <= 0 || isNaN(num)) num = 5;
+          return num;
+        })
+        .or(z.number()),
+    ]),
   })
   .transform((obj) => {
     const newObj = { ...obj };
@@ -108,6 +109,7 @@ const FormSchema = z
 
 function FilterBy({
   filters,
+  className,
 }: {
   filters: {
     minPrice: number;
@@ -115,6 +117,7 @@ function FilterBy({
     minRating: number;
     maxRating: number;
   };
+  className?: string;
 }) {
   const { minPrice, maxPrice, minRating, maxRating } = filters;
   const router = useRouter();
@@ -125,6 +128,8 @@ function FilterBy({
     defaultValues: {
       priceFrom: minPrice,
       priceTo: maxPrice,
+      price: [minPrice, maxPrice],
+      rating: [minRating, maxRating],
       ratingFrom: minRating,
       ratingTo: maxRating,
     },
@@ -136,117 +141,231 @@ function FilterBy({
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     router.push(
-      `?sort=${sortParam}&price=${data.priceFrom}to${data.priceTo}&rating=${data.ratingFrom}to${data.ratingTo}`,
+      `?sort=${sortParam}&price=${data.price[0]}to${data.price[1]}&rating=${data.rating[0]}to${data.rating[1]}`,
     );
   }
 
   return (
-    <aside className="sticky top-[4.5rem] h-fit w-max flex-col text-nowrap break-keep rounded-md bg-zinc-200 p-2 dark:bg-zinc-900">
-      <h2 className="mb-3 flex items-center gap-2 text-2xl font-bold">
-        <Filter className="h-7 w-7 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
-        Filter
-      </h2>
+    <aside
+      className={cn(
+        "flex h-fit w-full text-nowrap break-keep rounded-md bg-zinc-200 p-2 dark:bg-zinc-900 lg:sticky lg:top-[4.5rem] lg:w-max lg:flex-col",
+        className,
+      )}
+    >
+      <Drawer>
+        <DrawerTrigger className="flex items-center gap-2 text-xl font-bold lg:hidden lg:text-2xl">
+          <Filter className="h-6 w-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950 lg:h-7 lg:w-7" />
+          <h2>Filter</h2>
+          <ChevronDown className=" h-4 w-4" />
+        </DrawerTrigger>
+        <DrawerContent className="px-5">
+          <DrawerHeader>
+            <DrawerTitle className=" flex items-center justify-center gap-2 text-2xl font-bold">
+              <Filter className="h-7 w-7 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
+              <h2>Filter</h2>
+            </DrawerTitle>
+          </DrawerHeader>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex w-full items-stretch justify-stretch gap-4 lg:flex-col lg:gap-5"
+            >
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field: { onChange, ...fields } }) => (
+                  <FormItem className="w-full">
+                    <FormLabel asChild className="text-xl font-semibold">
+                      <h3>Price</h3>
+                    </FormLabel>
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium">
+                        {fields.value[0].toLocaleString()}$
+                      </span>
+                      <span className="text-sm font-medium">
+                        {fields.value[1].toLocaleString()}$
+                      </span>
+                    </div>
+                    <FormControl>
+                      <Slider
+                        {...fields}
+                        onValueChange={onChange}
+                        min={minPrice}
+                        max={maxPrice}
+                        step={1}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="rating"
+                render={({ field: { value, onChange } }) => (
+                  <FormItem className="w-full">
+                    <FormLabel asChild className="text-xl font-semibold">
+                      <h3>Rating</h3>
+                    </FormLabel>
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium">{value[0]}</span>
+                      <span className="text-sm font-medium">{value[1]}</span>
+                    </div>
+                    <FormControl>
+                      <Slider
+                        value={value}
+                        onValueChange={onChange}
+                        min={minRating}
+                        max={maxRating}
+                        step={0.1}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="hidden gap-2 lg:flex">
+                <Button
+                  onClick={() => form.reset()}
+                  variant="outline"
+                  size="sm"
+                  className="mt-3"
+                  asChild
+                >
+                  <Link
+                    href={`?sort=${sortParam}`}
+                    className={cn(
+                      isRestedDisabled && "pointer-events-none opacity-50",
+                    )}
+                  >
+                    <RotateCcw className="me-1 h-4 w-4" /> Reset
+                  </Link>
+                </Button>
+                <Button type="submit" size="sm" className="mt-3">
+                  Apply
+                </Button>
+              </div>
+            </form>
+          </Form>
+          <DrawerFooter>
+            <div className="ms-auto flex gap-2 lg:hidden">
+              <DrawerClose
+                className={cn(isRestedDisabled && "pointer-events-none")}
+              >
+                <Button
+                  onClick={() => form.reset()}
+                  variant="outline"
+                  size="sm"
+                  className="mt-3"
+                  asChild
+                >
+                  <Link
+                    href={`?sort=${sortParam}`}
+                    className={cn(
+                      isRestedDisabled && "pointer-events-none opacity-50",
+                    )}
+                  >
+                    <RotateCcw className="me-1 h-4 w-4" /> Reset
+                  </Link>
+                </Button>
+              </DrawerClose>
+              <Button type="submit" size="sm" className="mt-3">
+                Apply
+              </Button>
+            </div>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+      <div className="mb-3 hidden items-center gap-2 text-2xl font-bold lg:flex">
+        <h2 className=" flex items-center gap-2 text-2xl font-bold">
+          <Filter className="h-7 w-7 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
+          Filter
+        </h2>
+        <div className="ms-auto flex gap-2 lg:hidden">
+          <Button
+            onClick={() => form.reset()}
+            variant="outline"
+            size="sm"
+            className="mt-3"
+            asChild
+          >
+            <Link
+              href={`?sort=${sortParam}`}
+              className={cn(
+                isRestedDisabled && "pointer-events-none opacity-50",
+              )}
+            >
+              <RotateCcw className="me-1 h-4 w-4" /> Reset
+            </Link>
+          </Button>
+          <Button type="submit" size="sm" className="mt-3">
+            Apply
+          </Button>
+        </div>
+      </div>
 
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-1"
+          className="hidden w-full items-stretch justify-stretch gap-4 lg:flex lg:flex-col lg:gap-5"
         >
-          <h3 className="text-xl font-semibold">Price</h3>
-          <div className="flex flex-col items-start gap-1">
-            <FormField
-              control={form.control}
-              name="priceFrom"
-              render={({ field }) => (
-                <FormItem>
-                  {/* <FormLabel>From</FormLabel> */}
-                  <div className="flex items-center justify-center gap-1">
-                    <FormControl>
-                      <Input
-                        {...field}
-                        className="h-8 w-24 px-2 py-1"
-                        type="number"
-                        placeholder="0"
-                        step={0.1}
-                      />
-                    </FormControl>
-                    <span className=" font-semibold">$</span>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <span>to</span>
-            <FormField
-              control={form.control}
-              name="priceTo"
-              render={({ field }) => (
-                <FormItem>
-                  {/* <FormLabel>To</FormLabel> */}
-                  <div className="flex items-center justify-center gap-1">
-                    <FormControl>
-                      <Input
-                        {...field}
-                        className="h-8 w-24 px-2 py-1"
-                        placeholder="Infinity"
-                        type="number"
-                        step={0.1}
-                      />
-                    </FormControl>
-                    <span className=" font-semibold">$</span>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <h3 className="text-xl font-semibold">Rating</h3>
-          <div className="flex flex-row items-center gap-1">
-            <FormField
-              control={form.control}
-              name="ratingFrom"
-              render={({ field }) => (
-                <FormItem>
-                  {/* <FormLabel>From</FormLabel> */}
-                  <FormControl>
-                    <Input
-                      {...field}
-                      className="h-8 w-14 px-2 py-1"
-                      type="number"
-                      placeholder="0"
-                      min={0}
-                      max={5}
-                      step={0.1}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <span>to</span>
-            <FormField
-              control={form.control}
-              name="ratingTo"
-              render={({ field }) => (
-                <FormItem>
-                  {/* <FormLabel>To</FormLabel> */}
-                  <FormControl>
-                    <Input
-                      {...field}
-                      className="h-8 w-14 px-2 py-1"
-                      placeholder="5"
-                      type="number"
-                      min={0}
-                      max={5}
-                      step={0.1}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="flex gap-2">
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field: { onChange, ...fields } }) => (
+              <FormItem className="w-full">
+                <FormLabel asChild className="text-xl font-semibold">
+                  <h3>Price</h3>
+                </FormLabel>
+                <div className="flex justify-between">
+                  <span className="text-sm font-medium">
+                    {fields.value[0].toLocaleString()}$
+                  </span>
+                  <span className="text-sm font-medium">
+                    {fields.value[1].toLocaleString()}$
+                  </span>
+                </div>
+                <FormControl>
+                  <Slider
+                    {...fields}
+                    onValueChange={onChange}
+                    min={minPrice}
+                    max={maxPrice}
+                    step={1}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="rating"
+            render={({ field: { value, onChange } }) => (
+              <FormItem className="w-full">
+                <FormLabel asChild className="text-xl font-semibold">
+                  <h3>Rating</h3>
+                </FormLabel>
+                <div className="flex justify-between">
+                  <span className="text-sm font-medium">{value[0]}</span>
+                  <span className="text-sm font-medium">{value[1]}</span>
+                </div>
+                <FormControl>
+                  <Slider
+                    value={value}
+                    onValueChange={onChange}
+                    min={minRating}
+                    max={maxRating}
+                    step={0.1}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="hidden gap-2 lg:flex">
             <Button
               onClick={() => form.reset()}
               variant="outline"

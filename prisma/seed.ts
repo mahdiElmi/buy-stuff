@@ -1,7 +1,7 @@
 // import { prisma } from "@/lib/db";
 import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
-import { Product, User } from "@prisma/client";
+import { User } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -19,90 +19,42 @@ type fakeStoreProduct = {
 };
 
 async function main() {
-  const deleteReviews = prisma.review.deleteMany();
-  const deleteProducts = prisma.product.deleteMany();
-  const deleteCategories = prisma.category.deleteMany();
-  const deleteVendors = prisma.vendor.deleteMany();
-  const deleteUsers = prisma.user.deleteMany();
-  const deleteSessions = prisma.session.deleteMany();
-  const deleteAccounts = prisma.account.deleteMany();
-  await prisma.$transaction([
-    deleteReviews,
-    deleteProducts,
-    deleteVendors,
-    deleteUsers,
-    deleteSessions,
-    deleteAccounts,
-    deleteCategories,
-  ]);
-  // const vibrod = await prisma.vendor.upsert({
-  //   where: {
-  //     name: "Vibrod Prod tm",
-  //   },
-  //   update: {},
-  //   create: {
-  //     name: "Vibrod Prod tm",
-  //     description: "we make vibrators ok? deal with it",
-  //   },
-  // });
-  // const vibrator = await prisma.product.upsert({
-  //   where: { id: "a" },
-  //   update: {},
-  //   create: {
-  //     id: "a",
-  //     averageRating: 0,
-  //     name: "Vibrat pro",
-  //     description:
-  //       "the best vibrator in the town two times Vibcon winner of best vibrator of the year and certified to deliver orgasm level of 10 or higher. Squirt, piss, semen proof this vibrator can handle all the 4 vaginal fluids and penile fluids with ease.enterprise anti poop coating to keep the vibrator clean from 99.6% of bacteria found it human and dog feces. tested to go 20 inches deep*. *it is recommended to attach our fiber mesh band to the vibrator when going deep to prevent the good old pooping the vibrator out.",
-  //     price: 699,
-  //     stock: 7,
-  //     vendor: {
-  //       connect: {
-  //         id: vibrod.id,
-  //       },
-  //     },
-  //   },
-  // });
-  // const mahdi = await prisma.user.upsert({
-  //   where: { email: "mahdi@gmail.com" },
-  //   update: {},
-  //   create: {
-  //     email: "mahdi@gmail.com",
-  //     name: "Mahdi",
-  //     lastName: "Elmi",
-  //     reviews: {
-  //       create: {
-  //         title:
-  //           "the product that cured my hemorrhoid or how I stopped excreting painfully and started loving toilets again.",
-  //         body: "oh I like this product you have no Idea! haha it's a bit pricy but oh boy.. can you put a price on butt pain? :)) I mean... come on!! haha",
-  //         rating: 5,
-  //         productId: vibrator.id,
-  //       },
-  //     },
-  //   },
-  // });
-  // console.log(mahdi, vibrator, vibrod);
-  // const vibPorducts = await prisma.product.findMany({
-  //   where: { name: "vibrat pro" },
-  //   include: { reviews: true },
-  // });
-  // console.log(vibPorducts);
+  // const deleteVotes = prisma.vote.deleteMany();
+  // const deleteReviews = prisma.review.deleteMany();
+  // const deleteImages = prisma.image.deleteMany();
+  // const deleteProducts = prisma.product.deleteMany();
+  // const deleteCategories = prisma.category.deleteMany();
+  // const deleteVendors = prisma.vendor.deleteMany();
+  // const deleteUsers = prisma.user.deleteMany();
+  // const deleteSessions = prisma.session.deleteMany();
+  // const deleteAccounts = prisma.account.deleteMany();
+  // await prisma.$transaction([
+  //   deleteVotes,
+  //   deleteReviews,
+  //   deleteImages,
+  //   deleteProducts,
+  //   deleteVendors,
+  //   deleteUsers,
+  //   deleteSessions,
+  //   deleteAccounts,
+  //   deleteCategories,
+  // ]);
 
   const fetchResponse = await fetch("https://api.escuelajs.co/api/v1/products");
   const fakeProducts: fakeStoreProduct[] = await fetchResponse.json();
 
   // fetch and dedupe categories
-  const fetchCategoryResponse = await fetch(
-    "https://api.escuelajs.co/api/v1/categories",
-  );
-  const fakeCategories: { id: number; image: string; name: string }[] =
-    await fetchCategoryResponse.json();
-  const categoryNames = fakeCategories.map((category) => {
-    if (category.name === "fsdf") return "Electronics";
-    if (category.name === "Okurmen") return "Clothing";
-    return category.name;
+  // const fetchCategoryResponse = await fetch(
+  //   "https://api.escuelajs.co/api/v1/products",
+  // );
+  // const fakeCategories: { id: number; image: string; name: string }[] =
+  const categoryNames = fakeProducts.map((fakeProduct) => {
+    if (fakeProduct.category.name === "change title") return "furniture";
+    return fakeProduct.category.name;
   });
   const uniqueCategories = Array.from(new Set(categoryNames));
+
+  console.log(uniqueCategories);
 
   // create new categories from fake api
   const categoriesToFlush = [];
@@ -229,6 +181,28 @@ async function main() {
         await prisma.$transaction(reviewsToFlush);
       }
   }
+  const products = await prisma.product.findMany({});
+  const averageRatingsToUpdate = [];
+  let i = 1;
+  for (let product of products) {
+    const reviewAggregation = await prisma.review.aggregate({
+      _avg: { rating: true },
+      where: { productId: product.id },
+    });
+    console.log({ i, name: product.name, reviewAggregation });
+    i++;
+    // averageRatingsToUpdate.push(
+    //   prisma.product.update({
+    //     where: { id: product.id },
+    //     data: { averageRating: reviewAggregation._avg.rating ?? undefined },
+    //   }),
+    // );
+    await prisma.product.update({
+      where: { id: product.id },
+      data: { averageRating: reviewAggregation._avg.rating ?? undefined },
+    });
+  }
+  // await prisma.$transaction(averageRatingsToUpdate);
 }
 main()
   .then(async () => {

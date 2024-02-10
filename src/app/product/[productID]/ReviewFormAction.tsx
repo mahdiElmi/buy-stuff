@@ -19,12 +19,18 @@ export default async function SubmitReview(
   if (validationResult.success) {
     const product = await prisma.product.findUnique({
       where: { id: productId },
-      select: { vendor: true },
+      include: { _count: { select: { reviews: true } }, vendor: true },
+      // select: {
+      //   vendor: true,
+      //   averageRating: true,
+      //   _count: { select: { reviews: true } },
+      // },
     });
-    if (product?.vendor.id === userId)
+    if (!product) return { success: false, cause: "ProcutId is not valid." };
+    if (product.vendor.userId === userId)
       return { success: false, cause: "Reviewer is vendor" };
     try {
-      await prisma.review.create({
+      const reviewCreationToFlush = prisma.review.create({
         data: {
           rating: values.rating,
           title: values.title,
@@ -33,7 +39,18 @@ export default async function SubmitReview(
           reviewed: { connect: { id: productId } },
         },
       });
-      // prisma.$queryRaw``
+      // trying not to divide by zero
+      const newAverageRating =
+        (product.averageRating + values.rating) / product._count.reviews === 0
+          ? 1
+          : product._count.reviews;
+      const productUpdateToFlush = prisma.product.update({
+        where: { id: productId },
+        data: {
+          averageRating: newAverageRating,
+        },
+      });
+      await prisma.$transaction([reviewCreationToFlush, productUpdateToFlush]);
     } catch {
       return { success: false, cause: "database" };
     }

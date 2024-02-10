@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import ReviewDate from "./ReviewDate";
 import { Badge } from "@/components/ui/badge";
 import AddToCartButton from "./AddToCartButton";
+import Products from "@/app/products/page";
 
 const userWithReviewerVotes = Prisma.validator<Prisma.UserDefaultArgs>()({
   include: { reviewVotes: true },
@@ -88,14 +89,17 @@ export default async function Product({
         break;
     }
   }
-  const AverageRating = parseFloat(
-    (product.reviews.length > 0
-      ? product.reviews.reduce(
-          (acc, currentReview) => currentReview.rating + acc,
-          0,
-        ) / product.reviews.length
-      : 0
-    ).toFixed(1),
+  // const AverageRating = parseFloat(
+  //   (product.reviews.length > 0
+  //     ? product.reviews.reduce(
+  //         (acc, currentReview) => currentReview.rating + acc,
+  //         0,
+  //       ) / product.reviews.length
+  //     : 0
+  //   ).toFixed(1),
+  // );
+  const formattedAverageRating = product.averageRating.toFixed(
+    product.averageRating % 1 === 0 ? 0 : 1,
   );
   const indexedVotes = new Map<string, Vote>();
   if (user) {
@@ -116,7 +120,7 @@ export default async function Product({
             className=" place-self-center overflow-clip rounded-l-lg bg-zinc-100 py-1 dark:bg-zinc-800 "
           />
           <div className="flex w-full flex-col rounded-lg bg-zinc-200/60 p-7 dark:bg-zinc-900">
-            <div className="flex w-full items-center gap-4 ">
+            <div className="flex w-full items-center gap-2 ">
               <Image
                 width={40}
                 height={40}
@@ -124,7 +128,7 @@ export default async function Product({
                 alt={review.reviewedBy.name}
                 className="h-10 w-10 rounded-full"
               />
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col">
                 <div className="flex gap-2 text-sm font-bold">
                   <Link href={`/u/${review.reviewedBy.id}`}>
                     {review.reviewedBy.name}
@@ -156,9 +160,9 @@ export default async function Product({
                 </div>
               )}
             </div>
-            <h3 className="mb-1 mt-6 text-lg font-bold">{review.title}</h3>
+            <h3 className=" mt-3 text-lg font-bold">{review.title}</h3>
             <div
-              className="col-span-full col-start-2 flex-none space-y-6 p-1 text-base text-zinc-800 dark:text-zinc-200"
+              className="col-span-full col-start-2 flex-none px-1 text-base text-zinc-800 dark:text-zinc-200"
               dangerouslySetInnerHTML={{ __html: review.body }}
             />
           </div>
@@ -176,12 +180,12 @@ export default async function Product({
 
   return (
     <div className="">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-8xl lg:px-8">
-        <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+      <div className="mx-auto max-w-8xl  px-4 py-16 sm:px-6 sm:py-24 lg:max-w-8xl lg:px-8">
+        <div className="flex flex-col gap-14 md:flex-row">
           {/* Image gallery */}
           <ImageGroup images={product.images} />
           {/* Product info */}
-          <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+          <div className="mt-10 px-4 sm:mt-16 sm:px-0 md:w-1/2 lg:mt-0">
             <Link
               className="hover:text-sky-400 hover:underline"
               href={`/vendors/${product.vendorId}`}
@@ -191,6 +195,25 @@ export default async function Product({
             <h1 className="text-3xl font-bold tracking-tight">
               {product.name}
             </h1>
+            {product.reviews.length > 0 && (
+              <div className="flex items-center gap-1 pt-1">
+                <span className="font-bold">{formattedAverageRating}/5</span>
+                <CustomRating
+                  className="max-w-24"
+                  readOnly
+                  color="gold"
+                  value={product.averageRating}
+                />
+                <Link
+                  href="#reviews"
+                  className="ms-3 font-medium text-blue-500"
+                >
+                  See {product.reviews.length > 1 && "all"}{" "}
+                  {product.reviews.length} review
+                  {product.reviews.length > 1 && "s"}
+                </Link>
+              </div>
+            )}
             <div className="mt-3">
               <h2 className="sr-only">Product information</h2>
               <p className="text-3xl tracking-tight">{product.price}$</p>
@@ -218,7 +241,10 @@ export default async function Product({
         </div>
       </div>
       {/* REVIEW SECTION */}
-      <div className="mx-auto flex max-w-2xl flex-col gap-14 px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl  lg:gap-x-8 lg:px-8 lg:py-32">
+      <div
+        id="reviews"
+        className="mx-auto flex max-w-2xl flex-col gap-14 px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl  lg:gap-x-8 lg:px-8 lg:py-32"
+      >
         <div className="flex w-full flex-col gap-8 lg:flex-row">
           <div className="lg:w-96">
             <h2 className="w-max text-2xl font-bold tracking-tight">
@@ -229,11 +255,11 @@ export default async function Product({
                 className="max-w-52"
                 color="gold"
                 // style={{ maxWidth }}
-                value={AverageRating}
+                value={product.averageRating}
                 readOnly={true}
               />
               <h3 className="text-6xl font-bold">
-                {AverageRating}
+                {formattedAverageRating}
                 <span className="text-3xl">/5</span>
               </h3>
             </div>
@@ -241,7 +267,9 @@ export default async function Product({
             <div className="mt-3 flex items-center">
               <div>
                 <div className="flex items-center"></div>
-                <p className="sr-only">{AverageRating} out of 5 stars</p>
+                <p className="sr-only">
+                  {formattedAverageRating} out of 5 stars
+                </p>
               </div>
               <p className="ml-2 text-sm font-semibold ">
                 Based on {product.reviews.length} review

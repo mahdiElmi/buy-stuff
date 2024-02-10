@@ -1,10 +1,10 @@
-import ProductItem from "@/components/productItem";
+import ProductCard from "@/components/productCard";
 import { ProductWithImagesAndVendor } from "@/lib/types";
 
 export default async function ProductGrid({
   products,
 }: {
-  products: (ProductWithImagesAndVendor & { _averageRating?: number })[];
+  products: ProductWithImagesAndVendor[];
 }) {
   if (products.length <= 0)
     return (
@@ -19,11 +19,11 @@ export default async function ProductGrid({
     );
 
   const productElements = products.map((product) => {
-    return <ProductItem product={product} key={product.id} />;
+    return <ProductCard product={product} key={product.id} />;
   });
   return (
-    <div className="h-full w-full @container">
-      <div className="grid h-full w-full grid-cols-2 gap-4 rounded-md @2xl:grid-cols-3 @5xl:grid-cols-4 @6xl:grid-cols-5 @7xl:grid-cols-6">
+    <div className="@container">
+      <div className="grid grid-cols-1 gap-4 rounded-md @md:grid-cols-2 @2xl:grid-cols-3 @5xl:grid-cols-4 @6xl:grid-cols-5 @7xl:grid-cols-6">
         {productElements}
       </div>
     </div>

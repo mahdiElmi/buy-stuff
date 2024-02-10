@@ -3,8 +3,10 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Button } from "./ui/button";
 import { redirect } from "next/navigation";
 import { useRouter, useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Route } from "next";
 
-function SearchBar() {
+function SearchBar({ className }: { className?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -16,7 +18,7 @@ function SearchBar() {
 
     if (search.value) {
       // newParams.set("q", search.value);
-      router.push(`?q=${search.value}`);
+      router.push(`/products/?q=${search.value}` as Route);
     } else {
       // newParams.delete("q");
     }
@@ -25,9 +27,9 @@ function SearchBar() {
   }
 
   return (
-    <search className="h-full w-full">
+    <search className={cn("h-full w-full", className)}>
       <form
-        className="relative mx-auto flex w-1/2 min-w-fit flex-row justify-center "
+        className="relative mx-auto flex w-2/3 min-w-fit flex-row justify-center "
         onSubmit={onSubmit}
       >
         <input
@@ -35,8 +37,8 @@ function SearchBar() {
           name="search"
           minLength={3}
           defaultValue={searchParams?.get("q") || ""}
-          placeholder="What are you looking for?"
-          className="flex w-full rounded-md border-none bg-zinc-200 py-1 pe-9 text-sm font-medium shadow-inner
+          placeholder="Search"
+          className="flex w-full rounded-md border-none bg-zinc-200 py-1 pe-9 text-base font-medium shadow-inner
          placeholder:text-zinc-600 focus:ring-0 focus:placeholder:text-zinc-900 
          dark:bg-zinc-900 dark:text-zinc-300 dark:placeholder:text-zinc-400 dark:focus:placeholder:text-zinc-300 md:text-base "
         />
