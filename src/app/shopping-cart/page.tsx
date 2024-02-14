@@ -1,11 +1,10 @@
 import { LocalShoppingCartItems, UserWithShoppingCart } from "@/lib/types";
 import BigCart from "./BigCart";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/server/auth";
+import { auth } from "@/server/auth";
 import { prisma } from "@/lib/db";
 
 async function shoppingCart() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   let user: UserWithShoppingCart | null = null;
   const shoppingCartItems: LocalShoppingCartItems = {};
   if (session && session.user && session.user.email) {

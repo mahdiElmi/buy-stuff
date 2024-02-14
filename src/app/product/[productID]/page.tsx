@@ -4,8 +4,7 @@ import { Prisma, Vote } from "@prisma/client";
 import { StarIcon } from "@heroicons/react/20/solid";
 import ImageGroup from "./ImageGroup";
 import Image from "next/image";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/server/auth";
+import { auth } from "@/server/auth";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import DeleteButton from "../../../components/DeleteButton";
@@ -48,7 +47,7 @@ export default async function Product({
     },
   });
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!product) return <div>No product found. :(</div>;
   const vendor = await prisma.vendor.findUnique({
     where: {

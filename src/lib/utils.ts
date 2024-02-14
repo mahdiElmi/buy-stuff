@@ -1,9 +1,7 @@
-import { authOptions } from "@/server/auth";
 import { type ClassValue, clsx } from "clsx";
-import { getServerSession } from "next-auth";
+import { auth } from "@/server/auth";
 import { twMerge } from "tailwind-merge";
 import { prisma } from "./db";
-import { User } from "@prisma/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -47,7 +45,7 @@ export function abbrNum(number: number, decPlaces: number) {
 
 // checks wether current user is logged in and wether the same with the one who sent the request.
 export async function checkAuth(userId: string) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session || !session.user)
     return { success: false, cause: "User is not authenticated." };
   const user = await prisma.user.findUnique({ where: { id: userId } });

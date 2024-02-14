@@ -28,7 +28,7 @@ export default function ProductCard({
           />
         )}
         <span
-          className="absolute bottom-0 left-0 rounded-tr-md bg-zinc-50/50 p-1 text-2xl font-extrabold drop-shadow-md backdrop-blur-sm 
+          className="absolute bottom-0 left-0 rounded-tr-md bg-zinc-50/50 p-1 text-2xl font-extrabold backdrop-blur-sm 
         transition-opacity duration-100 group-hover:opacity-50 dark:bg-zinc-900"
         >
           {product.price}
@@ -36,7 +36,7 @@ export default function ProductCard({
         </span>
         {product.stock < 5 && (
           <span
-            className="absolute bottom-0 right-0 min-w-fit rounded-tl-md bg-zinc-50/50 p-1 text-lg font-semibold drop-shadow-md backdrop-blur-sm 
+            className="absolute bottom-0 right-0 min-w-fit rounded-tl-md bg-zinc-50/50 p-1 text-lg font-semibold backdrop-blur-sm 
           transition-opacity duration-100 group-hover:opacity-50 dark:bg-zinc-900"
           >
             {product.stock > 0 ? (

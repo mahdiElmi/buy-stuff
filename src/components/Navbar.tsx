@@ -3,8 +3,7 @@ import ThemeToggle from "./ThemeToggle";
 import UserProfileButton from "./UserProfileButton";
 import SearchBar from "./SearchBar";
 import ShoppingCart from "./ShoppingCart";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/server/auth";
+import { auth } from "@/server/auth";
 import { prisma } from "@/lib/db";
 import { LocalShoppingCartItems, UserWithShoppingCart } from "@/lib/types";
 import { Button } from "./ui/button";
@@ -19,7 +18,7 @@ import {
 } from "@/components/ui/sheet";
 
 async function Navbar() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   let user: UserWithShoppingCart | null = null;
   const shoppingCartItems: LocalShoppingCartItems = {};
   if (session && session.user && session.user.email) {
@@ -66,7 +65,10 @@ async function Navbar() {
             <Menu className="h-6 w-6" />
             {/* </Button> */}
           </SheetTrigger>
-          <SheetContent className="w-fit pe-10" side="left">
+          <SheetContent
+            className="w-fit border-zinc-200 pe-10 dark:border-zinc-700"
+            side="left"
+          >
             <div className="flex flex-col items-start gap-3 pt-5">
               <Link
                 href="/products?page=1"
@@ -97,22 +99,22 @@ async function Navbar() {
           <span className="h-min leading-none">BUY!!!</span>
           <span className="-mt-1 h-min leading-none">STUFF</span>
         </Link>
-        <div className="hidden md:flex md:items-center md:gap-3">
+        <div className="hidden md:flex md:items-center md:gap-4">
           <Link
             href="/products?page=1"
-            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-800 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"
+            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
           >
             products
           </Link>
           <Link
             href="/about"
-            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-800 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"
+            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
           >
             about
           </Link>
           <Link
             href="/blog"
-            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-800 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"
+            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
           >
             blog
           </Link>

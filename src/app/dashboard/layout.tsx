@@ -1,13 +1,12 @@
 import { prisma } from "@/lib/db";
-import { authOptions } from "@/server/auth";
-import { getServerSession } from "next-auth";
+import { auth } from "@/server/auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 async function layout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session) redirect("/api/auth/signin");
   const user = await prisma.user.findUnique({
     where: { email: session!.user!.email! },

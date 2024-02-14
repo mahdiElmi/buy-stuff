@@ -1,14 +1,4 @@
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { authOptions } from "@/server/auth";
-
-async function About() {
-  // const data = await fetch('https://fakestoreapi.com/products')
-  //         .then(res=>res.json())
-  //         .then(json=>console.log(json))
-  // console.log(data);
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/api/auth/signin");
+function About() {
   return (
     <div className="mt-5">
       <h1 className="mb-4 text-center text-3xl font-bold">About</h1>
@@ -19,9 +9,6 @@ async function About() {
         had the audacity to tackle such a project and the rest is history as you
         know.
       </p>
-      {/* <Suspense fallback={<>Loading Powerful Stats...</>}>
-        <BossStats />
-      </Suspense> */}
     </div>
   );
 }

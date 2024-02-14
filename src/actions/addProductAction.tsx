@@ -2,17 +2,15 @@
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { productSchema } from "@/lib/zodSchemas";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/server/auth";
+import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
-import { Image } from "@prisma/client";
 type ProductFields = z.infer<typeof productSchema>;
 
 export async function addProduct(values: ProductFields) {
   const validationResult = productSchema.safeParse(values);
 
   if (validationResult.success) {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (session && session.user && session.user.email) {
       const user = await prisma.user.findUnique({
         where: {

@@ -1,9 +1,8 @@
 "use server";
 import { prisma } from "@/lib/db";
 import { vendorSchema } from "@/lib/zodSchemas";
-import { authOptions } from "@/server/auth";
 import { Vendor } from "@prisma/client";
-import { getServerSession } from "next-auth";
+import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 type VendorFields = z.infer<typeof vendorSchema>;
@@ -15,7 +14,7 @@ export async function RegisterAction(values: VendorFields) {
       where: { name: values.name },
     });
     if (!Boolean(isVendorNameAvailable)) {
-      const session = await getServerSession(authOptions);
+      const session = await auth();
       if (session && session.user && session.user.email) {
         const newVendor = await prisma.vendor.create({
           data: {
