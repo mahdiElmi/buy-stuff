@@ -46,7 +46,10 @@ export default function ImageUpload({ imgUrls }: { imgUrls: string[] }) {
       </div>
       <div className="flex gap-1">
         {imgUrls.map((imgUrl) => (
-          <div className="bg-zinc-500/50drop-shadow-md group relative aspect-square rounded-sm">
+          <div
+            key={imgUrl}
+            className="bg-zinc-500/50drop-shadow-md group relative aspect-square rounded-sm"
+          >
             <button
               className="invisible absolute right-1 top-1 z-10 h-7 w-7 rounded-md bg-zinc-950/50 p-1 text-white drop-shadow-lg group-hover:visible"
               title="delete photo"

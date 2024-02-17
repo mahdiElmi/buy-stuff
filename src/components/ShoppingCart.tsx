@@ -170,10 +170,10 @@ function ShoppingCart({
             {itemsArr.length > 0 ? (
               <ScrollArea className="h-48 pe-2">
                 {itemsArr.map((item) => (
-                  <DropdownMenuItem asChild>
+                  <DropdownMenuItem key={item.productId} asChild>
                     <div
-                      className="flex items-center gap-2"
                       key={item.productId}
+                      className="flex items-center gap-2"
                     >
                       <Link
                         className="w-fit flex-shrink-0"

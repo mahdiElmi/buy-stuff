@@ -21,7 +21,9 @@ export default async function Vote(
     await prisma.review.update({
       where: { id: reviewId },
       data: {
-        upvoteCount: isVoteUp ? { increment: vote?2:1 } : { decrement: vote?2:1 },
+        upvoteCount: isVoteUp
+          ? { increment: vote ? 2 : 1 }
+          : { decrement: vote ? 2 : 1 },
         Vote: {
           upsert: {
             where: {

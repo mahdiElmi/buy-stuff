@@ -1,4 +1,3 @@
-import Products from "@/app/products/page";
 import ProductGrid from "@/components/ProductGrid";
 import { prisma } from "@/lib/db";
 import { ParamsType } from "@/lib/types";
@@ -74,8 +73,7 @@ async function VendorPage({
         <h2 className="px-3 text-center text-3xl font-extrabold lg:text-start">
           Our Products
         </h2>
-        <Products searchParams={searchParams} params={params} />
-        {/* <ProductGrid products={vendor.products} /> */}
+        <ProductGrid searchParams={searchParams} params={params} />
       </div>
     </div>
   );

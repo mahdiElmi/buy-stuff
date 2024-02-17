@@ -1,5 +1,4 @@
 "use client";
-import ImageUpload from "@/components/ImageUpload";
 import { useTransition } from "react";
 import DummyProductItem from "./DummyProductItem";
 import { addProduct } from "@/actions/addProductAction";

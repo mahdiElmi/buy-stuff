@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 async function layout({ children }: { children: React.ReactNode }) {
   const session = await auth();
-  if (!session) redirect("/api/auth/signin");
+  if (!session) redirect("/api/auth/sign-in");
   const user = await prisma.user.findUnique({
     where: { email: session!.user!.email! },
     include: { vendor: true },

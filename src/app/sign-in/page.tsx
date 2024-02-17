@@ -30,7 +30,7 @@ export default function Page({
           "The emails is already linked to an account. Try other ways to log in.",
       });
     }
-  }, []);
+  }, [authError, toast]);
 
   function handleLogIn(provider: "github" | "google") {
     setClickedProvider(provider);

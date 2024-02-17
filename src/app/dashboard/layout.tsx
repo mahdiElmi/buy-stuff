@@ -1,26 +1,24 @@
 import { prisma } from "@/lib/db";
 import { auth } from "@/server/auth";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 async function layout({ children }: { children: React.ReactNode }) {
   const session = await auth();
-  if (!session) redirect("/api/auth/signin");
   const user = await prisma.user.findUnique({
     where: { email: session!.user!.email! },
     include: { vendor: true },
   });
 
   return (
-    <div className="flex h-screen w-full max-w-7xl flex-row gap-5 self-start rounded-t-md border-2 border-b-0 bg-zinc-100 to-30% pt-5 shadow dark:border-zinc-700 dark:bg-gradient-to-r dark:from-zinc-900 dark:to-zinc-950 ">
+    <div className="my-5 flex h-screen w-full max-w-7xl flex-row gap-5 self-start rounded-md border-2 bg-zinc-100 to-30% pt-5 shadow dark:border-zinc-700 dark:bg-gradient-to-r dark:from-zinc-900 dark:to-zinc-950 ">
       <nav className="flex h-full w-1/5 flex-col gap-2 ">
-        <h2 className=" text-center text-2xl font-black">Buy Stuff</h2>
+        <h2 className=" text-center text-2xl font-black">Dashboard</h2>
         <Separator className="w-5/6 self-center" />
         <Link href="/dashboard">
           <Button
-            className="flex w-full justify-start text-xl font-semibold"
+            className="flex w-full justify-start text-xl font-bold"
             variant="ghost"
           >
             Profile
@@ -28,7 +26,7 @@ async function layout({ children }: { children: React.ReactNode }) {
         </Link>
         <Link href="/dashboard/favorites">
           <Button
-            className="flex w-full justify-start text-xl font-semibold"
+            className="flex w-full justify-start text-xl font-bold"
             variant="ghost"
           >
             Favorites
@@ -36,7 +34,7 @@ async function layout({ children }: { children: React.ReactNode }) {
         </Link>
         <Link href="/dashboard/settings">
           <Button
-            className="flex w-full justify-start text-xl font-semibold"
+            className="flex w-full justify-start text-xl font-bold"
             variant="ghost"
           >
             Settings
@@ -50,7 +48,7 @@ async function layout({ children }: { children: React.ReactNode }) {
             <Separator className="w-5/6 self-center" />
             <Link href={`/vendors/${user.vendor.id}`}>
               <Button
-                className="flex w-full justify-start text-xl font-semibold"
+                className="flex w-full justify-start text-xl font-bold"
                 variant="ghost"
               >
                 Vendor Page

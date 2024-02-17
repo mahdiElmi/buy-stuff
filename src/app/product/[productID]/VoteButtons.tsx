@@ -33,7 +33,7 @@ function VoteButtons({
       hasVotedUp: vote ? vote.isVoteUp : false,
       hasVotedDown: vote ? !vote.isVoteUp : false,
     }));
-  }, []);
+  }, [vote]);
   function handleVote(isVoteUp: boolean) {
     if (userId === null) {
       // #TODO pop sign in modal instead maybe

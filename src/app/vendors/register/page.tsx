@@ -21,7 +21,7 @@ import { useTransition } from "react";
 import { vendorSchema } from "@/lib/zodSchemas";
 import { z } from "zod";
 
-function page() {
+function Page() {
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof vendorSchema>>({
     resolver: zodResolver(vendorSchema),
@@ -40,7 +40,7 @@ function page() {
   }
   return (
     <div>
-      <h1>Welcome to the SELLER registration Process</h1>
+      <h1>Welcome to the Vendor Registration Process</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -74,7 +74,7 @@ function page() {
             )}
           />
           <Button disabled={isPending} type="submit">
-            {isPending ? "Loading..." : "Submit"}
+            {isPending ? "Submitting..." : "Submit"}
           </Button>
         </form>
       </Form>
@@ -82,4 +82,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

@@ -126,7 +126,7 @@ function AddToCartButton({
           {cartAdjustedQuantity <= 0 && (
             <TooltipContent>
               <span>
-                You can't add more. You have the entire stock in your cart.
+                You can&apos;t add more. You have the entire stock in your cart.
               </span>
             </TooltipContent>
           )}
