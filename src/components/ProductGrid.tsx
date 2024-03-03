@@ -12,7 +12,7 @@ export default async function ProductGrid({
   className,
 }: {
   searchParams: ParamsType;
-  params: { vendorId: string | undefined; category: string | undefined };
+  params: { vendorId: string | undefined; category?: string };
   className?: string;
 }) {
   const {
