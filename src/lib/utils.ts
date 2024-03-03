@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { auth } from "@/server/auth";
 import { twMerge } from "tailwind-merge";
 import { prisma } from "./db";
+import { LocalShoppingCartItems } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -55,5 +56,40 @@ export async function checkAuth(userId: string) {
       success: false,
       cause: "User who made the request isn't the same as the user logged in.",
     };
-  return { success: true, cause: "", user };
+  return { success: true, cause: "" };
+}
+
+// export const formatPrice = new Intl.NumberFormat("en-US", {
+//   style: "currency",
+//   currency: "USD",
+//   minimumFractionDigits: 0,
+// }).format;
+
+export function formatPrice(num: number | bigint) {
+  const formattedNum = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+  }).format(num);
+  return formattedNum.slice(1);
+}
+
+export function MergeCartItems(
+  itemsFromServer: LocalShoppingCartItems,
+  itemsFromClient: LocalShoppingCartItems,
+  prioritize: "client" | "server" = "server",
+) {
+  const mergedItems = { ...itemsFromServer };
+  for (const itemKey in itemsFromClient) {
+    const itemFromMap = mergedItems[itemKey];
+    if (itemFromMap) {
+      if (prioritize === "client") {
+        mergedItems[itemKey] = itemsFromClient[itemKey];
+      }
+    } else {
+      mergedItems[itemKey] = itemsFromClient[itemKey];
+    }
+  }
+
+  return mergedItems;
 }

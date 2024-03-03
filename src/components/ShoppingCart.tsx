@@ -28,6 +28,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { formatPrice } from "@/lib/utils";
 
 function ShoppingCart({
   cartItemsFromServer,
@@ -131,7 +132,7 @@ function ShoppingCart({
           <Separator />
           <DrawerFooter className="flex flex-row items-center justify-between gap-4 px-5 py-2">
             <span className=" text-sm font-bold">
-              Total: {totalPrice.toLocaleString()}$
+              Total: {formatPrice(totalPrice)}$
             </span>
             <Button
               asChild
@@ -220,7 +221,7 @@ function ShoppingCart({
             <Separator />
             <div className="flex items-center justify-between gap-4 px-2">
               <span className="text-sm font-bold">
-                Total: {totalPrice.toLocaleString()}$
+                Total: {formatPrice(totalPrice)}$
               </span>
               <Button
                 asChild

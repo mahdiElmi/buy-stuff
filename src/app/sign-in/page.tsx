@@ -1,36 +1,30 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { signIn } from "@/server/auth";
 import { Github, Loader2 } from "lucide-react";
-import {
-  Suspense,
-  startTransition,
-  useEffect,
-  useState,
-  useTransition,
-} from "react";
+import { useEffect, useState, useTransition } from "react";
 import logIn from "./logInAction";
+import { toast } from "sonner";
+import { MergeCartItems } from "@/lib/utils";
+import { useAtom } from "jotai";
+import { cartAtom } from "@/lib/atoms";
 
 export default function Page({
   searchParams,
 }: {
   searchParams: { callback: string | undefined; error: string | undefined };
 }) {
-  const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
   const { callback = "/", error: authError } = searchParams;
   const [clickedProvider, setClickedProvider] = useState("github");
   //OAuthAccountNotLinked: If the email on the account is already linked, but not with this OAuth account
   useEffect(() => {
     if (authError === "OAuthAccountNotLinked") {
-      toast({
-        title: "We couldn't log you in!",
+      toast.error("We couldn't log you in!", {
         description:
           "The emails is already linked to an account. Try other ways to log in.",
       });
     }
-  }, [authError, toast]);
+  }, [authError]);
 
   function handleLogIn(provider: "github" | "google") {
     setClickedProvider(provider);

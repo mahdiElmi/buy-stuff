@@ -12,11 +12,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserWithShoppingCart } from "@/lib/types";
-import { LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { UserWithShoppingCartAndVendor } from "@/lib/types";
+import { Heart, LayoutDashboard, List, LogOut, PanelTop } from "lucide-react";
 import { Button } from "./ui/button";
 
-function UserProfileButton({ user }: { user: UserWithShoppingCart }) {
+function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
   return (
     <div className="h-8 w-8">
       <DropdownMenu modal={false}>
@@ -43,18 +43,46 @@ function UserProfileButton({ user }: { user: UserWithShoppingCart }) {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Link href="/dashboard" className="flex items-center gap-1">
+          <DropdownMenuItem asChild>
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2 hover:cursor-pointer"
+            >
               <LayoutDashboard className="h-5 w-5" />
               Dashboard
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <a href="#" className="flex items-center gap-1">
-              <Settings className="h-5 w-5" />
-              Settings
-            </a>
+          <DropdownMenuItem asChild>
+            <Link
+              href="/dashboard/favorites"
+              className="flex items-center gap-2 hover:cursor-pointer"
+            >
+              <Heart className="h-5 w-5 fill-current" />
+              Favorites
+            </Link>
           </DropdownMenuItem>
+          {user.vendor && (
+            <>
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`/vendors/${user.vendor.id}`}
+                  className="flex items-center gap-2 hover:cursor-pointer"
+                >
+                  <PanelTop className="h-5 w-5 " />
+                  Vendor Page
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href="/dashboard/vendor-products"
+                  className="flex items-center gap-2 hover:cursor-pointer"
+                >
+                  <List className="h-5 w-5 fill-current" />
+                  Your Products
+                </Link>
+              </DropdownMenuItem>
+            </>
+          )}
           <DropdownMenuItem asChild>
             <form
               action={async () => {
@@ -64,7 +92,7 @@ function UserProfileButton({ user }: { user: UserWithShoppingCart }) {
             >
               <button
                 type="submit"
-                className="flex items-center gap-1 p-0"
+                className="flex w-full items-center gap-2 p-0"
                 // variant="ghostHoverLess"
                 // size="sm"
                 // onClick={() => signOut()}

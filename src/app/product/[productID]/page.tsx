@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/db";
-import { Prisma, Vote } from "@prisma/client";
+import { Vote } from "@prisma/client";
 
 import { StarIcon } from "@heroicons/react/20/solid";
 import ImageGroup from "./ImageGroup";
 import Image from "next/image";
 import { auth } from "@/server/auth";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import DeleteButton from "../../../components/DeleteButton";
 import ReviewForm from "./ReviewForm";
 import VoteButtons from "./VoteButtons";
@@ -16,14 +16,9 @@ import { Button } from "@/components/ui/button";
 import ReviewDate from "./ReviewDate";
 import { Badge } from "@/components/ui/badge";
 import AddToCartButton from "./AddToCartButton";
-import Products from "@/app/products/page";
-
-const userWithReviewerVotes = Prisma.validator<Prisma.UserDefaultArgs>()({
-  include: { reviewVotes: true },
-});
-type UserWithReviewerVotes = Prisma.UserGetPayload<
-  typeof userWithReviewerVotes
->;
+import AddFavoriteButton from "./AddFavoriteButton";
+import { Pencil } from "lucide-react";
+import ProductDeleteButton from "./ProductDeleteButton";
 
 export default async function Product({
   params,
@@ -47,21 +42,30 @@ export default async function Product({
     },
   });
 
-  const session = await auth();
   if (!product) return <div>No product found. :(</div>;
-  const vendor = await prisma.vendor.findUnique({
-    where: {
-      id: product.vendorId,
-    },
-  });
-  let user: UserWithReviewerVotes | null = null;
-  if (session && session.user && session.user.email) {
-    user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      include: { reviewVotes: true },
-    });
-  }
+
+  const session = await auth();
+
+  const [vendor, user] = await prisma.$transaction([
+    prisma.vendor.findUnique({
+      where: {
+        id: product.vendorId,
+      },
+    }),
+    prisma.user.findUnique({
+      where: { email: session?.user?.email! },
+      include: {
+        reviewVotes: true,
+        favorites: {
+          where: { id: product.id },
+          select: { id: true },
+        },
+      },
+    }),
+  ]);
+
   const isAuthor = vendor?.userId === user?.id;
+  const hasUserAddedToFavorites = !!user?.favorites[0];
 
   // calculate rating distribution
   const ratingCounts: [number, number, number, number, number] = [
@@ -173,18 +177,34 @@ export default async function Product({
       ))
     ) : (
       <div className="m-auto flex h-20 flex-col items-center justify-center rounded-xl bg-zinc-100 px-7 text-center text-xl font-semibold dark:bg-zinc-900">
-        No reviews yet. Be the first to share your thoughts!
+        No reviews yet. {!isAuthor && "Be the first to share your thoughts!"}
       </div>
     );
 
   return (
-    <div className="">
-      <div className="mx-auto max-w-8xl  px-4 py-16 sm:px-6 sm:py-24 lg:max-w-8xl lg:px-8">
+    <div>
+      <div className="mx-auto max-w-8xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-8xl lg:px-8">
         <div className="flex flex-col gap-14 md:flex-row">
           {/* Image gallery */}
           <ImageGroup images={product.images} />
           {/* Product info */}
-          <div className="mt-10 px-4 sm:mt-16 sm:px-0 md:w-1/2 lg:mt-0">
+          <div className="relative mt-10 px-4 sm:mt-16 sm:px-0 md:w-1/2 lg:mt-0">
+            {isAuthor && (
+              <div className="absolute right-0 top-0 flex gap-1">
+                <Button
+                  className="h-8 w-8 p-0"
+                  asChild
+                  variant="outline"
+                  title="Edit Product"
+                >
+                  <Link href={`/product/${product.id}/edit`}>
+                    <span className="sr-only">Edit product</span>
+                    <Pencil className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <ProductDeleteButton productId={product.id} />
+              </div>
+            )}
             <Link
               className="hover:text-sky-400 hover:underline"
               href={`/vendors/${product.vendorId}`}
@@ -215,7 +235,10 @@ export default async function Product({
             )}
             <div className="mt-3">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight">{product.price}$</p>
+              <p className="text-3xl tracking-tight">
+                <span className="text-xl">$</span>
+                {formatPrice(product.price)}
+              </p>
             </div>
             <div className="mt-6">
               <h3 className="sr-only">Description</h3>
@@ -231,11 +254,19 @@ export default async function Product({
               </h2>
             </section> */}
 
-            <AddToCartButton
-              quantity={product.stock}
-              userId={user && user.id}
-              product={product}
-            />
+            <div className="flex items-end gap-3">
+              {user && (
+                <AddFavoriteButton
+                  favoriteInitialState={hasUserAddedToFavorites}
+                  productId={product.id}
+                />
+              )}
+              <AddToCartButton
+                quantity={product.stock}
+                userId={user && user.id}
+                product={product}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -327,14 +358,20 @@ export default async function Product({
             {user !== null && !isAuthor ? (
               <ReviewForm user={user} productId={productId} />
             ) : (
-              <div className="flex h-full  items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-900/20">
-                <Button
-                  className="text-xl font-semibold"
-                  variant="link"
-                  asChild
-                >
-                  <Link href="/sign-in">Login to write a review</Link>
-                </Button>
+              <div className="flex h-full min-h-52 items-center justify-center rounded-2xl bg-zinc-100 px-5 dark:bg-zinc-900/20">
+                {user !== null && isAuthor ? (
+                  <span className="text-2xl font-semibold">
+                    You can&apos;t review your own products!
+                  </span>
+                ) : (
+                  <Button
+                    className="text-2xl font-semibold"
+                    variant="link"
+                    asChild
+                  >
+                    <Link href="/sign-in">Login to write a review</Link>
+                  </Button>
+                )}
               </div>
             )}
           </div>

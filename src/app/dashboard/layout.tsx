@@ -12,9 +12,9 @@ async function layout({ children }: { children: React.ReactNode }) {
   });
 
   return (
-    <div className="my-5 flex h-screen w-full max-w-7xl flex-row gap-5 self-start rounded-md border-2 bg-zinc-100 to-30% pt-5 shadow dark:border-zinc-700 dark:bg-gradient-to-r dark:from-zinc-900 dark:to-zinc-950 ">
-      <nav className="flex h-full w-1/5 flex-col gap-2 ">
-        <h2 className=" text-center text-2xl font-black">Dashboard</h2>
+    <div className="mx-2 my-5 flex h-fit min-h-screen w-full max-w-8xl flex-row gap-5 self-start rounded-md border-2 bg-zinc-100 pe-5 pt-4 shadow dark:border-zinc-700 dark:bg-zinc-950 dark:from-zinc-900 dark:to-zinc-950 md:to-30% md:dark:bg-gradient-to-r ">
+      <nav className="hidden h-full w-1/5 flex-col gap-2 md:flex ">
+        <h2 className="text-center text-2xl font-black">Dashboard</h2>
         <Separator className="w-5/6 self-center" />
         <Link href="/dashboard">
           <Button
@@ -32,34 +32,50 @@ async function layout({ children }: { children: React.ReactNode }) {
             Favorites
           </Button>
         </Link>
-        <Link href="/dashboard/settings">
+        {/* <Link href="/dashboard/purchase-history">
           <Button
             className="flex w-full justify-start text-xl font-bold"
             variant="ghost"
           >
-            Settings
+            Purchase History
           </Button>
         </Link>
+        <Link href="/dashboard/lists">
+          <Button
+            className="flex w-full justify-start text-xl font-bold"
+            variant="ghost"
+          >
+            Lists
+          </Button>
+        </Link> */}
         {user && user.vendor && (
           <>
             <h2 className=" text-center text-2xl font-black text-emerald-500">
               Sell Stuff
             </h2>
             <Separator className="w-5/6 self-center" />
-            <Link href={`/vendors/${user.vendor.id}`}>
+            <Link href={`/dashboard/vendor-profile`}>
               <Button
                 className="flex w-full justify-start text-xl font-bold"
                 variant="ghost"
               >
-                Vendor Page
+                Vendor Profile
+              </Button>
+            </Link>
+            <Link href={`/dashboard/vendor-products`}>
+              <Button
+                className="flex w-full justify-start text-xl font-bold"
+                variant="ghost"
+              >
+                Your Products
               </Button>
             </Link>
           </>
         )}
       </nav>
-      <section className="h-full w-full max-w-7xl self-start ">
-        {children}
-      </section>
+      {/* <section className="h-full max-h-fit w-full self-start overflow-x-auto bg-yellow-950 px-3 ps-8 "> */}
+      {children}
+      {/* </section> */}
     </div>
   );
 }

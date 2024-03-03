@@ -16,40 +16,39 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import DashNav from "./DashNav";
 
 async function Navbar() {
   const session = await auth();
-  let user: UserWithShoppingCart | null = null;
-  const shoppingCartItems: LocalShoppingCartItems = {};
-  if (session && session.user && session.user.email) {
-    user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      include: {
-        shoppingCartItems: {
-          include: { product: { include: { images: true } } },
-        },
+  const user = await prisma.user.findUnique({
+    where: { email: session?.user?.email || undefined },
+    include: {
+      shoppingCartItems: {
+        include: { product: { include: { images: true } } },
       },
-    });
-    if (user) {
-      //   shoppingCartItems = user.shoppingCartItems.map(
-      //     ({ productId, quantity, product }) => ({
-      //       productId,
-      //       quantity,
-      //       name: product.name,
-      //       image: product.images[0].url,
-      //     }),
-      //   );
-      for (let item of user.shoppingCartItems) {
-        const { productId, quantity, product } = item;
-        shoppingCartItems[productId] = {
-          productId,
-          quantity,
-          name: product.name,
-          image: product.images[0].url,
-          price: product.price,
-          stock: product.stock,
-        };
-      }
+      vendor: true,
+    },
+  });
+  const shoppingCartItems: LocalShoppingCartItems = {};
+  if (user) {
+    //   shoppingCartItems = user.shoppingCartItems.map(
+    //     ({ productId, quantity, product }) => ({
+    //       productId,
+    //       quantity,
+    //       name: product.name,
+    //       image: product.images[0].url,
+    //     }),
+    //   );
+    for (let item of user.shoppingCartItems) {
+      const { productId, quantity, product } = item;
+      shoppingCartItems[productId] = {
+        productId,
+        quantity,
+        name: product.name,
+        image: product.images[0].url,
+        price: product.price,
+        stock: product.stock,
+      };
     }
   }
 
@@ -69,27 +68,39 @@ async function Navbar() {
             className="w-fit border-zinc-200 pe-10 dark:border-zinc-700"
             side="left"
           >
-            <div className="flex flex-col items-start gap-3 pt-5">
-              <Link
-                href="/products?page=1"
-                className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-800 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"
-              >
-                products
-              </Link>
-              <Link
-                href="/about"
-                className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-800 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"
-              >
-                about
-              </Link>
-              <Link
-                href="/blog"
-                className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-800 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"
-              >
-                blog
-              </Link>
-            </div>
-            <ThemeToggle className="mt-5 border border-zinc-300 dark:border-zinc-700" />
+            <>
+              {user && <DashNav user={user} />}
+              <div className="flex flex-col items-start gap-3 pt-5">
+                <Button
+                  asChild
+                  className="text-start text-xl font-bold"
+                  variant="ghost"
+                >
+                  <Link href="/products?page=1" className="">
+                    Products
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  className="text-start text-xl font-bold"
+                  variant="ghost"
+                >
+                  <Link href="/about" className="">
+                    About
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  className="text-start text-xl font-bold"
+                  variant="ghost"
+                >
+                  <Link href="/blog" className="">
+                    Blog
+                  </Link>
+                </Button>
+              </div>
+              <ThemeToggle className="absolute bottom-5 right-5 " />
+            </>
           </SheetContent>
         </Sheet>
         <Link

@@ -69,11 +69,15 @@ async function VendorPage({
       <p className="rounded-b-md bg-zinc-200 px-3 py-4 text-lg font-medium shadow-sm dark:bg-zinc-800">
         {vendor.description}
       </p>
-      <div className="rounded-b-lg bg-zinc-200 py-5 dark:bg-zinc-900">
+      <div className="rounded-b-lg bg-zinc-200 py-5 dark:bg-zinc-950">
         <h2 className="px-3 text-center text-3xl font-extrabold lg:text-start">
           Our Products
         </h2>
-        <ProductGrid searchParams={searchParams} params={params} />
+        <ProductGrid
+          searchParams={searchParams}
+          params={params}
+          className="px-2"
+        />
       </div>
     </div>
   );

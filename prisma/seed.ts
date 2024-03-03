@@ -123,6 +123,8 @@ async function main() {
           data: {
             name: currentFakeProduct.title,
             price: currentFakeProduct.price,
+            discountPercentage:
+              j % 3 === 0 ? faker.number.int({ min: 10, max: 50 }) : 0,
             description: currentFakeProduct.description,
             stock: faker.number.int({ min: 0, max: 37 }),
             categories: {

@@ -3,6 +3,8 @@ import { auth } from "@/server/auth";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { redirect } from "next/navigation";
+import ProfileForm from "./ProfileForm";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -11,22 +13,15 @@ export default async function Dashboard() {
     where: { email: session!.user!.email! },
     include: { vendor: true },
   });
+  if (!user) redirect("/sign-in");
 
   return (
-    <>
+    <div className="h-fit overflow-x-clip px-5">
       <h1 className="mb-10 me-auto self-start text-4xl font-black">Profile</h1>
-      {user && user.vendor ? (
+      <ProfileForm user={user} />
+      {user && !user.vendor && (
         <>
-          <h2 className="me-auto mt-5 self-start text-2xl font-medium">
-            Your Products
-          </h2>
-          <Link href="/products/add">
-            <Button variant="outline">+ Add Products +</Button>
-          </Link>
-        </>
-      ) : (
-        <>
-          <Separator className="mb-5 w-5/6 self-center" />
+          <Separator className="my-5 w-5/6 self-center" />
           <h3 className="mb-1 text-2xl font-semibold">Become a Vendor</h3>
           <p className="mb-5 max-w-2xl text-zinc-700 dark:text-zinc-300">
             We&apos;re always looking for new vendors to join our marketplace.
@@ -34,13 +29,13 @@ export default async function Dashboard() {
             you! Becoming a vendor is easy and free. Simply click the button
             below to apply.
           </p>
-          <Button asChild id="become-seller" variant="outline">
+          <Button asChild id="become-vendor" variant="outline">
             <Link href="/vendors/register" className="mx-auto font-bold">
               Register as a Vendor
             </Link>
           </Button>
         </>
       )}
-    </>
+    </div>
   );
 }

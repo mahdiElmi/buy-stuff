@@ -1,7 +1,6 @@
 "use client";
-import { Tab } from "@headlessui/react";
+
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 import { Image as ImageType } from "@prisma/client";
 import {
   Carousel,
@@ -17,18 +16,31 @@ export default function ImageGroup({ images }: { images: ImageType[] }) {
   return (
     <Carousel className="md:w-1/2">
       <CarouselContent>
-        {images.map((image) => (
-          <CarouselItem key={image.url}>
+        {images.length > 0 ? (
+          images.map((image) => (
+            <CarouselItem key={image.url}>
+              <Image
+                priority={true}
+                src={image.url}
+                width={image.width || 700}
+                height={image.height || 700}
+                alt=""
+                className=" aspect-square h-full w-full rounded-lg object-cover object-center"
+              />
+            </CarouselItem>
+          ))
+        ) : (
+          <CarouselItem>
             <Image
               priority={true}
-              src={image.url}
-              width={image.width || 700}
-              height={image.height || 700}
+              src={"/questionMark.png"}
+              width={500}
+              height={500}
               alt=""
-              className="h-full w-full rounded-lg object-cover object-center"
+              className=" aspect-square h-full w-full rounded-lg object-cover object-center"
             />
           </CarouselItem>
-        ))}
+        )}
       </CarouselContent>
       <CarouselThumbNails>
         {images.map((image, i) => (

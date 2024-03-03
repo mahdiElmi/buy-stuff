@@ -2,7 +2,7 @@
 const nextConfig = {
   experimental: {
     typedRoutes: true,
-    swcPlugins: [['@swc-jotai/react-refresh', {}]],
+    swcPlugins: [["@swc-jotai/react-refresh", {}]],
   },
   // webpack: (config) => {
   //   config.experiments = { ...config.experiments, topLevelAwait: true };
@@ -49,7 +49,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "i.imgur.com",
         pathname: "/**",
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
 };

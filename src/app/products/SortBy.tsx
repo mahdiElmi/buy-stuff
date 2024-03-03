@@ -69,6 +69,7 @@ function SortBy({
   let allOtherSearchParams = "";
   for (let [key, value] of searchParams.entries()) {
     if (key === "sort") continue;
+    if (key === "page") continue;
     allOtherSearchParams = `${allOtherSearchParams}${key}=${value}&`;
   }
 
@@ -79,7 +80,7 @@ function SortBy({
   return (
     <aside
       className={cn(
-        "flex h-fit w-fit items-end gap-10 text-nowrap break-keep rounded-md bg-zinc-200 dark:bg-zinc-900 lg:sticky lg:top-[4.5rem] lg:flex-col lg:items-start lg:gap-0 lg:p-2",
+        "flex h-fit w-fit items-end gap-10 text-nowrap break-keep rounded-md bg-zinc-200 dark:bg-zinc-900 lg:sticky lg:top-16 lg:flex-col lg:items-start lg:gap-0 lg:p-2",
         className,
       )}
     >

@@ -7,11 +7,12 @@ import { Toaster } from "@/components/ui/sonner";
 import { Provider as JotaiProvider } from "jotai";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import type { Metadata } from "next";
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  // display: "swap",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export default async function RootLayout({
 }) {
   const session = await auth();
   return (
-    <html lang="en" className={`${inter.variable} scroll-smooth`}>
+    <html lang="en" className={`${inter.variable} scroll-smooth font-sans`}>
       <body className="flex min-h-[100dvh] flex-col bg-zinc-50 bg-scroll text-zinc-950 scrollbar-thin dark:bg-zinc-950 dark:text-zinc-50">
         <SessionProvider session={session}>
           <ThemeProvider
@@ -45,11 +46,7 @@ export default async function RootLayout({
             </JotaiProvider>
           </ThemeProvider>
         </SessionProvider>
-        <footer className="mt-auto w-full max-w-8xl self-center border-t border-zinc-200 py-4 dark:border-zinc-800">
-          <div className="mx-auto flex h-full w-full items-center justify-center sm:px-6 lg:px-8">
-            © 2024 Buy Stuff Inc. All rights reserved.
-          </div>
-        </footer>
+        <Footer />
         <Toaster />
       </body>
     </html>

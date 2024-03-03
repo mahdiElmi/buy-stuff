@@ -89,7 +89,7 @@ function AddToCartButton({
   }
 
   return (
-    <div className="mt-5 flex w-fit gap-3">
+    <div className="mt-5 flex w-fit items-center gap-3">
       {quantity > 0 ? (
         <Select
           disabled={cartAdjustedQuantity <= 0}
@@ -108,7 +108,9 @@ function AddToCartButton({
           </SelectContent>
         </Select>
       ) : (
-        <span className="text-red-600 dark:text-red-700">Out of Stock!</span>
+        <span className="rounded-md border-2 border-red-900  p-1 font-bold text-red-950 dark:text-red-200">
+          Out of Stock!
+        </span>
       )}
       <TooltipProvider delayDuration={300}>
         <Tooltip>

@@ -1,4 +1,5 @@
 "use client";
+import { cn, formatPrice } from "@/lib/utils";
 import { productSchema } from "@/lib/zodSchemas";
 import Image from "next/image";
 import { z } from "zod";
@@ -6,11 +7,18 @@ import { z } from "zod";
 type ProductData = z.infer<typeof productSchema>;
 export default function DummyProductItem({
   product,
+  className,
 }: {
   product: ProductData;
+  className?: string;
 }) {
   return (
-    <div className="w-full max-w-sm place-self-center @container/1">
+    <div
+      className={cn(
+        "mt-5 w-full max-w-sm justify-self-center @container/1",
+        className,
+      )}
+    >
       <h2 className="py-2 text-2xl font-bold">Product Card Preview</h2>
       <div
         className="flex w-full flex-col overflow-hidden rounded-md border-zinc-300 bg-gradient-to-t from-zinc-300 from-20% to-white shadow-md 
@@ -53,8 +61,8 @@ export default function DummyProductItem({
               <span className="text-lg font-medium">Free</span>
             ) : (
               <span className="text-xl font-extrabold tracking-tighter">
-                {product.price}
                 <span className="text-xs ">$</span>
+                {formatPrice(product.price)}
               </span>
             )}
             <span className="text-lg font-medium">

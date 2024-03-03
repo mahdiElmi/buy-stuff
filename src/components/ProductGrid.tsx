@@ -4,13 +4,16 @@ import PaginationWrapper from "./PaginationWrapper";
 import SortBy from "@/app/products/SortBy";
 import FilterBy from "@/app/products/FilterBy";
 import { prisma } from "@/lib/db";
+import { cn } from "@/lib/utils";
 
 export default async function ProductGrid({
   searchParams,
   params,
+  className,
 }: {
   searchParams: ParamsType;
-  params: { vendorId: string | undefined };
+  params: { vendorId: string | undefined; category: string | undefined };
+  className?: string;
 }) {
   const {
     sort = "new",
@@ -19,7 +22,7 @@ export default async function ProductGrid({
     rating = "0to5",
     q,
   } = searchParams;
-  const { vendorId } = params;
+  const { vendorId, category } = params;
   // extract price bounds
   const [minPriceString, maxPriceString] = price.split("to");
   let minPrice = parseFloat(minPriceString);
@@ -75,6 +78,7 @@ export default async function ProductGrid({
       averageRating: { gte: minRating, lte: maxRating },
       name: { contains: q },
       vendorId,
+      categories: { every: { name: category } },
     },
   });
 
@@ -87,6 +91,7 @@ export default async function ProductGrid({
       averageRating: { gte: minRating, lte: maxRating },
       name: { contains: q },
       vendorId,
+      categories: { every: { name: category } },
     },
     take: PRODUCTS_PER_PAGE,
     orderBy: orderByObject,
@@ -105,11 +110,13 @@ export default async function ProductGrid({
     ]);
   const maxPageNum = Math.ceil(productCount / PRODUCTS_PER_PAGE);
 
-  const productElements = products.map((product) => {
-    return <ProductCard product={product} key={product.id} />;
-  });
   return (
-    <div className="relative flex w-full flex-grow flex-col gap-1 py-5 lg:flex-row  ">
+    <div
+      className={cn(
+        "relative flex w-full flex-grow flex-col gap-1 py-5 lg:flex-row",
+        className,
+      )}
+    >
       <aside className="sticky right-0 top-12 z-40 flex w-full min-w-max items-center gap-2 bg-zinc-50 px-1 py-1 dark:bg-zinc-950 lg:hidden">
         <FilterBy
           className="rounded-r-none bg-opacity-0 dark:bg-opacity-0"
@@ -140,7 +147,7 @@ export default async function ProductGrid({
             Found {productCount} matches for &quot;{q}&quot;
           </h1>
         )}
-        <FilteredAndSortedProductList productElements={productElements} />
+        <FilteredAndSortedProductList products={products} />
         <PaginationWrapper p={p} maxPageNum={maxPageNum} />
       </div>
       <SortBy className="hidden lg:flex" currentSort={sort} />
@@ -148,11 +155,14 @@ export default async function ProductGrid({
   );
 }
 
-function FilteredAndSortedProductList({
-  productElements,
+export function FilteredAndSortedProductList({
+  products,
 }: {
-  productElements: JSX.Element[];
+  products: ProductWithImagesAndVendor[];
 }) {
+  const productElements = products.map((product) => {
+    return <ProductCard product={product} key={product.id} />;
+  });
   if (productElements.length <= 0)
     return (
       <div className="flex h-[70dvh] flex-col items-center justify-center">

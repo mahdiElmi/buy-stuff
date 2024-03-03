@@ -7,6 +7,16 @@ const productWithImages = Prisma.validator<Prisma.ProductDefaultArgs>()({
 export type ProductWithImages = Prisma.ProductGetPayload<
   typeof productWithImages
 >;
+
+const productWithImagesAndCategories =
+  Prisma.validator<Prisma.ProductDefaultArgs>()({
+    include: { images: { select: { url: true } }, categories: true },
+  });
+
+export type ProductWithImagesAndCategories = Prisma.ProductGetPayload<
+  typeof productWithImagesAndCategories
+>;
+
 // #TODO change name to have reviews as well
 const productWithImagesAndVendor =
   Prisma.validator<Prisma.ProductDefaultArgs>()({
@@ -29,6 +39,20 @@ const userWithShoppingCart = Prisma.validator<Prisma.UserDefaultArgs>()({
 
 export type UserWithShoppingCart = Prisma.UserGetPayload<
   typeof userWithShoppingCart
+>;
+
+const userWithShoppingCartAndVendor =
+  Prisma.validator<Prisma.UserDefaultArgs>()({
+    include: {
+      shoppingCartItems: {
+        include: { product: { include: { images: true } } },
+      },
+      vendor: true,
+    },
+  });
+
+export type UserWithShoppingCartAndVendor = Prisma.UserGetPayload<
+  typeof userWithShoppingCartAndVendor
 >;
 
 export type LocalShoppingCartItem = {

@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export default auth((req) => {
   const session = req.auth;
-  console.log("I happened", session, req.nextUrl, req.url);
+  // console.log("I happened", session, req.nextUrl, req.url);
   if (req.nextUrl.pathname === "/sign-in" && session)
     return NextResponse.redirect(new URL("/", req.url));
   if (!session && req.nextUrl.pathname !== "/sign-in")

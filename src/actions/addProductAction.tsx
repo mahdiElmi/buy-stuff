@@ -30,6 +30,7 @@ export async function addProduct(values: ProductFields) {
             description: values.description,
             price: values.price,
             stock: values.stock,
+            categories: { connect: { name: values.categories } },
             images: {
               createMany: {
                 data: urls,

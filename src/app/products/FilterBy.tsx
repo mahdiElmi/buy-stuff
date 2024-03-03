@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -123,6 +123,9 @@ function FilterBy({
   const router = useRouter();
   const searchParams = useSearchParams();
   const sortParam = searchParams.get("sort") ?? "new";
+  const searchQueryParam = searchParams.get("q")
+    ? `&q=${searchParams.get("q")}`
+    : "";
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -141,14 +144,14 @@ function FilterBy({
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     router.push(
-      `?sort=${sortParam}&price=${data.price[0]}to${data.price[1]}&rating=${data.rating[0]}to${data.rating[1]}`,
+      `?sort=${sortParam}&price=${data.price[0]}to${data.price[1]}&rating=${data.rating[0]}to${data.rating[1]}${searchQueryParam}`,
     );
   }
 
   return (
     <aside
       className={cn(
-        "flex h-fit w-full text-nowrap break-keep rounded-md bg-zinc-200 p-2 dark:bg-zinc-900 lg:sticky lg:top-[4.5rem] lg:w-max lg:flex-col",
+        "flex h-fit w-full text-nowrap break-keep rounded-md bg-zinc-200 p-2 dark:bg-zinc-900 lg:sticky lg:top-16 lg:w-max lg:flex-col",
         className,
       )}
     >
@@ -180,10 +183,10 @@ function FilterBy({
                     </FormLabel>
                     <div className="flex justify-between">
                       <span className="text-sm font-medium">
-                        {fields.value[0].toLocaleString()}$
+                        {formatPrice(fields.value[0])}$
                       </span>
                       <span className="text-sm font-medium">
-                        {fields.value[1].toLocaleString()}$
+                        {formatPrice(fields.value[1])}$
                       </span>
                     </div>
                     <FormControl>
@@ -234,7 +237,7 @@ function FilterBy({
                   asChild
                 >
                   <Link
-                    href={`?sort=${sortParam}`}
+                    href={`?sort=${sortParam}${searchQueryParam}`}
                     className={cn(
                       isRestedDisabled && "pointer-events-none opacity-50",
                     )}
@@ -291,7 +294,7 @@ function FilterBy({
             asChild
           >
             <Link
-              href={`?sort=${sortParam}`}
+              href={`?${sortParam}${searchQueryParam}`}
               className={cn(
                 isRestedDisabled && "pointer-events-none opacity-50",
               )}
@@ -320,10 +323,10 @@ function FilterBy({
                 </FormLabel>
                 <div className="flex justify-between">
                   <span className="text-sm font-medium">
-                    {fields.value[0].toLocaleString()}$
+                    {formatPrice(fields.value[0])}$
                   </span>
                   <span className="text-sm font-medium">
-                    {fields.value[1].toLocaleString()}$
+                    {formatPrice(fields.value[1])}$
                   </span>
                 </div>
                 <FormControl>

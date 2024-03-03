@@ -2,6 +2,18 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselThumbNails,
+  CarouselThumb,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
+import ProductCard from "@/components/productCard";
+import Autoplay from "embla-carousel-autoplay";
+import HomePageCarousel from "@/components/HomePageCarousel";
 
 export default async function Home() {
   // const vendor = await prisma.vendor.findFirst({
@@ -18,25 +30,89 @@ export default async function Home() {
   //     },
   //   });
   // }
+
+  const [
+    newArrivalProducts,
+    discountedProducts,
+    [clotheCategory, electronicsCategory],
+  ] = await prisma.$transaction([
+    prisma.product.findMany({
+      where: { stock: { not: 0 } },
+      include: {
+        images: true,
+        vendor: true,
+        _count: { select: { reviews: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+    }),
+
+    prisma.product.findMany({
+      where: { stock: { not: 0 } },
+      include: {
+        images: true,
+        vendor: true,
+        _count: { select: { reviews: true } },
+      },
+      orderBy: { discountPercentage: "desc" },
+      take: 10,
+    }),
+
+    prisma.category.findMany({
+      where: { name: { in: ["Clothes", "Electronics"] } },
+    }),
+  ]);
+
   return (
-    <section className="flex h-full flex-col items-center justify-center gap-5 ">
-      <h1 className="w-fit text-8xl font-black underline decoration-red-500 decoration-8">
-        BUY STUFF
-      </h1>
-      <p className="max-w-5xl text-center text-3xl font-medium">
-        Yes you heard it right you can{" "}
-        <span className="font-extrabold text-violet-400">BUY STUFF</span> here.
-        uhum, take a deep breath, no you are not dreaming :) that&apos;s us. We
-        give <span className="font-extrabold text-violet-400">YOU</span> the
-        power to BUY STUFF. So what are you waiting for?? get on over to buy
-        stuff and buy stuff 😉👍
-      </p>
-      <Link
-        href="/products"
-        className="rounded-sm bg-emerald-600 p-1 text-center text-3xl font-medium hover:invert"
-      >
-        START BUYING
-      </Link>
+    <section className="flex h-full w-full min-w-0 flex-col items-center justify-center gap-5 px-1 py-10">
+      <h1 className="sr-only">Home Page</h1>
+      <HomePageCarousel
+        headerLink="/products"
+        products={newArrivalProducts}
+        headerText="new arrivals"
+      />
+      <HomePageCarousel
+        headerLink="/products?discounted=true"
+        products={discountedProducts}
+        headerText="Deals"
+      />
+      <section className="h-fit w-full space-y-5 rounded-md bg-zinc-200 px-2 py-5 dark:bg-zinc-900 sm:px-5">
+        <h2 className="text-3xl font-extrabold capitalize md:text-4xl">
+          Shop By Category
+        </h2>
+        <div className="flex gap-5">
+          <Link
+            className="relative overflow-hidden"
+            href={`/products/${clotheCategory.name}`}
+          >
+            <Image
+              className="aspect-square rounded-lg object-cover object-center"
+              width={400}
+              height={400}
+              alt="clothes"
+              src="https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?q=80&w=1664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            />
+            <span className="absolute bottom-0 left-0 mx-2 my-1 w-fit text-2xl font-semibold text-emerald-100">
+              {clotheCategory.name}
+            </span>
+          </Link>
+          <Link
+            className="relative overflow-hidden"
+            href={`/products/${electronicsCategory.name}`}
+          >
+            <Image
+              className="aspect-square rounded-lg object-cover object-center"
+              width={400}
+              height={400}
+              alt="Electronics"
+              src="https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            />
+            <span className="absolute bottom-0 left-0 mx-2 my-1 w-fit text-2xl font-bold text-slate-950">
+              {electronicsCategory.name}
+            </span>
+          </Link>
+        </div>
+      </section>
     </section>
   );
 }
