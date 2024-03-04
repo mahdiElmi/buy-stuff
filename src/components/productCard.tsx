@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
-import AddFavoriteButton from "@/app/product/[productId]/AddFavoriteButton";
+// import AddFavoriteButton from "../app/product/[productId]/AddFavoriteButton";
 import { auth } from "@/server/auth";
 import { prisma } from "@/lib/db";
 
