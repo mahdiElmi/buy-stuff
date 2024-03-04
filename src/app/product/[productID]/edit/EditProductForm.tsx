@@ -33,7 +33,7 @@ import DummyProductItem from "@/app/products/add/DummyProductItem";
 import { ProductWithImagesAndCategories } from "@/lib/types";
 import { editProduct } from "./EditProductAction";
 import { X } from "lucide-react";
-import deleteImage from "@/actions/DeleteImageAction";
+import deleteImage from "./DeleteImageAction";
 
 export default function EditProductForm({
   categories,
