@@ -28,16 +28,17 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { formatPrice } from "@/lib/utils";
+import { MergeCartItems, formatPrice } from "@/lib/utils";
 
-function ShoppingCart({
+export default function ShoppingCart({
   cartItemsFromServer,
 }: {
   cartItemsFromServer: LocalShoppingCartItems;
 }) {
-  useHydrateAtoms([[cartAtom, cartItemsFromServer]]);
   const [items, setItems] = useAtom(cartAtom);
-
+  useHydrateAtoms([
+    [cartAtom, MergeCartItems(cartItemsFromServer, items, "client")],
+  ]);
   const itemsArr = Object.values(items);
   const totalPrice = itemsArr.reduce(
     (prevValue, item, i) => prevValue + item.price * item.quantity,
@@ -237,5 +238,3 @@ function ShoppingCart({
     </>
   );
 }
-
-export default ShoppingCart;
