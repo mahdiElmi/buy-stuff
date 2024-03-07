@@ -30,7 +30,7 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en" className={`${inter.variable} scroll-smooth font-sans`}>
-      <body className="flex min-h-[100dvh] flex-col bg-zinc-50 bg-scroll text-zinc-950 scrollbar-thin dark:bg-zinc-950 dark:text-zinc-50">
+      <body className="flex min-h-[100dvh] flex-col bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
         <SessionProvider session={session}>
           <ThemeProvider
             attribute="class"
@@ -40,7 +40,7 @@ export default async function RootLayout({
           >
             <JotaiProvider>
               <Navbar />
-              <main className="flex h-full flex-grow items-center justify-center scrollbar sm:px-6 lg:px-8">
+              <main className="flex h-full flex-grow items-center justify-center sm:px-6 lg:px-8">
                 {children}
               </main>
             </JotaiProvider>

@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { ComponentProps, useState } from "react";
-function ReviewDate({
+function DateToggle({
   date,
   ...otherProps
 }: { date: Date } & ComponentProps<"button">) {
@@ -25,4 +25,4 @@ function ReviewDate({
   );
 }
 
-export default ReviewDate;
+export default DateToggle;

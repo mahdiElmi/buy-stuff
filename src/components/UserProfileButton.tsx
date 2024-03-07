@@ -18,7 +18,7 @@ import { Button } from "./ui/button";
 
 function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
   return (
-    <div className="h-8 w-8">
+    <div className="h-7 w-7">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger>
           <Image

@@ -23,7 +23,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="h-8 w-8 dark:hidden"
+            className="h-7 w-7 dark:hidden"
           >
             <path
               strokeLinecap="round"
@@ -37,7 +37,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="inset-0 h-8 w-8 fill-zinc-900 dark:fill-zinc-50 "
+              className="inset-0 h-7 w-7 fill-zinc-900 dark:fill-zinc-50 "
             >
               <path
                 strokeLinecap="round"
@@ -50,7 +50,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="absolute right-0 top-0 h-4 w-4 fill-zinc-900 dark:fill-zinc-50"
+              className="absolute right-0 top-0 h-[14px] w-[14px] fill-zinc-900 dark:fill-zinc-50"
             >
               <path
                 strokeLinecap="round"

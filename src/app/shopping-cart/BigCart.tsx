@@ -15,11 +15,12 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import clearCart from "./ClearCartAction";
 import deleteItemFromCart from "./DeleteCartItemAction";
 import updateShoppingCartItemQuantity from "./UpdateCartItemAction";
-import { MergeCartItems, formatPrice } from "@/lib/utils";
+import { mergeCartItems, formatPrice } from "@/lib/utils";
+import { signIn } from "next-auth/react";
 
 export default function BigCart({
   cartItemsFromServer,
@@ -30,7 +31,7 @@ export default function BigCart({
 }) {
   const [items, setItems] = useAtom(cartAtom);
   useHydrateAtoms([
-    [cartAtom, MergeCartItems(cartItemsFromServer, items, "client")],
+    [cartAtom, mergeCartItems(cartItemsFromServer, items, "client")],
   ]);
   const [isPending, startTransition] = useTransition();
   const itemsArr = Object.values(items);
@@ -47,9 +48,22 @@ export default function BigCart({
           console.log(result);
         }
       });
+    } else {
+      setItems({});
     }
   }
-
+  function handleOrderSubmit() {
+    if (userId) {
+      handleDeleteAll();
+    } else {
+      signIn();
+    }
+  }
+  // useEffect(() => {
+  //   setItems((oldItems) =>
+  //     mergeCartItems(cartItemsFromServer, oldItems, "client"),
+  //   );
+  // }, []);
   if (itemsArr.length <= 0)
     return (
       <div className="flex h-fit min-h-screen w-full max-w-7xl flex-grow flex-col items-center justify-center gap-2">
@@ -109,7 +123,7 @@ export default function BigCart({
           Total: {formatPrice(totalPrice)}
         </h2>
         <Button
-          onClick={handleDeleteAll}
+          onClick={handleOrderSubmit}
           disabled={isPending}
           className="min-w-0 font-bold"
         >
@@ -147,6 +161,12 @@ function CartItemCountController({
           });
         }
       });
+    } else {
+      setItems((oldCart) => {
+        const newCart = { ...oldCart };
+        delete newCart[id];
+        return newCart;
+      });
     }
   }
 
@@ -181,6 +201,16 @@ function CartItemCountController({
           });
           console.log(result);
         }
+      });
+    } else {
+      setItems((oldCart) => {
+        return {
+          ...oldCart,
+          [id]: {
+            ...oldCart[id],
+            quantity: oldCart[id].quantity + (isPositive ? 1 : -1),
+          },
+        };
       });
     }
   }

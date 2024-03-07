@@ -5,9 +5,13 @@ import SearchBar from "./SearchBar";
 import ShoppingCart from "./ShoppingCart";
 import { auth } from "@/server/auth";
 import { prisma } from "@/lib/db";
-import { LocalShoppingCartItems, UserWithShoppingCart } from "@/lib/types";
+import {
+  LocalShoppingCartItems,
+  UserWithShoppingCart,
+  UserWithShoppingCartAndVendor,
+} from "@/lib/types";
 import { Button } from "./ui/button";
-import { Menu } from "lucide-react";
+import { Dot, Menu } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -17,18 +21,34 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import DashNav from "./DashNav";
+import SignInButton from "./SignInButton";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu";
+import NavMenu from "./navMenu";
 
 async function Navbar() {
   const session = await auth();
-  const user = await prisma.user.findUnique({
-    where: { email: session?.user?.email || undefined },
-    include: {
-      shoppingCartItems: {
-        include: { product: { include: { images: true } } },
-      },
-      vendor: true,
-    },
-  });
+  const user =
+    session && session.user && session.user.email
+      ? await prisma.user.findUnique({
+          where: { email: session.user.email },
+          include: {
+            shoppingCartItems: {
+              include: { product: { include: { images: true } } },
+            },
+            vendor: true,
+          },
+        })
+      : null;
+
   const shoppingCartItems: LocalShoppingCartItems = {};
   if (user) {
     //   shoppingCartItems = user.shoppingCartItems.map(
@@ -53,11 +73,11 @@ async function Navbar() {
   }
 
   return (
-    <nav
+    <header
       id="navbar"
       className="sticky top-0 z-50 w-full min-w-fit gap-2 bg-zinc-50 px-3 dark:bg-zinc-950"
     >
-      <div className="mx-auto flex max-w-[95rem] flex-row items-center gap-5 py-1">
+      <nav className="mx-auto flex max-w-[95rem] flex-row items-center gap-5 py-1">
         <Sheet>
           <SheetTrigger className="md:hidden">
             {/* <Button className="h-9 w-9 p-1" variant="outline" size="icon"> */}
@@ -78,6 +98,24 @@ async function Navbar() {
                 >
                   <Link href="/products?page=1" className="">
                     Products
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  className="ms-1 text-start text-xl font-bold"
+                  variant="ghost"
+                >
+                  <Link href="/products/clothes" className="">
+                    <Dot className="h-9 w-9  " /> Clothes
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  className="ms-1 text-start text-xl font-bold"
+                  variant="ghost"
+                >
+                  <Link href="/products/electronics" className="">
+                    <Dot className="h-9 w-9  " /> Electronics
                   </Link>
                 </Button>
                 <Button
@@ -105,53 +143,27 @@ async function Navbar() {
         </Sheet>
         <Link
           href="/"
-          className="me-auto flex h-min w-min select-none flex-col text-lg font-black leading-none sm:text-2xl md:me-0 md:text-2xl"
+          className="me-auto flex h-min w-min select-none flex-col text-lg font-black leading-none md:me-0 "
         >
           <span className="h-min leading-none">BUY!!!</span>
           <span className="-mt-1 h-min leading-none">STUFF</span>
         </Link>
         <div className="hidden md:flex md:items-center md:gap-4">
-          <Link
-            href="/products?page=1"
-            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
-          >
-            products
-          </Link>
-          <Link
-            href="/about"
-            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
-          >
-            about
-          </Link>
-          <Link
-            href="/blog"
-            className="h-min w-min text-2xl font-medium capitalize leading-none text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-50"
-          >
-            blog
-          </Link>
+          <NavMenu />
         </div>
         {/* <SearchBar className="hidden md:block" /> */}
         <SearchBar className="" />
         <div className="ms-auto flex items-center gap-2 md:gap-5">
           <ThemeToggle className="hidden md:flex" />
-          <ShoppingCart cartItemsFromServer={shoppingCartItems} />
-          {user ? (
-            <UserProfileButton user={user} />
-          ) : (
-            <Button asChild variant="outline">
-              <Link
-                href="/sign-in"
-                className="h-min w-max rounded-xl text-xl font-medium leading-none text-zinc-950 dark:text-zinc-50 
-              dark:hover:text-white  "
-              >
-                Sign In
-              </Link>
-            </Button>
-          )}
+          <ShoppingCart
+            cartItemsFromServer={shoppingCartItems}
+            userId={user && user.id}
+          />
+          {user ? <UserProfileButton user={user} /> : <SignInButton />}
         </div>
-      </div>
+      </nav>
       {/* <SearchBar className="md:hidden" /> */}
-    </nav>
+    </header>
   );
 }
 

@@ -69,6 +69,7 @@ function AddToCartButton({
         };
       }
     });
+
     setSelectedQty("1");
     toast.success(
       `added ${selectedQtyNum > 1 ? `(${selectedQtyNum})` : ""} ${product.name} to cart.`,
@@ -134,8 +135,8 @@ function AddToCartButton({
           )}
         </Tooltip>
       </TooltipProvider>
-      <span className="self-end text-lg tracking-tighter text-zinc-700 dark:text-zinc-400">
-        {productFromCart !== undefined && `${productFromCart.quantity} In Cart`}
+      <span className="self-end text-base font-medium tracking-wide text-zinc-700 dark:text-zinc-400">
+        {productFromCart !== undefined && `${productFromCart.quantity} in cart`}
       </span>
     </div>
   );

@@ -71,10 +71,11 @@ export function formatPrice(num: number | bigint) {
     currency: "USD",
     minimumFractionDigits: 0,
   }).format(num);
-  return formattedNum.slice(1);
+  // return formattedNum.slice(1);
+  return formattedNum;
 }
 
-export function MergeCartItems(
+export function mergeCartItems(
   itemsFromServer: LocalShoppingCartItems,
   itemsFromClient: LocalShoppingCartItems,
   prioritize: "client" | "server" = "server",

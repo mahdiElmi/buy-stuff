@@ -142,9 +142,13 @@ export default async function ProductGrid({
         }}
       />
       <div className="h-full w-full min-w-0 rounded-md bg-zinc-200 p-2 dark:bg-zinc-900">
-        {q && (
+        {q ? (
           <h1 className="mb-2 text-3xl font-black">
             Found {productCount} matches for &quot;{q}&quot;
+          </h1>
+        ) : (
+          <h1 className="mb-2 text-3xl font-black capitalize">
+            {category ? category : "all products"}
           </h1>
         )}
         <FilteredAndSortedProductList products={products} />

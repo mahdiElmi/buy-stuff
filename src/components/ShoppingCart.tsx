@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { ShoppingCartIcon, Trash, X } from "lucide-react";
+import { Loader, ShoppingCartIcon, Trash, X } from "lucide-react";
 import { LocalShoppingCartItems } from "@/lib/types";
 import Image from "next/image";
 import { ScrollArea } from "./ui/scroll-area";
@@ -15,42 +15,62 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAtom } from "jotai";
-import { useHydrateAtoms } from "jotai/utils";
 import { cartAtom } from "@/lib/atoms";
 import { Separator } from "./ui/separator";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { MergeCartItems, formatPrice } from "@/lib/utils";
+import { mergeCartItems, formatPrice } from "@/lib/utils";
+import deleteItemFromCart from "@/app/shopping-cart/DeleteCartItemAction";
+import { useEffect, useTransition } from "react";
 
 export default function ShoppingCart({
   cartItemsFromServer,
+  userId,
 }: {
   cartItemsFromServer: LocalShoppingCartItems;
+  userId: string | null;
 }) {
   const [items, setItems] = useAtom(cartAtom);
-  useHydrateAtoms([
-    [cartAtom, MergeCartItems(cartItemsFromServer, items, "client")],
-  ]);
+  // useHydrateAtoms([[cartAtom, cartItemsFromServer]]);
+  const [isPending, startTransition] = useTransition();
   const itemsArr = Object.values(items);
   const totalPrice = itemsArr.reduce(
     (prevValue, item, i) => prevValue + item.price * item.quantity,
     0,
   );
   function handleDelete(id: string) {
-    setItems((oldCart) => {
-      const newCart = { ...oldCart };
-      delete newCart[id];
-      return newCart;
-    });
+    if (userId) {
+      startTransition(async () => {
+        const result = await deleteItemFromCart(userId, id);
+        if (result.success) {
+          console.log(result);
+          setItems((oldCart) => {
+            const newCart = { ...oldCart };
+            delete newCart[id];
+            return newCart;
+          });
+        }
+      });
+    } else {
+      setItems((oldCart) => {
+        const newCart = { ...oldCart };
+        delete newCart[id];
+        return newCart;
+      });
+    }
   }
+  useEffect(() => {
+    if (userId)
+      setItems((oldItems) =>
+        mergeCartItems(cartItemsFromServer, oldItems, "server"),
+      );
+  }, [cartItemsFromServer, setItems, userId]);
 
   return (
     <>
@@ -118,8 +138,14 @@ export default function ShoppingCart({
                       onClick={() => handleDelete(item.productId)}
                       variant="ghost"
                       size="icon"
+                      disabled={isPending}
                     >
-                      <Trash />
+                      <span className="sr-only">Delete Item</span>
+                      {isPending ? (
+                        <Loader className="animate-spin" />
+                      ) : (
+                        <Trash />
+                      )}
                     </Button>
                   </div>
                 ))}
@@ -207,8 +233,14 @@ export default function ShoppingCart({
                         onClick={() => handleDelete(item.productId)}
                         variant="ghost"
                         size="icon"
+                        disabled={isPending}
                       >
-                        <Trash />
+                        <span className="sr-only">Delete Item</span>
+                        {isPending ? (
+                          <Loader className="animate-spin" />
+                        ) : (
+                          <Trash />
+                        )}
                       </Button>
                     </div>
                   </DropdownMenuItem>

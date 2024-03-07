@@ -1,6 +1,3 @@
-"use client";
-
-import Autoplay from "embla-carousel-autoplay";
 import ProductCard from "./productCard";
 import {
   Carousel,
@@ -33,7 +30,6 @@ export default function HomePageCarousel({
       <Carousel
         navButtonPosition="topRight"
         opts={{ loop: true, skipSnaps: true }}
-        plugins={[Autoplay({ delay: 5000 })]}
       >
         <CarouselContent>
           {products.map((product) => (

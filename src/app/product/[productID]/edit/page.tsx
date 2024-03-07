@@ -10,16 +10,19 @@ export default async function Page({
   params: { productId: string };
 }) {
   const session = await auth();
-  const [user, product] = await prisma.$transaction([
-    prisma.user.findUnique({
-      where: { email: session?.user?.email! },
-    }),
-    prisma.product.findUnique({
-      where: { id: params.productId },
-      include: { vendor: true, images: true, categories: true },
-    }),
-  ]);
+  const user =
+    session && session.user && session.user.email
+      ? await prisma.user.findUnique({
+          where: { email: session.user.email },
+        })
+      : null;
   if (!user) redirect("/sign-in");
+
+  const product = await prisma.product.findUnique({
+    where: { id: params.productId },
+    include: { vendor: true, images: true, categories: true },
+  });
+
   if (user.id !== product?.vendor.userId) redirect("/");
 
   const categories = await prisma.category.findMany({

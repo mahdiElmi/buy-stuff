@@ -13,12 +13,31 @@ import VoteButtons from "./VoteButtons";
 import deleteReview from "./ReviewDeleteAction";
 import CustomRating from "@/components/ui/CustomRating";
 import { Button } from "@/components/ui/button";
-import ReviewDate from "./ReviewDate";
+import DateToggle from "./DateToggle";
 import { Badge } from "@/components/ui/badge";
 import AddToCartButton from "./AddToCartButton";
 import AddFavoriteButton from "./AddFavoriteButton";
-import { Pencil } from "lucide-react";
+import { ChevronRight, Home, Pencil } from "lucide-react";
 import ProductDeleteButton from "./ProductDeleteButton";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { productId: string };
+}): Promise<Metadata> {
+  const product = await prisma.product.findUnique({
+    where: { id: params.productId },
+    select: { name: true, description: true },
+  });
+  if (product === null) notFound();
+  const { name: title, description } = product;
+  return {
+    title,
+    description,
+  };
+}
 
 export default async function Product({
   params,
@@ -39,30 +58,33 @@ export default async function Product({
       },
       vendor: true,
       images: true,
+      categories: true,
     },
   });
 
   if (!product) return <div>No product found. :(</div>;
-
+  const category = product.categories[0];
   const session = await auth();
 
-  const [vendor, user] = await prisma.$transaction([
-    prisma.vendor.findUnique({
-      where: {
-        id: product.vendorId,
-      },
-    }),
-    prisma.user.findUnique({
-      where: { email: session?.user?.email! },
-      include: {
-        reviewVotes: true,
-        favorites: {
-          where: { id: product.id },
-          select: { id: true },
-        },
-      },
-    }),
-  ]);
+  const vendor = await prisma.vendor.findUnique({
+    where: {
+      id: product.vendorId,
+    },
+  });
+
+  const user =
+    session && session.user && session.user.email
+      ? await prisma.user.findUnique({
+          where: { email: session.user.email },
+          include: {
+            reviewVotes: true,
+            favorites: {
+              where: { id: product.id },
+              select: { id: true },
+            },
+          },
+        })
+      : null;
 
   const isAuthor = vendor?.userId === user?.id;
   const hasUserAddedToFavorites = !!user?.favorites[0];
@@ -169,7 +191,7 @@ export default async function Product({
               dangerouslySetInnerHTML={{ __html: review.body }}
             />
           </div>
-          <ReviewDate
+          <DateToggle
             className="absolute bottom-2 right-2"
             date={review.createdAt}
           />
@@ -205,6 +227,68 @@ export default async function Product({
                 <ProductDeleteButton productId={product.id} />
               </div>
             )}
+            <nav className="flex" aria-label="Breadcrumb">
+              <ol role="list" className="mb-4 flex items-center space-x-4">
+                <li>
+                  <div>
+                    <Link
+                      href="/products"
+                      className="text-zinc-400 hover:text-zinc-500 dark:text-zinc-500 dark:hover:text-zinc-300"
+                    >
+                      <Home
+                        className="h-5 w-5 flex-shrink-0 "
+                        aria-hidden="true"
+                      />
+                      <span className="sr-only">Home</span>
+                    </Link>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex items-center">
+                    <ChevronRight
+                      className="h-5 w-5 flex-shrink-0 text-zinc-400 dark:text-zinc-400"
+                      aria-hidden="true"
+                    />
+                    <Link
+                      href="/products"
+                      className="ml-4 text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                    >
+                      Products
+                    </Link>
+                  </div>
+                </li>
+                {category && (
+                  <li>
+                    <div className="flex items-center">
+                      <ChevronRight
+                        className="h-5 w-5 flex-shrink-0 text-zinc-400 dark:text-zinc-400"
+                        aria-hidden="true"
+                      />
+                      <Link
+                        href={`/products/${category.name}`}
+                        className="ml-4 text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                      >
+                        {category.name}
+                      </Link>
+                    </div>
+                  </li>
+                )}
+                <li>
+                  <div className="flex items-center">
+                    <ChevronRight
+                      className="h-5 w-5 flex-shrink-0 text-zinc-400 dark:text-zinc-400"
+                      aria-hidden="true"
+                    />
+                    <Link
+                      href={`/product/${product.id}`}
+                      className="ml-4 text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                    >
+                      {product.name}
+                    </Link>
+                  </div>
+                </li>
+              </ol>
+            </nav>
             <Link
               className="hover:text-sky-400 hover:underline"
               href={`/vendors/${product.vendorId}`}
@@ -235,14 +319,12 @@ export default async function Product({
             )}
             <div className="mt-3">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight">
-                <span className="text-xl">$</span>
+              <p className="text-3xl tracking-tight first-letter:font-extralight">
                 {formatPrice(product.price)}
               </p>
             </div>
             <div className="mt-6">
               <h3 className="sr-only">Description</h3>
-
               <div
                 className="space-y-6 text-base text-zinc-700 dark:text-zinc-300"
                 dangerouslySetInnerHTML={{ __html: product.description }}

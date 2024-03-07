@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
-// import AddFavoriteButton from "../app/product/[productId]/AddFavoriteButton";
 import { auth } from "@/server/auth";
 import { prisma } from "@/lib/db";
+import AddFavoriteButton from "@/app/product/[productId]/AddFavoriteButton";
 
 export default async function ProductCard({
   product,
@@ -13,16 +13,20 @@ export default async function ProductCard({
   product: ProductWithImagesAndVendor;
 }) {
   const session = await auth();
-  const user = await prisma.user.findUnique({
-    where: { email: session?.user?.email! },
-    include: {
-      reviewVotes: true,
-      favorites: {
-        where: { id: product.id },
-        select: { id: true },
-      },
-    },
-  });
+  const user =
+    session && session.user && session.user.email
+      ? await prisma.user.findUnique({
+          where: { email: session.user.email },
+          include: {
+            reviewVotes: true,
+            favorites: {
+              where: { id: product.id },
+              select: { id: true },
+            },
+          },
+        })
+      : null;
+
   const hasUserAddedToFavorites = !!user?.favorites[0];
 
   return (
@@ -30,10 +34,18 @@ export default async function ProductCard({
       <div
         key={product.id}
         className={cn(
-          "flex h-full w-full flex-col overflow-hidden rounded-md p-1",
+          "relative flex h-full w-full flex-col overflow-hidden rounded-md p-1",
           product.stock <= 0 && "opacity-70",
         )}
       >
+        {user && (
+          <AddFavoriteButton
+            className="absolute right-[2px] top-[2px] z-10 text-white drop-shadow-sm "
+            productId={product.id}
+            favoriteInitialState={hasUserAddedToFavorites}
+            variant="ghostHoverLess"
+          />
+        )}
         <Link
           href={`/product/${product.id}`}
           className="group relative min-w-0"
@@ -50,18 +62,11 @@ export default async function ProductCard({
             alt="product Image"
           />
           <span
-            className="absolute -left-[1px] bottom-0 rounded-tr-md bg-zinc-200 p-1 text-xs  font-extrabold transition-opacity 
-        duration-100 group-hover:opacity-50 @[8rem]/card:text-2xl dark:bg-zinc-900"
+            className="absolute -left-[1px] bottom-0 rounded-tr-md bg-zinc-200 p-1 text-xs font-extrabold transition-opacity duration-100 
+        first-letter:font-light group-hover:opacity-50 @[8rem]/card:text-2xl dark:bg-zinc-900"
           >
-            <span className="text-xs @[8rem]/card:text-base">$</span>
             {formatPrice(product.price)}
           </span>
-          {/* <AddFavoriteButton
-            className="absolute right-[2px] top-[2px] z-10"
-            productId={product.id}
-            favoriteInitialState={hasUserAddedToFavorites}
-            variant="ghostHoverLess"
-          /> */}
           {product.stock < 5 && (
             <span
               className="absolute -right-[1px] bottom-0 min-w-fit rounded-tl-md bg-zinc-200 px-1 text-base font-semibold  transition-opacity duration-100 

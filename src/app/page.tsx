@@ -1,36 +1,9 @@
 import Image from "next/image";
-import { Inter } from "next/font/google";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselThumbNails,
-  CarouselThumb,
-  CarouselPrevious,
-  CarouselNext,
-} from "@/components/ui/carousel";
-import ProductCard from "@/components/productCard";
-import Autoplay from "embla-carousel-autoplay";
 import HomePageCarousel from "@/components/HomePageCarousel";
 
-export default async function Home() {
-  // const vendor = await prisma.vendor.findFirst({
-  //   where: { name: "Boxy Town" },
-  // });
-  // for (let i = 0; i < 20; i++) {
-  //   await prisma.product.create({
-  //     data: {
-  //       name: `box ${i}`,
-  //       description: "big box",
-  //       price: 10,
-  //       stock: 5,
-  //       vendorId: vendor!.id,
-  //     },
-  //   });
-  // }
-
+export default async function HomePage() {
   const [
     newArrivalProducts,
     discountedProducts,

@@ -20,10 +20,10 @@ export default auth((req) => {
 export const config = {
   matcher: [
     // "/((?!api|_next/static|_next/image|favicon.ico).*)",
-    "/about/:path*",
     "/dashboard/:path*",
     "/products/add/:path*",
     "/sign-in/:path*",
+    "/product/:path/edit",
   ],
 };
 
