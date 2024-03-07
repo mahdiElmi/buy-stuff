@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import clearCart from "./ClearCartAction";
 import deleteItemFromCart from "./DeleteCartItemAction";
 import updateShoppingCartItemQuantity from "./UpdateCartItemAction";
