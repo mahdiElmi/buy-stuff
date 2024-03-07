@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import DateToggle from "./DateToggle";
 import { Badge } from "@/components/ui/badge";
 import AddToCartButton from "./AddToCartButton";
-import AddFavoriteButton from "./AddFavoriteButton";
+import AddFavoriteButton from "../../../components/AddFavoriteButton";
 import { ChevronRight, Home, Pencil } from "lucide-react";
 import ProductDeleteButton from "./ProductDeleteButton";
 import { Metadata } from "next";

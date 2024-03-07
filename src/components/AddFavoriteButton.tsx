@@ -3,7 +3,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Heart, Loader2 } from "lucide-react";
 import { useState, useTransition } from "react";
-import { addToFavorites, removeFromFavorites } from "./FavoritesActions";
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from "../app/product/[productId]/FavoritesActions";
 
 export default function AddFavoriteButton({
   favoriteInitialState,

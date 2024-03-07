@@ -5,7 +5,7 @@ import { Star } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { auth } from "@/server/auth";
 import { prisma } from "@/lib/db";
-import AddFavoriteButton from "../app/product/[productId]/AddFavoriteButton";
+import AddFavoriteButton from "./AddFavoriteButton";
 
 export default async function ProductCard({
   product,
