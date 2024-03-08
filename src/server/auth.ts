@@ -64,4 +64,5 @@ export const {
   providers: [GitHub, Google],
   adapter: PrismaAdapter(prisma),
   session: { strategy: "database" },
+  trustHost: true,
 });
