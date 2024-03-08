@@ -56,7 +56,7 @@ export default async function SubmitReview(
     }
   } else return { success: false, cause: "Validation error" };
 
-  revalidatePath("/product/[productID]");
+  revalidatePath("/product/[productId]");
 
   return { success: true, cause: "" };
 }
