@@ -183,10 +183,10 @@ function FilterBy({
                     </FormLabel>
                     <div className="flex justify-between">
                       <span className="text-sm font-medium">
-                        {formatPrice(fields.value[0])}$
+                        {formatPrice(fields.value[0])}
                       </span>
                       <span className="text-sm font-medium">
-                        {formatPrice(fields.value[1])}$
+                        {formatPrice(fields.value[1])}
                       </span>
                     </div>
                     <FormControl>
@@ -323,10 +323,10 @@ function FilterBy({
                 </FormLabel>
                 <div className="flex justify-between">
                   <span className="text-sm font-medium">
-                    {formatPrice(fields.value[0])}$
+                    {formatPrice(fields.value[0])}
                   </span>
                   <span className="text-sm font-medium">
-                    {formatPrice(fields.value[1])}$
+                    {formatPrice(fields.value[1])}
                   </span>
                 </div>
                 <FormControl>

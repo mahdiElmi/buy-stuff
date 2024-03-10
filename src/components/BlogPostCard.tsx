@@ -14,10 +14,10 @@ function BlogPostCard({ post }: { post: PostDataType }) {
         className="decoration group space-y-2 decoration-indigo-600 decoration-2 underline-offset-1 @xs:space-y-6 hover:text-indigo-600 hover:underline dark:decoration-indigo-500 dark:hover:text-indigo-500"
       >
         <div className="relative before:absolute before:h-full before:w-full before:bg-gradient-to-t before:from-zinc-900 before:via-zinc-900/40  before:content-['']">
-          <span className="absolute bottom-3 right-2 flex items-center gap-1 font-medium text-zinc-300">
+          <span className="absolute bottom-3 right-2 flex items-center gap-1 text-xs font-medium text-zinc-300 @xs:text-base">
             <Timer className="h-4 w-4" /> {timeToRead} min read
           </span>
-          <div className="absolute bottom-3 left-5 mt-8 flex items-center gap-x-4">
+          <div className="absolute bottom-3 left-2 mt-8 flex items-center gap-x-4 @xs:left-5">
             <Image
               width={50}
               height={50}

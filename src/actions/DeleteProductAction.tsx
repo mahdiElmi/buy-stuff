@@ -29,12 +29,17 @@ export async function deleteProduct(productId: string) {
     return { success: false, cause: "User does not own this product." };
 
   try {
-    const [imagesDeleteResult, reviewsDeleteResult, productDeleteResult] =
-      await prisma.$transaction([
-        prisma.image.deleteMany({ where: { productId } }),
-        prisma.review.deleteMany({ where: { productId } }),
-        prisma.product.delete({ where: { id: productId } }),
-      ]);
+    const [
+      imagesDeleteResult,
+      voteDeleteResult,
+      reviewsDeleteResult,
+      productDeleteResult,
+    ] = await prisma.$transaction([
+      prisma.image.deleteMany({ where: { productId } }),
+      prisma.vote.deleteMany({ where: { review: { productId } } }),
+      prisma.review.deleteMany({ where: { productId } }),
+      prisma.product.delete({ where: { id: productId } }),
+    ]);
 
     const imageKeys = product.images.map(
       (imgObj) => imgObj.url.split("/f/")[1],
@@ -42,6 +47,7 @@ export async function deleteProduct(productId: string) {
 
     const result = await utapi.deleteFiles(imageKeys);
     revalidatePath("/dashboard/vendor-products");
+    revalidatePath(`/product/${productId}`);
     return { success: true };
   } catch (e) {
     return { success: false };

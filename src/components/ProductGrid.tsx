@@ -117,7 +117,7 @@ export default async function ProductGrid({
         className,
       )}
     >
-      <aside className="sticky right-0 top-12 z-40 flex w-full min-w-max items-center gap-2 bg-zinc-50 px-1 py-1 dark:bg-zinc-950 lg:hidden">
+      <aside className="sticky right-0 top-14 z-40 flex w-full min-w-max items-center gap-2 bg-zinc-50 px-1 py-1 dark:bg-zinc-950 lg:hidden">
         <FilterBy
           className="rounded-r-none bg-opacity-0 dark:bg-opacity-0"
           filters={{
@@ -133,7 +133,7 @@ export default async function ProductGrid({
         />
       </aside>
       <FilterBy
-        className="clip hidden lg:flex"
+        className=" hidden lg:flex"
         filters={{
           minPrice: productAggregations._min.price || 0,
           maxPrice: productAggregations._max.price || 0,

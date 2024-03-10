@@ -65,6 +65,11 @@ const nextConfig = {
         hostname: "picsum.photos/**.webp",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "api.lorem.space",
+        pathname: "/image/**",
+      },
     ],
   },
 };

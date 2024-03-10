@@ -1,12 +1,13 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  directUrl    = env("DIRECT_URL")
-  relationMode = "prisma"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  // relationMode = "prisma"
 }
 
 model Account {
@@ -23,9 +24,9 @@ model Account {
   id_token          String? @db.Text
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // @@index([userId])
 
   @@unique([provider, providerAccountId])
-  @@index([userId])
 }
 
 model Session {
@@ -35,7 +36,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
+  // @@index([userId])
 }
 
 model VerificationToken {
@@ -74,7 +75,7 @@ model List {
   authorId    String
   author      User      @relation(fields: [authorId], references: [id])
 
-  @@index([authorId])
+  // @@index([authorId])
 }
 
 model Vote {
@@ -84,10 +85,10 @@ model Vote {
   review   Review  @relation(fields: [reviewId], references: [id])
   userId   String
   reviewId String
+  // @@index([userId])
+  // @@index([reviewId])
 
   @@id([userId, reviewId])
-  @@index([userId])
-  @@index([reviewId])
 }
 
 model Vendor {
@@ -117,7 +118,7 @@ model ShippingAddress {
   userId      String
   User        User     @relation(fields: [userId], references: [id])
 
-  @@index([userId])
+  // @@index([userId])
 }
 
 model Product {
@@ -139,7 +140,7 @@ model Product {
   favoritedBy        User[]
   listAssociations   List[]
 
-  @@index([vendorId])
+  // @@index([vendorId])
 }
 
 model Image {
@@ -150,7 +151,7 @@ model Image {
   Product   Product? @relation(fields: [productId], references: [id])
   productId String?
 
-  @@index([productId])
+  // @@index([productId])
 }
 
 model ShoppingCartItem {
@@ -160,10 +161,10 @@ model ShoppingCartItem {
   userId    String
   product   Product @relation(fields: [productId], references: [id])
   user      User    @relation(fields: [userId], references: [id])
+  // @@index([productId])
+  // @@index([userId])
 
   @@unique([productId, userId])
-  @@index([productId])
-  @@index([userId])
 }
 
 model Category {
@@ -187,8 +188,8 @@ model Review {
   reviewed    Product  @relation(fields: [productId], references: [id])
   Vote        Vote[]
 
-  @@index([userId])
-  @@index([productId])
+  // @@index([userId])
+  // @@index([productId])
 }
 
 model CategoryToProduct {
@@ -196,6 +197,6 @@ model CategoryToProduct {
   B String
 
   @@unique([A, B], map: "_CategoryToProduct_AB_unique")
-  @@index([B], map: "_CategoryToProduct_B_index")
+  // @@index([B], map: "_CategoryToProduct_B_index")
   @@map("_CategoryToProduct")
 }

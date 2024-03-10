@@ -85,6 +85,7 @@ function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
           )}
           <DropdownMenuItem asChild>
             <form
+              className="bg-sky-700"
               action={async () => {
                 "use server";
                 await signOut({ redirectTo: "/" });

@@ -73,10 +73,10 @@ async function main() {
   // faker.seed(5);
   let allUsers: User[] = [];
 
-  for (let i = 0; i < 10; i++) {
-    console.log(faker.internet.email(), "  ass");
+  for (let i = 0; i < 15; i++) {
+    console.log(faker.internet.email());
     const createdAtTime = faker.date.past({ years: 3 });
-    console.log(createdAtTime, "  ass2");
+    console.log(createdAtTime);
     const user = await prisma.user.create({
       // where: { id: faker.string.nanoid() },
       // update: {},
@@ -86,7 +86,7 @@ async function main() {
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
         createdAt: createdAtTime,
-        image: faker.internet.avatar(),
+        image: faker.image.avatar(),
         vendor:
           i % 2
             ? {
@@ -98,6 +98,10 @@ async function main() {
                     height: 400,
                     category: "business",
                   }),
+                  bannerImage: faker.image.urlPicsumPhotos({
+                    width: 1000,
+                    height: 400,
+                  }),
                 },
               }
             : undefined,
@@ -108,7 +112,7 @@ async function main() {
     allUsers.push(user);
 
     if (i % 2)
-      for (let j = 0; j < 12; j++) {
+      for (let j = 0; j < 8; j++) {
         const currentFakeProduct = fakeProducts[i + j];
         console.log(currentFakeProduct, "fakeeee");
         const currentCategory =
@@ -147,11 +151,10 @@ async function main() {
           },
         });
         const reviewsToFlush = [];
-        for (let j = 0; j < faker.number.int({ max: Math.min(i, 6) }); j++) {
+        for (let j = 0; j < faker.number.int({ max: 10 }); j++) {
           const randomUser =
             allUsers[faker.number.int({ max: allUsers.length - 1 })];
           console.log(
-            "assssss",
             randomUser.firstName,
             "index is: ",
             i,
@@ -184,7 +187,7 @@ async function main() {
       }
   }
   const products = await prisma.product.findMany({});
-  const averageRatingsToUpdate = [];
+  // const averageRatingsToUpdate = [];
   let i = 1;
   for (let product of products) {
     const reviewAggregation = await prisma.review.aggregate({

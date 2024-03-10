@@ -19,7 +19,7 @@ export type ProductWithImagesAndCategories = Prisma.ProductGetPayload<
 
 // #TODO change name to have reviews as well
 const productWithImagesAndVendor =
-  Prisma.validator<Prisma.ProductDefaultArgs>()({
+  Prisma.validator<Prisma.ProductFindManyArgs>()({
     include: {
       images: { select: { url: true } },
       vendor: { select: { name: true } },
@@ -29,7 +29,7 @@ const productWithImagesAndVendor =
 
 export type ProductWithImagesAndVendor = Prisma.ProductGetPayload<
   typeof productWithImagesAndVendor
->;
+> & { originalPrice: number };
 
 const userWithShoppingCart = Prisma.validator<Prisma.UserDefaultArgs>()({
   include: {

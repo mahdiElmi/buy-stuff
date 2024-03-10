@@ -4,7 +4,6 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 const prismaClientSingleton = new PrismaClient({
   // log: ["query"],
 })
-  .$extends(withAccelerate())
   .$extends({
     result: {
       product: {
@@ -17,7 +16,8 @@ const prismaClientSingleton = new PrismaClient({
         },
       },
     },
-  });
+  })
+  .$extends(withAccelerate());
 type PrismaClientSingleton = typeof prismaClientSingleton;
 
 const globalForPrisma = globalThis as unknown as {

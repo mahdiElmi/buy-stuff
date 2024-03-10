@@ -75,7 +75,7 @@ async function Navbar() {
   return (
     <header
       id="navbar"
-      className="sticky top-0 z-50 w-full min-w-fit gap-2 bg-zinc-50 px-3 dark:bg-zinc-950"
+      className="sticky top-0 z-50 w-full min-w-fit gap-2 bg-zinc-50 px-3 py-1 dark:bg-zinc-950"
     >
       <nav className="mx-auto flex max-w-[95rem] flex-row items-center gap-5 py-1">
         <Sheet>
