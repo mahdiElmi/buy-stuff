@@ -150,7 +150,7 @@ export default async function Product({
                 width={40}
                 height={40}
                 src={review.reviewedBy.image}
-                alt={review.reviewedBy.name}
+                alt={`${review.reviewedBy.name} profile picture`}
                 className="h-10 w-10 rounded-full"
               />
               <div className="flex flex-col">
@@ -162,9 +162,9 @@ export default async function Product({
                     <Link href={`/vendors/${review.reviewedBy.vendor.id}`}>
                       <Badge
                         variant="simple"
-                        className="bg-emerald-200 font-semibold tracking-wide text-emerald-800 dark:bg-emerald-900  dark:text-emerald-50"
+                        className="min-w-max bg-emerald-200 font-semibold tracking-wide text-emerald-800 dark:bg-emerald-900 dark:text-emerald-50 "
                       >
-                        Also Sells Stuff!
+                        Sells Stuff
                       </Badge>
                     </Link>
                   )}
@@ -185,9 +185,9 @@ export default async function Product({
                 </div>
               )}
             </div>
-            <h3 className=" mt-3 text-lg font-bold">{review.title}</h3>
+            <h3 className=" mb-1 mt-3 font-bold md:text-lg">{review.title}</h3>
             <div
-              className="col-span-full col-start-2 flex-none px-1 text-base text-zinc-800 dark:text-zinc-200"
+              className="col-span-full col-start-2 flex-none px-1 text-sm text-zinc-800 dark:text-zinc-200 md:text-base"
               dangerouslySetInnerHTML={{ __html: review.body }}
             />
           </div>
@@ -204,8 +204,53 @@ export default async function Product({
     );
 
   return (
-    <div>
+    <div className=" h-full w-full">
       <div className="mx-auto max-w-8xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-8xl lg:px-8">
+        <nav className="mb-6 flex" aria-label="Breadcrumb">
+          <ol role="list" className=" flex items-center space-x-4">
+            <li>
+              <div>
+                <Link
+                  href="/products"
+                  className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300"
+                >
+                  <Home className="h-5 w-5 flex-shrink-0 " aria-hidden="true" />
+                  <span className="sr-only">Home</span>
+                </Link>
+              </div>
+            </li>
+            <li>
+              <div className="flex items-center">
+                <ChevronRight
+                  className="h-5 w-5 flex-shrink-0 text-zinc-400 dark:text-zinc-400"
+                  aria-hidden="true"
+                />
+                <Link
+                  href="/products"
+                  className="ml-4 text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                >
+                  Products
+                </Link>
+              </div>
+            </li>
+            {category && (
+              <li>
+                <div className="flex items-center">
+                  <ChevronRight
+                    className="h-5 w-5 flex-shrink-0 text-zinc-400 dark:text-zinc-400"
+                    aria-hidden="true"
+                  />
+                  <Link
+                    href={`/products/${category.name}`}
+                    className="ml-4 text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                  >
+                    {category.name}
+                  </Link>
+                </div>
+              </li>
+            )}
+          </ol>
+        </nav>
         <div className="flex flex-col gap-14 md:flex-row">
           {/* Image gallery */}
           <ImageGroup images={product.images} />
@@ -227,68 +272,7 @@ export default async function Product({
                 <ProductDeleteButton productId={product.id} />
               </div>
             )}
-            <nav className="flex" aria-label="Breadcrumb">
-              <ol role="list" className="mb-4 flex items-center space-x-4">
-                <li>
-                  <div>
-                    <Link
-                      href="/products"
-                      className="text-zinc-400 hover:text-zinc-500 dark:text-zinc-500 dark:hover:text-zinc-300"
-                    >
-                      <Home
-                        className="h-5 w-5 flex-shrink-0 "
-                        aria-hidden="true"
-                      />
-                      <span className="sr-only">Home</span>
-                    </Link>
-                  </div>
-                </li>
-                <li>
-                  <div className="flex items-center">
-                    <ChevronRight
-                      className="h-5 w-5 flex-shrink-0 text-zinc-400 dark:text-zinc-400"
-                      aria-hidden="true"
-                    />
-                    <Link
-                      href="/products"
-                      className="ml-4 text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-                    >
-                      Products
-                    </Link>
-                  </div>
-                </li>
-                {category && (
-                  <li>
-                    <div className="flex items-center">
-                      <ChevronRight
-                        className="h-5 w-5 flex-shrink-0 text-zinc-400 dark:text-zinc-400"
-                        aria-hidden="true"
-                      />
-                      <Link
-                        href={`/products/${category.name}`}
-                        className="ml-4 text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-                      >
-                        {category.name}
-                      </Link>
-                    </div>
-                  </li>
-                )}
-                <li>
-                  <div className="flex items-center">
-                    <ChevronRight
-                      className="h-5 w-5 flex-shrink-0 text-zinc-400 dark:text-zinc-400"
-                      aria-hidden="true"
-                    />
-                    <Link
-                      href={`/product/${product.id}`}
-                      className="ml-4 text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-                    >
-                      {product.name}
-                    </Link>
-                  </div>
-                </li>
-              </ol>
-            </nav>
+
             <Link
               className="hover:text-sky-400 hover:underline"
               href={`/vendors/${product.vendorId}`}
