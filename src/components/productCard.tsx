@@ -63,26 +63,26 @@ export default async function ProductCard({
           />
           <div className="absolute -left-[1px] bottom-0 ">
             <div
-              className="relative z-20 h-full w-full rounded-tr-md bg-zinc-200 px-2 py-[2px] transition-opacity duration-100 
-        first-letter:font-light group-hover:opacity-50 dark:bg-zinc-900"
+              className="relative z-20 h-full w-full rounded-tr-md bg-zinc-200 px-1 transition-opacity duration-100 first-letter:font-light group-hover:opacity-50 
+        @[8rem]/card:px-2 @[8rem]/card:py-[2px] dark:bg-zinc-900"
             >
-              <span className="text-xs font-extrabold  @[8rem]/card:text-xl">
+              <span className="text-xs font-extrabold @[8rem]/card:text-xl">
                 {formatPrice(product.price)}
               </span>
 
               {product.discountPercentage > 0 && (
                 <div
                   className="absolute left-0 top-0 z-30 flex -translate-y-full  items-center justify-center rounded-r-md transition-opacity duration-100  
-                    group-hover:opacity-50  "
+                    group-hover:opacity-50"
                 >
-                  <span className="h-full rounded-tr-md bg-zinc-200 p-[3px] px-[4px] text-xs line-through decoration-black first-letter:font-light dark:bg-zinc-700  dark:decoration-white">
+                  <span className="h-full rounded-tr-md bg-zinc-300 p-[3px] px-[4px] text-xs line-through decoration-black first-letter:font-light dark:bg-zinc-700  dark:decoration-white">
                     {formatPrice(product.originalPrice)}
                   </span>
                   <span
-                    className="flex -translate-x-[2px] translate-y-1 items-center justify-center rounded-md bg-red-200 p-[1px] px-[3px] text-xs font-medium transition-opacity duration-100 
-                    group-hover:opacity-50 @[8rem]/card:text-sm dark:bg-red-900"
+                    className="flex -translate-x-[2px] translate-y-1 items-center justify-center rounded-md bg-red-900 p-[1px] px-[3px] text-xs font-medium text-zinc-50 transition-opacity 
+                    duration-100 @[8rem]/card:text-sm"
                   >
-                    {product.discountPercentage}%
+                    -{product.discountPercentage}%
                   </span>
                 </div>
               )}
@@ -110,7 +110,7 @@ export default async function ProductCard({
               {product.name}
             </h2>
           </Link>
-          <div className="flex items-center gap-1">
+          <div className="mt-2 flex items-center gap-1">
             <Link
               className="me-1 text-xs font-medium text-zinc-600 @[8rem]/card:text-sm hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400 "
               href={`/vendors/${product.vendorId}`}
@@ -120,7 +120,7 @@ export default async function ProductCard({
             {product._count.reviews > 0 && (
               <>
                 <Star className="ms-auto h-4 w-4 fill-current " />
-                <span className="min-w-fit text-sm font-bold text-zinc-800 dark:text-zinc-200">
+                <span className="min-w-fit text-xs font-bold text-zinc-800 @[8rem]/card:text-sm dark:text-zinc-200">
                   {product.averageRating.toFixed(
                     product.averageRating % 1 === 0 ? 0 : 1,
                   )}
@@ -128,7 +128,7 @@ export default async function ProductCard({
               </>
             )}
           </div>
-          <p className="mb-1 mt-2 line-clamp-2 text-xs font-medium text-zinc-700 @[8rem]/card:text-sm dark:text-zinc-300">
+          <p className="mb-1 mt-2 line-clamp-2 text-xs font-medium text-zinc-700 @[8rem]/card:text-sm dark:text-zinc-300 md:line-clamp-2">
             {product.description}, Lorem, ipsum dolor sit amet consectetur
             adipisicing elit. A eveniet veniam sunt et atque maiores esse facere
             doloribus, quas nesciunt eius, aliquam deleniti ipsam ad repudiandae

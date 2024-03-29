@@ -17,7 +17,12 @@ export default async function Dashboard() {
 
   return (
     <div className="h-fit overflow-x-clip px-5">
-      <h1 className="mb-10 me-auto self-start text-4xl font-black">Profile</h1>
+      <div className="mb-10 flex gap-1">
+        <h1 className="self-start text-4xl font-black">Profile</h1>
+        <Button asChild className="self-end font-semibold" variant="link">
+          <Link href={`/u/${user.id}`}>Profile Page</Link>
+        </Button>
+      </div>
       <ProfileForm user={user} />
       {user && !user.vendor && (
         <>

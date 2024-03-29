@@ -1,7 +1,6 @@
 "use client";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Button } from "./ui/button";
-import { redirect } from "next/navigation";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Route } from "next";
@@ -29,7 +28,7 @@ function SearchBar({ className }: { className?: string }) {
   return (
     <search className={cn("h-full w-full", className)}>
       <form
-        className="relative mx-auto flex w-2/3 min-w-fit flex-row justify-center "
+        className="relative mx-auto flex w-full min-w-fit flex-row justify-center sm:w-2/3 "
         onSubmit={onSubmit}
       >
         <input

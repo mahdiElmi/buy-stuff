@@ -66,7 +66,7 @@ export default async function HomePage() {
               alt="clothes"
               src="https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?q=80&w=1664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             />
-            <span className="absolute bottom-0 left-0 mx-2 my-1 w-fit text-2xl font-semibold text-emerald-100">
+            <span className="absolute bottom-0 left-0 mx-2 my-1 w-fit text-sm font-semibold text-emerald-100 md:text-2xl">
               {clotheCategory.name}
             </span>
           </Link>
@@ -81,7 +81,7 @@ export default async function HomePage() {
               alt="Electronics"
               src="https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             />
-            <span className="absolute bottom-0 left-0 mx-2 my-1 w-fit text-2xl font-bold text-slate-950">
+            <span className="absolute bottom-0 left-0 mx-2 my-1 w-fit text-sm font-bold text-slate-950 md:text-2xl">
               {electronicsCategory.name}
             </span>
           </Link>

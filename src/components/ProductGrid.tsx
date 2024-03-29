@@ -78,7 +78,7 @@ export default async function ProductGrid({
       averageRating: { gte: minRating, lte: maxRating },
       name: { contains: q },
       vendorId,
-      categories: { every: { name: category } },
+      categories: { some: { name: { equals: category, mode: "insensitive" } } },
     },
   });
 
@@ -91,7 +91,7 @@ export default async function ProductGrid({
       averageRating: { gte: minRating, lte: maxRating },
       name: { contains: q },
       vendorId,
-      categories: { every: { name: category } },
+      categories: { some: { name: { equals: category, mode: "insensitive" } } },
     },
     take: PRODUCTS_PER_PAGE,
     orderBy: orderByObject,
@@ -109,7 +109,6 @@ export default async function ProductGrid({
       productCountPromise,
     ]);
   const maxPageNum = Math.ceil(productCount / PRODUCTS_PER_PAGE);
-
   return (
     <div
       className={cn(
@@ -180,7 +179,7 @@ export function FilteredAndSortedProductList({
     );
   return (
     <div className="@container">
-      <div className="grid grid-cols-1 gap-4 rounded-md @md:grid-cols-2 @2xl:grid-cols-3 @5xl:grid-cols-4 @6xl:grid-cols-5 @7xl:grid-cols-6">
+      <div className="grid grid-cols-1 gap-4 rounded-md @xs:grid-cols-2 @2xl:grid-cols-3 @5xl:grid-cols-4 @6xl:grid-cols-5 @7xl:grid-cols-6">
         {productElements}
       </div>
     </div>

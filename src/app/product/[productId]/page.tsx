@@ -21,6 +21,7 @@ import { ChevronRight, Home, Pencil } from "lucide-react";
 import ProductDeleteButton from "./ProductDeleteButton";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import ReviewSort from "./ReviewSort";
 
 export async function generateMetadata({
   params,
@@ -40,10 +41,14 @@ export async function generateMetadata({
 }
 
 export default async function Product({
+  searchParams,
+
   params,
 }: {
+  searchParams: { sort: "top" | "new" | "old" };
   params: { productId: string };
 }) {
+  const { sort = "new" } = searchParams;
   const { productId } = params;
   const product = await prisma.product.findUnique({
     where: {
@@ -54,7 +59,10 @@ export default async function Product({
         include: {
           reviewedBy: { include: { vendor: true } },
         },
-        orderBy: { createdAt: "desc" },
+        orderBy:
+          sort === "top"
+            ? { upvoteCount: "desc" }
+            : { createdAt: sort === "new" ? "desc" : "asc" },
       },
       vendor: true,
       images: true,
@@ -205,7 +213,7 @@ export default async function Product({
 
   return (
     <div className=" h-full w-full">
-      <div className="mx-auto max-w-8xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-8xl lg:px-8">
+      <div className="s:px-6 mx-auto max-w-8xl px-4 py-4 sm:py-24 md:py-16 lg:max-w-8xl lg:px-8">
         <nav className="mb-6 flex" aria-label="Breadcrumb">
           <ol role="list" className=" flex items-center space-x-4">
             <li>
@@ -251,7 +259,7 @@ export default async function Product({
             )}
           </ol>
         </nav>
-        <div className="flex flex-col gap-14 md:flex-row">
+        <div className="flex flex-col gap-5 md:flex-row md:gap-14">
           {/* Image gallery */}
           <ImageGroup images={product.images} />
           {/* Product info */}
@@ -303,8 +311,18 @@ export default async function Product({
             )}
             <div className="mt-3">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight first-letter:font-extralight">
+              <p className="flex items-end gap-3 text-3xl tracking-tight first-letter:font-extralight">
+                {product.discountPercentage > 0 && (
+                  <span className=" font-medium text-red-500 first-letter:me-1 ">
+                    -{product.discountPercentage}%
+                  </span>
+                )}
                 {formatPrice(product.price)}
+                {product.discountPercentage > 0 && (
+                  <span className="h-full text-xl text-zinc-700 line-through first-letter:font-light dark:text-zinc-400 ">
+                    {formatPrice(product.originalPrice)}
+                  </span>
+                )}
               </p>
             </div>
             <div className="mt-6">
@@ -444,8 +462,8 @@ export default async function Product({
         </div>
 
         <div className="mt-16 lg:col-span-7 lg:col-start-6 lg:mt-0">
-          <h3 className="sr-only">Recent reviews</h3>
-
+          <h3 className="sr-only">Reviews</h3>
+          <ReviewSort className="mb-5" value={sort} />
           <div className="flow-root h-full">
             <div className="flex flex-col gap-10">{reviewElements}</div>
           </div>

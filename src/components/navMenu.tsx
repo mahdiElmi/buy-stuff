@@ -18,11 +18,19 @@ export default function NavMenu() {
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>
-            <Link href="/products">Products</Link>
-          </NavigationMenuTrigger>
+          <NavigationMenuTrigger>Products</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="flex gap-3 p-4 md:w-[450px]">
+            <NavigationMenuLink>
+              <Link
+                href="/products"
+                className="pattern-dotted relative mx-6 mt-4 flex h-full select-none flex-col items-start justify-end overflow-clip rounded-md bg-gradient-to-b from-zinc-300/50 to-zinc-300 
+                p-6 px-4 text-xl font-black no-underline outline-none hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 hover:dark:to-zinc-600"
+              >
+                All Products
+              </Link>
+            </NavigationMenuLink>
+
+            <ul className="flex gap-3 p-6 md:w-[450px]">
               <li className="w-56">
                 <NavigationMenuLink>
                   <Link
@@ -31,7 +39,9 @@ export default function NavMenu() {
                     href="/products/clothes"
                   >
                     <Shirt className="absolute inset-0 h-5/6 w-5/6 -translate-x-1/3 place-self-center stroke-[0.8] opacity-50" />
-                    <div className="mb-2 mt-4 text-xl font-medium">Clothes</div>
+                    <div className="mb-2 mt-4 text-xl font-extrabold">
+                      Clothes
+                    </div>
                   </Link>
                 </NavigationMenuLink>
               </li>
@@ -43,7 +53,7 @@ export default function NavMenu() {
                     href="/products/electronics"
                   >
                     <Plug className="absolute inset-0 h-5/6 w-5/6 -translate-x-16 place-self-center stroke-[0.8] opacity-50" />
-                    <div className="mb-2 mt-4 text-xl font-medium">
+                    <div className="mb-2 mt-4 text-xl font-extrabold">
                       Electronics
                     </div>
                   </Link>

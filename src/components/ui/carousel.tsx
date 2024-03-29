@@ -327,6 +327,7 @@ const CarouselThumb = React.forwardRef<HTMLButtonElement, ThumbPropType>(
           width={width}
           height={height}
           alt={imgAlt}
+          priority={true}
           className={cn(
             "aspect-square h-full w-full rounded-lg object-cover object-center",
             `w-[${width}] h-[${height}]`,

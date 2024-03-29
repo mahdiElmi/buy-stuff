@@ -30,7 +30,11 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en" className={`${inter.variable} scroll-smooth font-sans`}>
-      <body className="flex min-h-[100dvh] flex-col bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
+      <body
+        className="flex min-h-[100dvh] flex-col bg-zinc-50 text-zinc-950 scrollbar scrollbar-thumb-zinc-400/40
+        hover:scrollbar-thumb-zinc-400 active:scrollbar-thumb-zinc-500 dark:bg-zinc-950 dark:text-zinc-50 dark:scrollbar-thumb-zinc-800/40
+        dark:hover:scrollbar-thumb-zinc-800 dark:active:scrollbar-thumb-zinc-700"
+      >
         <SessionProvider session={session}>
           <ThemeProvider
             attribute="class"
