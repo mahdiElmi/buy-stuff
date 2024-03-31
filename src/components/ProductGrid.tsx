@@ -76,7 +76,7 @@ export default async function ProductGrid({
           ? { gte: minPrice }
           : { gte: minPrice, lte: maxPrice },
       averageRating: { gte: minRating, lte: maxRating },
-      name: { contains: q },
+      name: { contains: q, mode: "insensitive" },
       vendorId,
       categories: { some: { name: { equals: category, mode: "insensitive" } } },
     },
@@ -89,7 +89,7 @@ export default async function ProductGrid({
           ? { gte: minPrice }
           : { gte: minPrice, lte: maxPrice },
       averageRating: { gte: minRating, lte: maxRating },
-      name: { contains: q },
+      name: { contains: q, mode: "insensitive" },
       vendorId,
       categories: { some: { name: { equals: category, mode: "insensitive" } } },
     },

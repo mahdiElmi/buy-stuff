@@ -22,12 +22,11 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { mergeCartItems, formatPrice } from "@/lib/utils";
+import { mergeCartItems, formatPrice, cn } from "@/lib/utils";
 import deleteItemFromCart from "@/app/shopping-cart/DeleteCartItemAction";
-import { useEffect, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 export default function ShoppingCart({
   cartItemsFromServer,
@@ -37,8 +36,8 @@ export default function ShoppingCart({
   userId: string | null;
 }) {
   const [items, setItems] = useAtom(cartAtom);
-  // useHydrateAtoms([[cartAtom, cartItemsFromServer]]);
   const [isPending, startTransition] = useTransition();
+  const [isMerging, setIsMerging] = useState(!!userId);
   const itemsArr = Object.values(items);
   const totalPrice = itemsArr.reduce(
     (prevValue, item, i) => prevValue + item.price * item.quantity,
@@ -66,10 +65,12 @@ export default function ShoppingCart({
     }
   }
   useEffect(() => {
-    if (userId)
+    if (userId) {
       setItems((oldItems) =>
         mergeCartItems(cartItemsFromServer, oldItems, "server"),
       );
+      setIsMerging(false);
+    }
   }, [cartItemsFromServer, setItems, userId]);
 
   return (
@@ -77,35 +78,30 @@ export default function ShoppingCart({
       <Drawer>
         <DrawerTrigger asChild className="relative md:hidden">
           <Button variant="ghostHoverLess" className="relative" size="icon">
-            <span className="absolute end-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-zinc-200 p-1 text-xs font-bold dark:bg-zinc-700">
-              {itemsArr.length}
+            <span
+              className={cn(
+                "absolute end-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-zinc-200 p-1 text-xs font-bold dark:bg-zinc-700",
+                isMerging && "animate-pulse",
+              )}
+            >
+              {isMerging === false && itemsArr.length}
             </span>
             <ShoppingCartIcon className="h-7 w-7" />
           </Button>
         </DrawerTrigger>
         <DrawerContent>
-          {/* <DrawerHeader>
-            <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-            <DrawerDescription>This action cannot be undone.</DrawerDescription>
-          </DrawerHeader>
-          <DrawerFooter>
-            <Button>Submit</Button>
-            <DrawerClose>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter> */}
           <DrawerHeader className="flex justify-center gap-2">
             <ShoppingCartIcon className="h-6 w-6" />
             <h4 className="text-lg font-bold text-zinc-800 dark:text-zinc-300">
               Shopping Cart
             </h4>
           </DrawerHeader>
-          <div className="flex w-full flex-col px-5">
+          <div className="w-full px-5">
             {itemsArr.length > 0 ? (
-              <ScrollArea className="h-48 pe-2">
+              <ScrollArea className="h-52 w-full pe-2">
                 {itemsArr.map((item) => (
                   <div
-                    className="mb-3 flex items-center gap-2"
+                    className="mb-3 flex w-full items-center gap-2"
                     key={item.productId}
                   >
                     <Link
@@ -120,33 +116,35 @@ export default function ShoppingCart({
                         height={36}
                       />
                     </Link>
-                    <div className="flex h-full flex-col justify-between self-start">
+                    <div className="flex h-full flex-shrink flex-col justify-between self-start">
                       <Link
                         href={`/product/${item.productId}`}
                         title={item.name}
-                        className=" flex-shrink truncate text-sm font-semibold hover:underline"
+                        className=" truncate text-wrap break-words text-sm font-semibold hover:underline"
                       >
                         {item.name}
                       </Link>
                       <span className="text-xs font-bold">{item.price}$</span>
                     </div>
-                    <span className="ms-auto flex items-center justify-center font-semibold">
-                      x{item.quantity}
-                    </span>
-                    <Button
-                      className=""
-                      onClick={() => handleDelete(item.productId)}
-                      variant="ghost"
-                      size="icon"
-                      disabled={isPending}
-                    >
-                      <span className="sr-only">Delete Item</span>
-                      {isPending ? (
-                        <Loader className="animate-spin" />
-                      ) : (
-                        <Trash />
-                      )}
-                    </Button>
+                    <div className="ms-auto flex gap-1">
+                      <span className="flex items-center justify-center font-semibold">
+                        x{item.quantity}
+                      </span>
+                      <Button
+                        className=""
+                        onClick={() => handleDelete(item.productId)}
+                        variant="ghost"
+                        size="icon"
+                        disabled={isPending}
+                      >
+                        <span className="sr-only">Delete Item</span>
+                        {isPending ? (
+                          <Loader className="animate-spin" />
+                        ) : (
+                          <Trash />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </ScrollArea>
