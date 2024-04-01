@@ -22,7 +22,7 @@ export default function SignOutButton() {
     <Button
       type="submit"
       disabled={isPending}
-      className="flex w-full items-center gap-2 p-0"
+      className="flex w-full items-center justify-start gap-2 rounded-sm p-0 ps-2 hover:bg-zinc-100 dark:hover:bg-zinc-800"
       variant="ghostHoverLess"
       size="sm"
       onClick={handleSignOut}
