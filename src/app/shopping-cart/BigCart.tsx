@@ -14,9 +14,9 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState, useTransition } from "react";
-import clearCart from "./ClearCartAction";
-import deleteItemFromCart from "./DeleteCartItemAction";
-import updateShoppingCartItemQuantity from "./UpdateCartItemAction";
+import clearCart from "./clearCartAction";
+import deleteItemFromCart from "./deleteCartItemAction";
+import updateShoppingCartItemQuantity from "./updateCartItemAction";
 import { mergeCartItems, formatPrice } from "@/lib/utils";
 import { signIn } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";

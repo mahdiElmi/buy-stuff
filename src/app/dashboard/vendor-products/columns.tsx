@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { deleteProduct } from "@/actions/DeleteProductAction";
+import { deleteProduct } from "@/actions/deleteProductAction";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTransition } from "react";
 

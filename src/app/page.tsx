@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import HomePageCarousel from "@/components/HomePageCarousel";
-import { deleteProduct } from "@/actions/DeleteProductAction";
+import { deleteProduct } from "@/actions/deleteProductAction";
 
 export default async function HomePage() {
   const [

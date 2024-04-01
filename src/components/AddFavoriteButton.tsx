@@ -6,7 +6,7 @@ import { useState, useTransition } from "react";
 import {
   addToFavorites,
   removeFromFavorites,
-} from "../actions/FavoritesActions";
+} from "../actions/favoritesActions";
 export default function AddFavoriteButton({
   favoriteInitialState,
   productId,

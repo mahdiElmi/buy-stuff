@@ -31,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { deleteProductInBulk } from "@/actions/DeleteProductAction";
+import { deleteProductInBulk } from "@/actions/deleteProductAction";
 import { toast } from "sonner";
 import Link from "next/link";
 import { ListPlus, ListTodo, ListX, Loader, Plus } from "lucide-react";

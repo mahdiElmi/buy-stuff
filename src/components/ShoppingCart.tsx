@@ -25,7 +25,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { mergeCartItems, formatPrice, cn } from "@/lib/utils";
-import deleteItemFromCart from "@/app/shopping-cart/DeleteCartItemAction";
+import deleteItemFromCart from "@/app/shopping-cart/deleteCartItemAction";
 import { useEffect, useState, useTransition } from "react";
 
 export default function ShoppingCart({
