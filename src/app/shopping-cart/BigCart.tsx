@@ -1,17 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { cartAtom } from "@/lib/atoms";
 import { LocalShoppingCartItem, LocalShoppingCartItems } from "@/lib/types";
 import { useAtom, useSetAtom } from "jotai";
-import { useHydrateAtoms } from "jotai/utils";
 import {
   Check,
   ChevronLeft,
   ChevronRight,
   Loader,
   Trash,
-  Trash2,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -34,10 +31,7 @@ export default function BigCart({
   const SHIPPING_ESTIMATE = 5.0 as const;
 
   const [items, setItems] = useAtom(cartAtom);
-  // useHydrateAtoms([
-  //   [cartAtom, mergeCartItems(cartItemsFromServer, items, "client")],
-  // ]);
-  const [isMerging, setIsMerging] = useState(!!userId);
+  const [isMerging, setIsMerging] = useState(true);
   const [isPending, startTransition] = useTransition();
 
   const itemsArr = useMemo(() => {
@@ -59,8 +53,8 @@ export default function BigCart({
       setItems((oldItems) =>
         mergeCartItems(cartItemsFromServer, oldItems, "server"),
       );
-      setIsMerging(false);
     }
+    setIsMerging(false);
   }, [cartItemsFromServer, setItems, userId]);
 
   function handleDeleteAll() {
@@ -83,85 +77,9 @@ export default function BigCart({
       signIn();
     }
   }
-  // useEffect(() => {
-  //   setItems((oldItems) =>
-  //     mergeCartItems(cartItemsFromServer, oldItems, "client"),
-  //   );
-  // }, []);
-  // if (itemsArr.length <= 0)
-  //   return (
-  //     <div className="flex h-fit min-h-screen w-full max-w-7xl flex-grow flex-col items-center justify-center gap-2">
-  //       <h1 className="text-5xl font-bold">Cart is Empty!</h1>
-  //       <p className="text-3xl font-semibold dark:text-zinc-100">
-  //         you can browse our products{" "}
-  //         <Link className="text-violet-600 hover:underline" href="/products">
-  //           here
-  //         </Link>
-  //         .
-  //       </p>
-  //     </div>
-  //   );
-
-  // return (
-  //   <div className="mt-10 flex h-fit min-h-screen w-full max-w-3xl flex-col gap-4 self-start">
-  //     <div className="flex justify-between gap-5 pb-5">
-  //       <h1 className=" text-4xl font-bold">Shopping Cart</h1>
-  //       <Button
-  //         onClick={handleDeleteAll}
-  //         className="min-w-0 self-end font-bold"
-  //         variant="secondary"
-  //         size="sm"
-  //         disabled={isPending}
-  //       >
-  //         <Trash2 className="me-1 h-5 w-5" />
-  //         Empty Cart
-  //       </Button>
-  //     </div>
-  //     {itemsArr.map((item) => (
-  //       <div key={item.productId} className="flex items-center gap-2 ">
-  //         <Link href={`/product/${item.productId}`}>
-  //           <Image
-  //             className="h-20 w-20 rounded-lg shadow-2xl"
-  //             alt="product image"
-  //             src={item.image}
-  //             width={80}
-  //             height={80}
-  //           />
-  //         </Link>
-  //         <div className="flex h-full flex-col gap-1 self-start">
-  //           <Link
-  //             href={`/product/${item.productId}`}
-  //             title={item.name}
-  //             className="text-xl font-semibold hover:underline"
-  //           >
-  //             {item.name}
-  //           </Link>
-  //           <span className="text-lg font-bold">${item.price}</span>
-  //         </div>
-  //         <CartItemCountController item={item} userId={userId} />
-  //       </div>
-  //     ))}
-  //     <Separator className="my-3 h-1 rounded-full bg-zinc-400 dark:bg-zinc-600" />
-  //     <div className="flex justify-between">
-  //       <h2 className="self-end text-2xl font-bold">
-  //         Total: {formatPrice(totalPrice)}
-  //       </h2>
-  //       <Button
-  //         onClick={handleOrderSubmit}
-  //         disabled={isPending}
-  //         className="min-w-0 font-bold"
-  //       >
-  //         Finalize Order
-  //       </Button>
-  //     </div>
-  //   </div>
-  // );
 
   return (
-    <form
-      onSubmit={handleOrderSubmit}
-      className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16"
-    >
+    <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
       <section aria-labelledby="cart-heading" className="lg:col-span-7">
         <h2 id="cart-heading" className="sr-only">
           Items in your shopping cart
@@ -325,15 +243,15 @@ export default function BigCart({
 
         <div className="mt-6">
           <button
-            type="submit"
             disabled={itemsArr.length <= 0}
+            onClick={handleOrderSubmit}
             className="w-full rounded-md border border-transparent bg-indigo-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
           >
             Checkout
           </button>
         </div>
       </section>
-    </form>
+    </div>
   );
 }
 

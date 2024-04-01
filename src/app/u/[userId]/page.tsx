@@ -158,7 +158,7 @@ async function page({
         </Link>
         <div className=" flex-shrink border-b-2"></div>
       </div>
-      <section className="h-full overflow-y-auto rounded-b-lg border-2 border-t-0 border-zinc-600 scrollbar dark:scrollbar-thumb-zinc-700">
+      <section className="h-full overflow-y-auto rounded-b-lg border-2 border-t-0 border-zinc-600 scrollbar dark:scrollbar-thumb-zinc-700 dark:hover:scrollbar-thumb-zinc-600 dark:active:scrollbar-thumb-zinc-500">
         {view === "reviews" ? (
           user.reviews.length > 0 ? (
             <div className=" flex flex-col gap-5 p-4">

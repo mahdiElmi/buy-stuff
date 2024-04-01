@@ -31,9 +31,9 @@ import { Reorder } from "framer-motion";
 import { cn } from "@/lib/utils";
 import DummyProductItem from "@/app/products/add/DummyProductItem";
 import { ProductWithImagesAndCategories } from "@/lib/types";
-import { editProduct } from "./EditProductAction";
+import { editProduct } from "./editProductAction";
 import { X } from "lucide-react";
-import deleteImage from "./DeleteImageAction";
+import deleteImage from "./deleteImageAction";
 
 export default function EditProductForm({
   categories,

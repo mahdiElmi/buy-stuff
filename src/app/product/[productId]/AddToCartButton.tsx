@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useMemo, useState, useTransition } from "react";
-import addToCart from "./AddToCartAction";
+import addToCart from "./addToCartAction";
 import { LocalShoppingCartItem, ProductWithImages } from "@/lib/types";
 import { cartAtom } from "@/lib/atoms";
 import { useAtom, useSetAtom } from "jotai";

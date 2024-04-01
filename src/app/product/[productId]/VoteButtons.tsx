@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown, ArrowUp, ArrowUpIcon, Flag } from "lucide-react";
 import { useEffect, useOptimistic, useState, useTransition } from "react";
-import Vote from "./ReviewVoteAction";
+import Vote from "./reviewVoteAction";
 import { abbrNum, cn } from "@/lib/utils";
 import { toast } from "sonner";
 import Link from "next/link";

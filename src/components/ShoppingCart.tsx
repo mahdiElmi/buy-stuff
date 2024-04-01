@@ -37,7 +37,7 @@ export default function ShoppingCart({
 }) {
   const [items, setItems] = useAtom(cartAtom);
   const [isPending, startTransition] = useTransition();
-  const [isMerging, setIsMerging] = useState(!!userId);
+  const [isMerging, setIsMerging] = useState(true);
   const itemsArr = Object.values(items);
   const totalPrice = itemsArr.reduce(
     (prevValue, item, i) => prevValue + item.price * item.quantity,
@@ -69,8 +69,8 @@ export default function ShoppingCart({
       setItems((oldItems) =>
         mergeCartItems(cartItemsFromServer, oldItems, "server"),
       );
-      setIsMerging(false);
     }
+    setIsMerging(false);
   }, [cartItemsFromServer, setItems, userId]);
 
   return (
@@ -84,7 +84,7 @@ export default function ShoppingCart({
                 isMerging && "animate-pulse",
               )}
             >
-              {isMerging === false && itemsArr.length}
+              {!isMerging && itemsArr.length}
             </span>
             <ShoppingCartIcon className="h-7 w-7" />
           </Button>
@@ -177,12 +177,15 @@ export default function ShoppingCart({
             className="relative hidden md:flex"
             size="icon"
           >
-            {/* <Link href="/shopping-cart" className="relative"> */}
-            <span className="absolute end-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-zinc-200 p-1 text-xs font-bold dark:bg-zinc-700">
-              {itemsArr.length}
+            <span
+              className={cn(
+                "absolute end-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-zinc-200 p-1 text-xs font-bold dark:bg-zinc-700",
+                isMerging && "animate-pulse",
+              )}
+            >
+              {!isMerging && itemsArr.length}
             </span>
             <ShoppingCartIcon className="h-7 w-7" />
-            {/* </Link> */}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent asChild>

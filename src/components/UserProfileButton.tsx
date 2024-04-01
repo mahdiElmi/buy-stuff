@@ -1,8 +1,5 @@
-// "use client";
 import Image from "next/image";
 import Link from "next/link";
-// import { signIn, signOut, useSession } from "next-auth/react";
-import { signOut } from "@/server/auth";
 
 import {
   DropdownMenu,
@@ -13,8 +10,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UserWithShoppingCartAndVendor } from "@/lib/types";
-import { Heart, LayoutDashboard, List, LogOut, PanelTop } from "lucide-react";
-import { Button } from "./ui/button";
+import { Heart, LayoutDashboard, List, PanelTop } from "lucide-react";
+import SignOutButton from "./SignOutButton";
 
 function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
   return (
@@ -84,24 +81,7 @@ function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
             </>
           )}
           <DropdownMenuItem asChild>
-            <form
-              className=""
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/" });
-              }}
-            >
-              <button
-                type="submit"
-                className="flex w-full items-center gap-2 p-0"
-                // variant="ghostHoverLess"
-                // size="sm"
-                // onClick={() => signOut()}
-              >
-                <LogOut className="h-5 w-5" />
-                Sign Out
-              </button>
-            </form>
+            <SignOutButton />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

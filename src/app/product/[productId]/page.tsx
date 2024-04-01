@@ -10,7 +10,7 @@ import { cn, formatPrice } from "@/lib/utils";
 import DeleteButton from "../../../components/DeleteButton";
 import ReviewForm from "./ReviewForm";
 import VoteButtons from "./VoteButtons";
-import deleteReview from "./ReviewDeleteAction";
+import deleteReview from "./reviewDeleteAction";
 import CustomRating from "@/components/ui/CustomRating";
 import { Button } from "@/components/ui/button";
 import DateToggle from "./DateToggle";

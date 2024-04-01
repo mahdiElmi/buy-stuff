@@ -17,7 +17,7 @@ import Image from "next/image";
 import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import SubmitReview from "./ReviewFormAction";
+import SubmitReview from "./reviewFormAction";
 import { LucideRotateCw } from "lucide-react";
 import CustomRating from "@/components/ui/CustomRating";
 import { toast } from "sonner";
