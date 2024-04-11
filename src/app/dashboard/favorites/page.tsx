@@ -24,7 +24,7 @@ async function page() {
   if (!user) redirect("/sign-in");
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="mb-5 flex w-full flex-col gap-10 px-5 md:ps-0">
       <h1 className="me-auto self-start text-4xl font-black">Favorites</h1>
       <FilteredAndSortedProductList products={user.favorites} />
     </div>

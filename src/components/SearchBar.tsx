@@ -13,16 +13,10 @@ function SearchBar({ className }: { className?: string }) {
     e.preventDefault();
     const val = e.target as HTMLFormElement;
     const search = val.search as HTMLInputElement;
-    // const newParams = new URLSearchParams(searchParams.toString());
 
     if (search.value) {
-      // newParams.set("q", search.value);
       router.push(`/products/?q=${search.value}` as Route);
-    } else {
-      // newParams.delete("q");
     }
-
-    // router.push(createUrl("/search", newParams));
   }
 
   return (

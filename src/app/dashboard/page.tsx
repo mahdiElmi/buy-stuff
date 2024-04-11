@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { redirect } from "next/navigation";
 import ProfileForm from "./ProfileForm";
+import { SquareArrowOutUpRight, SquareArrowUpRight } from "lucide-react";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -16,12 +17,13 @@ export default async function Dashboard() {
   if (!user) redirect("/sign-in");
 
   return (
-    <div className="h-fit overflow-x-clip px-5">
-      <div className="mb-10 flex gap-1">
+    <div className="h-fit w-full px-5 pb-5 md:ps-0">
+      <div className="mb-10 flex items-center gap-2">
         <h1 className="self-start text-4xl font-black">Profile</h1>
-        <Button asChild className="self-end font-semibold" variant="link">
-          <Link href={`/u/${user.id}`}>Profile Page</Link>
-        </Button>
+        <Link className="self-start pt-1" href={`/u/${user.id}`}>
+          <SquareArrowOutUpRight className="size-4" />
+          <span className="sr-only">Profile Link</span>
+        </Link>
       </div>
       <ProfileForm user={user} />
       {user && !user.vendor && (

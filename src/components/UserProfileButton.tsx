@@ -20,7 +20,7 @@ function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
         <DropdownMenuTrigger>
           <Image
             className="rounded-full bg-zinc-500"
-            src={user.image}
+            src={user.image || "/avatar.png"}
             alt="profile picture"
             width={32}
             height={32}

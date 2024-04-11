@@ -56,5 +56,5 @@ export const profileSchema = z.object({
   username: z.string().trim().toLowerCase(),
   firstName: z.string().trim().toLowerCase(),
   lastName: z.string().trim().toLowerCase(),
-  image: z.string().trim(),
+  image: z.string(),
 });

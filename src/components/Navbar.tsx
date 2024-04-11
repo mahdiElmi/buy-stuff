@@ -5,33 +5,12 @@ import SearchBar from "./SearchBar";
 import ShoppingCart from "./ShoppingCart";
 import { auth } from "@/server/auth";
 import { prisma } from "@/lib/db";
-import {
-  LocalShoppingCartItems,
-  UserWithShoppingCart,
-  UserWithShoppingCartAndVendor,
-} from "@/lib/types";
+import { LocalShoppingCartItems } from "@/lib/types";
 import { Button } from "./ui/button";
 import { Dot, Menu } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import DashNav from "./DashNav";
 import SignInButton from "./SignInButton";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
 import NavMenu from "./navMenu";
 
 async function Navbar() {
@@ -51,14 +30,6 @@ async function Navbar() {
 
   const shoppingCartItems: LocalShoppingCartItems = {};
   if (user) {
-    //   shoppingCartItems = user.shoppingCartItems.map(
-    //     ({ productId, quantity, product }) => ({
-    //       productId,
-    //       quantity,
-    //       name: product.name,
-    //       image: product.images[0].url,
-    //     }),
-    //   );
     for (let item of user.shoppingCartItems) {
       const { productId, quantity, product } = item;
       shoppingCartItems[productId] = {
@@ -80,10 +51,8 @@ async function Navbar() {
       <nav className="mx-auto flex max-w-[95rem] flex-row items-center gap-5 py-1">
         <Sheet>
           <SheetTrigger className="md:hidden">
-            {/* <Button className="h-9 w-9 p-1" variant="outline" size="icon"> */}
             <Menu className="h-6 w-6" />
             <span className="sr-only">Open navigation menu</span>
-            {/* </Button> */}
           </SheetTrigger>
           <SheetContent
             className="w-fit border-zinc-200 pe-10 dark:border-zinc-700"
@@ -152,7 +121,6 @@ async function Navbar() {
         <div className="hidden md:flex md:items-center md:gap-4">
           <NavMenu />
         </div>
-        {/* <SearchBar className="hidden md:block" /> */}
         <SearchBar className="" />
         <div className="ms-auto flex items-center gap-2 md:gap-5">
           <ThemeToggle className="hidden md:flex" />
@@ -163,7 +131,6 @@ async function Navbar() {
           {user ? <UserProfileButton user={user} /> : <SignInButton />}
         </div>
       </nav>
-      {/* <SearchBar className="md:hidden" /> */}
     </header>
   );
 }

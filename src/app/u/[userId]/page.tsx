@@ -115,7 +115,7 @@ async function page({
           <Image
             width={80}
             height={80}
-            src={user.image}
+            src={user.image || "/avatar.png"}
             alt={`${user.name} profile picture`}
             className="h-10 w-10 self-center rounded-full md:h-20 md:w-20"
           />

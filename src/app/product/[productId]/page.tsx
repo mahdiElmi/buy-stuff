@@ -97,7 +97,7 @@ export default async function Product({
   const isAuthor = vendor?.userId === user?.id;
   const hasUserAddedToFavorites = !!user?.favorites[0];
 
-  // calculate rating distribution
+  // calculate rating distribution. this should be derived form the database if number of reviews are high
   const ratingCounts: [number, number, number, number, number] = [
     0, 0, 0, 0, 0,
   ];
@@ -122,15 +122,7 @@ export default async function Product({
         break;
     }
   }
-  // const AverageRating = parseFloat(
-  //   (product.reviews.length > 0
-  //     ? product.reviews.reduce(
-  //         (acc, currentReview) => currentReview.rating + acc,
-  //         0,
-  //       ) / product.reviews.length
-  //     : 0
-  //   ).toFixed(1),
-  // );
+
   const formattedAverageRating = product.averageRating.toFixed(
     product.averageRating % 1 === 0 ? 0 : 1,
   );
@@ -157,8 +149,8 @@ export default async function Product({
               <Image
                 width={40}
                 height={40}
-                src={review.reviewedBy.image}
-                alt={`${review.reviewedBy.name} profile picture`}
+                src={review.reviewedBy.image || "/avatar.png"}
+                alt={`${review.reviewedBy.name}'s profile picture`}
                 className="h-10 w-10 rounded-full"
               />
               <div className="flex flex-col">
@@ -181,7 +173,6 @@ export default async function Product({
                 <CustomRating
                   color="gold"
                   className="max-w-28"
-                  // style={{ maxWidth }}
                   value={review.rating}
                   readOnly={true}
                 />
