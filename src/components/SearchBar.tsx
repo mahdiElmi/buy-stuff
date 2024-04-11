@@ -51,6 +51,7 @@ function SearchBar({ className }: { className?: string }) {
             className="h-5 w-5 flex-shrink-0 stroke-2 text-zinc-600 dark:text-zinc-400"
             aria-hidden="true"
           />
+          <span className="sr-only">Search</span>
         </Button>
       </form>
     </search>

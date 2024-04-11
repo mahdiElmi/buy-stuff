@@ -82,6 +82,7 @@ async function Navbar() {
           <SheetTrigger className="md:hidden">
             {/* <Button className="h-9 w-9 p-1" variant="outline" size="icon"> */}
             <Menu className="h-6 w-6" />
+            <span className="sr-only">Open navigation menu</span>
             {/* </Button> */}
           </SheetTrigger>
           <SheetContent

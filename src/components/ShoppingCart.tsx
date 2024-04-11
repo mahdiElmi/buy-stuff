@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/drawer";
 import { mergeCartItems, formatPrice, cn } from "@/lib/utils";
 import deleteItemFromCart from "@/app/shopping-cart/deleteCartItemAction";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 
 export default function ShoppingCart({
   cartItemsFromServer,
@@ -38,7 +38,18 @@ export default function ShoppingCart({
   const [items, setItems] = useAtom(cartAtom);
   const [isPending, startTransition] = useTransition();
   const [isMerging, setIsMerging] = useState(true);
-  const itemsArr = Object.values(items);
+  const itemsArr = useMemo(() => {
+    return Object.values(items);
+  }, [items]);
+
+  const cartItemsCount = useMemo(() => {
+    let sum = 0;
+    for (const item of itemsArr) {
+      sum += item.quantity;
+    }
+    return sum;
+  }, [itemsArr]);
+
   const totalPrice = itemsArr.reduce(
     (prevValue, item, i) => prevValue + item.price * item.quantity,
     0,
@@ -84,7 +95,7 @@ export default function ShoppingCart({
                 isMerging && "animate-pulse",
               )}
             >
-              {!isMerging && itemsArr.length}
+              {!isMerging && cartItemsCount}
             </span>
             <ShoppingCartIcon className="h-7 w-7" />
           </Button>
@@ -97,7 +108,7 @@ export default function ShoppingCart({
             </h4>
           </DrawerHeader>
           <div className="w-full px-5">
-            {itemsArr.length > 0 ? (
+            {cartItemsCount > 0 ? (
               <ScrollArea className="h-52 w-full pe-2">
                 {itemsArr.map((item) => (
                   <div
@@ -183,7 +194,7 @@ export default function ShoppingCart({
                 isMerging && "animate-pulse",
               )}
             >
-              {!isMerging && itemsArr.length}
+              {!isMerging && cartItemsCount}
             </span>
             <ShoppingCartIcon className="h-7 w-7" />
           </Button>
@@ -196,7 +207,7 @@ export default function ShoppingCart({
               </h4>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {itemsArr.length > 0 ? (
+            {cartItemsCount > 0 ? (
               <ScrollArea className="h-48 pe-2">
                 {itemsArr.map((item) => (
                   <DropdownMenuItem key={item.productId} asChild>
