@@ -8,6 +8,7 @@ import { Provider as JotaiProvider } from "jotai";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
+import Script from "next/script";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -53,6 +54,11 @@ export default async function RootLayout({
         <Footer />
         <Toaster />
       </body>
+      <Script
+        defer
+        data-domain="buy-stuff-lilac.vercel.app"
+        src="https://plausible.io/js/script.js"
+      />
     </html>
   );
 }

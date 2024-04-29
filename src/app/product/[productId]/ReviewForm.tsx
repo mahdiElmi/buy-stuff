@@ -65,7 +65,7 @@ function ReviewForm({ user, productId }: { user: User; productId: string }) {
           <Image
             width={36}
             height={36}
-            src={user.image || "avatar.png"}
+            src={user.image || "/avatar.png"}
             alt={user.name}
             className="h-9 w-9 rounded-full"
           />

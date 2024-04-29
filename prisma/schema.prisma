@@ -48,23 +48,25 @@ model VerificationToken {
 }
 
 model User {
-  id                String             @id @default(cuid())
-  name              String
-  firstName         String?
-  lastName          String?
-  email             String             @unique
-  emailVerified     DateTime?
-  createdAt         DateTime           @default(now())
-  image             String             @default("http://www.gravatar.com/avatar/?d=mp") @db.VarChar(2048)
-  reviews           Review[]
-  reviewVotes       Vote[]
-  shippingAddresses ShippingAddress[]
-  shoppingCartItems ShoppingCartItem[]
-  accounts          Account[]
-  sessions          Session[]
-  vendor            Vendor?
-  favorites         Product[]
-  lists             List[]
+  id                       String             @id @default(cuid())
+  name                     String
+  firstName                String?
+  lastName                 String?
+  email                    String             @unique
+  emailVerified            DateTime?
+  createdAt                DateTime           @default(now())
+  image                    String             @default("http://www.gravatar.com/avatar/?d=mp") @db.VarChar(2048)
+  reviews                  Review[]
+  reviewVotes              Vote[]
+  shippingAddresses        ShippingAddress[]  @relation("UserShippingAddresses")
+  defaultShippingAddress   ShippingAddress?   @relation("DefaultShippingAddress", fields: [defaultShippingAddressId], references: [id])
+  defaultShippingAddressId String?            @unique
+  shoppingCartItems        ShoppingCartItem[]
+  accounts                 Account[]
+  sessions                 Session[]
+  vendor                   Vendor?
+  favorites                Product[]
+  lists                    List[]
 }
 
 model List {
@@ -112,11 +114,12 @@ model ShippingAddress {
   city        String
   address     String
   zip         String
-  phoneNumber Int
+  phoneNumber String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   userId      String
-  User        User     @relation(fields: [userId], references: [id])
+  User        User     @relation("UserShippingAddresses", fields: [userId], references: [id])
+  isDefault   User?    @relation("DefaultShippingAddress")
 
   // @@index([userId])
 }

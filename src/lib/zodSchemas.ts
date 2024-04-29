@@ -58,3 +58,15 @@ export const profileSchema = z.object({
   lastName: z.string().trim().toLowerCase(),
   image: z.string(),
 });
+
+export const shippingAddressSchema = z.object({
+  id: z.string().trim(),
+  firstName: z.string().trim().toLowerCase().min(2),
+  lastName: z.string().trim().toLowerCase().min(2),
+  country: z.string().trim().min(1),
+  state: z.string().trim().min(1),
+  city: z.string().trim().min(1),
+  address: z.string().trim().min(1),
+  zip: z.string().trim().min(1),
+  phoneNumber: z.string().trim().min(1),
+});

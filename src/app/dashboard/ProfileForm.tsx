@@ -21,7 +21,7 @@ import {
 } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import updateProfile from "./updateProfileAction";
+import { updateProfile } from "./updateProfileAction";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -86,7 +86,6 @@ export default function ProfileForm({ user }: { user: User }) {
         toast.success("Profile updated.");
         setFiles([]);
         const updatedImage = form.getValues("image");
-        console.log(updatedImage);
         form.reset({ image: updatedImage });
       } else toast.error("Profile update failed.");
     });
@@ -114,9 +113,10 @@ export default function ProfileForm({ user }: { user: User }) {
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-3"
+        className=" flex flex-col gap-3  "
         onSubmit={form.handleSubmit(handleFormSubmit)}
       >
+        <h2 className="text-2xl font-bold">Update Profile</h2>
         <FormField
           name="image"
           control={form.control}
@@ -124,10 +124,10 @@ export default function ProfileForm({ user }: { user: User }) {
             <FormItem>
               <FormLabel>Profile Picture</FormLabel>
               <FormControl>
-                <div className="flex items-center gap-5">
-                  <div className="relative">
+                <div className="flex items-center gap-5 ">
+                  <div className="relative shrink-0">
                     <Image
-                      className="h-20 w-20 rounded-full"
+                      className="size-20 rounded-full"
                       src={tempImageUrl ? tempImageUrl : value || "/avatar.png"}
                       alt="user profile picture"
                       width={80}
@@ -147,7 +147,7 @@ export default function ProfileForm({ user }: { user: User }) {
                   </div>
                   <div
                     {...getRootProps()}
-                    className="w-fit cursor-pointer rounded-lg border-2 border-dashed border-current p-6 opacity-70 hover:opacity-100 md:p-10"
+                    className="flex h-28 w-64 min-w-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-current opacity-70 hover:opacity-100 "
                   >
                     <Input {...rest} {...getInputProps()} />
 

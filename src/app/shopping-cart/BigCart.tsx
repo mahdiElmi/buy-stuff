@@ -14,12 +14,16 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState, useTransition } from "react";
-import clearCart from "./clearCartAction";
-import deleteItemFromCart from "./deleteCartItemAction";
-import updateShoppingCartItemQuantity from "./updateCartItemAction";
+
 import { mergeCartItems, formatPrice } from "@/lib/utils";
 import { signIn } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  updateCart,
+  clearCart,
+  deleteItemFromCart,
+  updateShoppingCartItemQuantity,
+} from "./ShoppingCartActions";
 
 export default function BigCart({
   cartItemsFromServer,
@@ -48,11 +52,15 @@ export default function BigCart({
     return totalPrice * 0.06;
   }, [totalPrice]);
 
+  async function syncCart(newItems: LocalShoppingCartItems) {
+    if (!userId) return;
+    const result = await updateCart(userId, newItems);
+  }
+
   useEffect(() => {
     if (userId) {
-      setItems((oldItems) =>
-        mergeCartItems(cartItemsFromServer, oldItems, "server"),
-      );
+      const mergedItems = mergeCartItems(cartItemsFromServer, items, "server");
+      setItems((oldItems) => mergedItems);
     }
     setIsMerging(false);
   }, [cartItemsFromServer, setItems, userId]);
@@ -303,7 +311,6 @@ function CartItemCountController({
 
     if (userId) {
       setCurrentLoading(isPositive ? "increment" : "decrement");
-
       startTransition(async () => {
         const result = await updateShoppingCartItemQuantity(
           userId,
@@ -322,6 +329,7 @@ function CartItemCountController({
           });
           console.log(result);
         }
+        console.log(result);
       });
     } else {
       setItems((oldCart) => {

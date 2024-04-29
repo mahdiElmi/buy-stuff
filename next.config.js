@@ -1,8 +1,13 @@
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     typedRoutes: true,
-    swcPlugins: [["@swc-jotai/react-refresh", {}]],
+    // swcPlugins: [["@swc-jotai/react-refresh", {}]],
   },
   // webpack: (config) => {
   //   config.experiments = { ...config.experiments, topLevelAwait: true };
@@ -74,4 +79,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

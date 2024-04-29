@@ -1,9 +1,9 @@
 "use client";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Button } from "./ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Route } from "next";
+import { Search } from "lucide-react";
 
 function SearchBar({ className }: { className?: string }) {
   const router = useRouter();
@@ -41,7 +41,7 @@ function SearchBar({ className }: { className?: string }) {
           variant="outline"
           className="absolute inset-y-0 right-0 flex h-8 w-8 items-center bg-zinc-300 dark:bg-zinc-950"
         >
-          <MagnifyingGlassIcon
+          <Search
             className="h-5 w-5 flex-shrink-0 stroke-2 text-zinc-600 dark:text-zinc-400"
             aria-hidden="true"
           />
