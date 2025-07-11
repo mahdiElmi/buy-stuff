@@ -58,11 +58,9 @@ export default function ProfileForm({ user }: { user: User }) {
     return null;
   }, [files]);
   ``;
-  const { startUpload, permittedFileInfo } = useUploadThing("imageUploader");
+  const { startUpload, routeConfig } = useUploadThing("imageUploader");
 
-  const fileTypes = permittedFileInfo?.config
-    ? Object.keys(permittedFileInfo?.config)
-    : [];
+  const fileTypes = routeConfig ? Object.keys(routeConfig) : [];
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,

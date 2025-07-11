@@ -2,31 +2,56 @@ import ProductGrid from "@/components/ProductGrid";
 import { prisma } from "@/lib/db";
 import { ParamsType } from "@/lib/types";
 import { AlertTriangle } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
-async function VendorPage({
-  searchParams,
-  params,
-}: {
-  searchParams: ParamsType;
-  params: { vendorId: string };
-}) {
-  // console.log(searchParams, params);
+export async function generateMetadata(
+  props: {
+    params: Promise<{ vendorId: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const { vendorId } = params;
-  if (!vendorId) return;
+  if (!vendorId) notFound();
   const vendor = await prisma.vendor.findUnique({
     where: {
       id: vendorId,
     },
-    // include: {
-    //   products: {
-    //     include: {
-    //       images: true,
-    //       vendor: { select: { name: true } },
-    //       _count: { select: { reviews: true } },
-    //     },
-    //   },
-    // },
+    select: {
+      name: true,
+      description: true,
+    },
+  });
+  if (!vendor) notFound();
+
+  const { name: title, description } = vendor;
+  return {
+    title: `${title}'s Vendor Profile`,
+    description,
+  };
+}
+
+async function VendorPage(
+  props: {
+    searchParams: Promise<ParamsType>;
+    params: Promise<{ vendorId: string }>;
+  }
+) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+  // console.log(searchParams, params);
+  const { vendorId } = params;
+  if (!vendorId) notFound();
+  const vendor = await prisma.vendor.findUnique({
+    where: {
+      id: vendorId,
+    },
+    select: {
+      name: true,
+      description: true,
+      imageURL: true,
+    },
   });
   if (!vendor) {
     return (

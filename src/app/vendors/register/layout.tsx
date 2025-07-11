@@ -2,6 +2,12 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Register Vendor",
+};
+
 async function layout({ children }: { children: React.ReactNode }) {
   const session = await auth();
   if (!session) redirect("/api/auth/sign-in");

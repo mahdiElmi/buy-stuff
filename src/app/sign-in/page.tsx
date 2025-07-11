@@ -1,15 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Github, Loader2 } from "lucide-react";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition, use } from "react";
 import logIn from "./logInAction";
 import { toast } from "sonner";
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: { callback: string | undefined; error: string | undefined };
-}) {
+export default function Page(
+  props: {
+    searchParams: Promise<{ callback: string | undefined; error: string | undefined }>;
+  }
+) {
+  const searchParams = use(props.searchParams);
   const [isPending, startTransition] = useTransition();
   const { callback = "/", error: authError } = searchParams;
   const [clickedProvider, setClickedProvider] = useState("github");

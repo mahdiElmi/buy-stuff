@@ -1,11 +1,14 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { prisma } from "@/lib/db";
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
+
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Vendor Products",
+};
 
 export default async function Page() {
   const session = await auth();

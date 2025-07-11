@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/db";
-import { checkAuth } from "@/lib/utils";
+import { checkAuth } from "@/lib/server-utils";
 import { vendorSchema } from "@/lib/zodSchemas";
 import { z } from "zod";
 

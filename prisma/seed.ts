@@ -19,27 +19,6 @@ type fakeStoreProduct = {
 };
 
 async function main() {
-  // const deleteVotes = prisma.vote.deleteMany();
-  // const deleteReviews = prisma.review.deleteMany();
-  // const deleteImages = prisma.image.deleteMany();
-  // const deleteProducts = prisma.product.deleteMany();
-  // const deleteCategories = prisma.category.deleteMany();
-  // const deleteVendors = prisma.vendor.deleteMany();
-  // const deleteUsers = prisma.user.deleteMany();
-  // const deleteSessions = prisma.session.deleteMany();
-  // const deleteAccounts = prisma.account.deleteMany();
-  // await prisma.$transaction([
-  //   deleteVotes,
-  //   deleteReviews,
-  //   deleteImages,
-  //   deleteProducts,
-  //   deleteVendors,
-  //   deleteUsers,
-  //   deleteSessions,
-  //   deleteAccounts,
-  //   deleteCategories,
-  // ]);
-
   const fetchResponse = await fetch("https://api.escuelajs.co/api/v1/products");
   const fakeProducts: fakeStoreProduct[] = await fetchResponse.json();
 

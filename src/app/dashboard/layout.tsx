@@ -3,6 +3,15 @@ import { auth } from "@/server/auth";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Dashboard | Buy Stuff",
+    default: "Dashboard | Buy Stuff",
+  },
+  description: "Buy Stuff Dashboard for users and vendors.",
+};
 
 async function layout({ children }: { children: React.ReactNode }) {
   const session = await auth();

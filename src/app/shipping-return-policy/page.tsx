@@ -1,3 +1,9 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Shipping Return Policy",
+};
+
 export default function Page() {
   return (
     <section className="flex max-w-3xl flex-col items-center justify-center gap-5 py-24 ">

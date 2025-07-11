@@ -75,6 +75,11 @@ const nextConfig = {
         hostname: "api.lorem.space",
         pathname: "/image/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.jsdelivr.net",
+        pathname: "/gh/faker-js/**",
+      },
     ],
   },
 };

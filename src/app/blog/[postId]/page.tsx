@@ -6,11 +6,12 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-export function generateMetadata({
-  params,
-}: {
-  params: { postId: string };
-}): Metadata {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ postId: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const parsedID = parseInt(params.postId);
   if (posts[parsedID] === undefined) notFound();
   const { title, description } = posts[parsedID];
@@ -20,7 +21,8 @@ export function generateMetadata({
   };
 }
 
-function Post({ params }: { params: { postId: string } }) {
+async function Post(props: { params: Promise<{ postId: string }> }) {
+  const params = await props.params;
   const parsedID = parseInt(params.postId);
   if (posts[parsedID] === undefined) notFound();
   const { id, title, timeToRead, author } = posts[parsedID];

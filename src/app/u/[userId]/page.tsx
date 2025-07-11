@@ -4,16 +4,39 @@ import { FilteredAndSortedProductList } from "@/components/ProductGrid";
 import CustomRating from "@/components/ui/CustomRating";
 import { prisma } from "@/lib/db";
 import { cn } from "@/lib/utils";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+export async function generateMetadata(
+  props: {
+    params: Promise<{ userId: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+  const { userId } = params;
+  if (!userId) notFound();
+  const vendor = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: { name: true },
+  });
+  if (!vendor) notFound();
 
-async function page({
-  searchParams,
-  params,
-}: {
-  searchParams: { view: "reviews" | "favorites"; sort: "top" | "new" | "old" };
-  params: { userId: string };
-}) {
+  const { name: title } = vendor;
+  return {
+    title: `${title}'s Profile`,
+  };
+}
+async function page(
+  props: {
+    searchParams: Promise<{ view: "reviews" | "favorites"; sort: "top" | "new" | "old" }>;
+    params: Promise<{ userId: string }>;
+  }
+) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const { view = "reviews", sort = "new" } = searchParams;
   const { userId } = params;
 

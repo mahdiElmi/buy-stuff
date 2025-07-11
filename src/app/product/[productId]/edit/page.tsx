@@ -4,11 +4,18 @@ import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 import { useDropzone } from "@uploadthing/react";
 
-export default async function Page({
-  params,
-}: {
-  params: { productId: string };
-}) {
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Edit Product",
+};
+
+export default async function Page(
+  props: {
+    params: Promise<{ productId: string }>;
+  }
+) {
+  const params = await props.params;
   const session = await auth();
   const user =
     session && session.user && session.user.email

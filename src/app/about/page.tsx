@@ -1,4 +1,9 @@
 import Image from "next/image";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+};
 
 const stats = [
   { label: "Transactions every 24 hours", value: "44 million" },

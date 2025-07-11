@@ -4,7 +4,12 @@ import { redirect } from "next/navigation";
 import VendorProfileForm from "./VendorProfileForm";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, MoveUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Vendor Profile",
+};
 
 export default async function Page() {
   const session = await auth();

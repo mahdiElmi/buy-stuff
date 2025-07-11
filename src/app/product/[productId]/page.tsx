@@ -22,12 +22,14 @@ import ProductDeleteButton from "./ProductDeleteButton";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ReviewSort from "./ReviewSort";
+import NotFound from "@/app/not-found";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { productId: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ productId: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const product = await prisma.product.findUnique({
     where: { id: params.productId },
     select: { name: true, description: true },
@@ -40,14 +42,14 @@ export async function generateMetadata({
   };
 }
 
-export default async function Product({
-  searchParams,
-
-  params,
-}: {
-  searchParams: { sort: "top" | "new" | "old" };
-  params: { productId: string };
-}) {
+export default async function Product(
+  props: {
+    searchParams: Promise<{ sort: "top" | "new" | "old" }>;
+    params: Promise<{ productId: string }>;
+  }
+) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const { sort = "new" } = searchParams;
   const { productId } = params;
   const product = await prisma.product.findUnique({
@@ -64,26 +66,20 @@ export default async function Product({
             ? { upvoteCount: "desc" }
             : { createdAt: sort === "new" ? "desc" : "asc" },
       },
-      vendor: true,
+      vendor: { select: { userId: true, name: true } },
       images: true,
       categories: true,
     },
   });
 
-  if (!product) return <div>No product found. :(</div>;
+  if (!product) return NotFound();
   const category = product.categories[0];
   const session = await auth();
 
-  const vendor = await prisma.vendor.findUnique({
-    where: {
-      id: product.vendorId,
-    },
-  });
-
   const user =
-    session && session.user && session.user.email
+    session && session.user
       ? await prisma.user.findUnique({
-          where: { email: session.user.email },
+          where: { id: session.user.id },
           include: {
             reviewVotes: true,
             favorites: {
@@ -94,7 +90,7 @@ export default async function Product({
         })
       : null;
 
-  const isAuthor = vendor?.userId === user?.id;
+  const isAuthor = product.vendor.userId === user?.id;
   const hasUserAddedToFavorites = !!user?.favorites[0];
 
   // calculate rating distribution. this should be derived form the database if number of reviews are high
@@ -304,7 +300,7 @@ export default async function Product({
               <h2 className="sr-only">Product information</h2>
               <p className="flex items-end gap-3 text-3xl tracking-tight first-letter:font-extralight">
                 {product.discountPercentage > 0 && (
-                  <span className=" font-medium text-red-500 first-letter:me-1 ">
+                  <span className=" font-medium text-emerald-500 first-letter:me-1 ">
                     -{product.discountPercentage}%
                   </span>
                 )}
@@ -351,7 +347,7 @@ export default async function Product({
         className="mx-auto flex max-w-2xl flex-col gap-14 px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl  lg:gap-x-8 lg:px-8 lg:py-32"
       >
         <div className="flex w-full flex-col gap-8 lg:flex-row">
-          <div className="lg:w-96">
+          <div className="lg:w-2/6">
             <h2 className="w-max text-2xl font-bold tracking-tight">
               Customer Reviews
             </h2>
@@ -429,7 +425,7 @@ export default async function Product({
               </dl>
             </div>
           </div>
-          <div className="flex-grow">
+          <div className="lg:w-4/5">
             {user !== null && !isAuthor ? (
               <ReviewForm user={user} productId={productId} />
             ) : (

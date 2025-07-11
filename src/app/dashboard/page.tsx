@@ -7,6 +7,11 @@ import { redirect } from "next/navigation";
 import ProfileForm from "./ProfileForm";
 import { SquareArrowOutUpRight } from "lucide-react";
 import ShippingAddresses from "./ShippingAddresses";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "User Profile",
+};
 
 export default async function Dashboard() {
   const session = await auth();

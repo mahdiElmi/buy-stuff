@@ -3,7 +3,11 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 import React from "react";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Favorites",
+};
 async function page() {
   const session = await auth();
   const user =

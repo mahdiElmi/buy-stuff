@@ -29,7 +29,7 @@ import {
 import { Category } from "@prisma/client";
 import Image from "next/image";
 import { toast } from "sonner";
-import { Reorder } from "framer-motion";
+import { Reorder } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Trash, X } from "lucide-react";
 

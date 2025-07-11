@@ -4,7 +4,7 @@ import { z } from "zod";
 import { ReviewSchema } from "@/lib/zodSchemas";
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { checkAuth } from "@/lib/utils";
+import { checkAuth } from "@/lib/server-utils";
 type ReviewFields = z.infer<typeof ReviewSchema>;
 export default async function SubmitReview(
   values: ReviewFields,

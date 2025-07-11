@@ -17,9 +17,30 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Buy Stuff",
+  title: {
+    template: "%s | Buy Stuff",
+    default: "Buy Stuff",
+  },
   description:
-    "you can buy Stuff here or sell em YOU choose we give the power to YOU",
+    "Welcome to Buy Stuff, the ultimate online marketplace where you can buy and sell a wide range of products. Discover new items, connect with buyers and sellers, and enjoy secure transactions. Start shopping or selling today!",
+  keywords: [
+    "E-commerce",
+    "Online marketplace",
+    "Shopping platform",
+    "Online shopping",
+    "Marketplace",
+    "Online store",
+    "Shopping website",
+    "Retail marketplace",
+    "Buy online",
+    "Sell online",
+    "Shopping community",
+    "Online trading",
+    "Retail platform",
+    "Goods exchange",
+    "Product marketplace",
+    "Virtual marketplace",
+  ],
   icons: { icon: "./favicon.ico" },
 };
 
@@ -30,7 +51,11 @@ export default async function RootLayout({
 }) {
   const session = await auth();
   return (
-    <html lang="en" className={`${inter.variable} scroll-smooth font-sans`}>
+    <html
+      suppressHydrationWarning
+      lang="en"
+      className={`${inter.variable} scroll-smooth font-sans`}
+    >
       <body
         className="flex min-h-[100dvh] flex-col bg-zinc-50 text-zinc-950 scrollbar scrollbar-thumb-zinc-400/40
         hover:scrollbar-thumb-zinc-400 active:scrollbar-thumb-zinc-500 dark:bg-zinc-950 dark:text-zinc-50 dark:scrollbar-thumb-zinc-800/40
@@ -54,11 +79,6 @@ export default async function RootLayout({
         <Footer />
         <Toaster />
       </body>
-      <Script
-        defer
-        data-domain="buy-stuff-lilac.vercel.app"
-        src="https://plausible.io/js/script.js"
-      />
     </html>
   );
 }
