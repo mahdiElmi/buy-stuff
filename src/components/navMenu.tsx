@@ -20,7 +20,7 @@ export default function NavMenu() {
         <NavigationMenuItem>
           <NavigationMenuTrigger>Products</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <NavigationMenuLink>
+            <NavigationMenuLink asChild>
               <Link
                 href="/products"
                 className="pattern-dotted relative mx-6 mt-4 flex h-full select-none flex-col items-start justify-end overflow-clip rounded-md bg-linear-to-b from-zinc-300/50 to-zinc-300 
@@ -32,7 +32,7 @@ export default function NavMenu() {
 
             <ul className="flex gap-3 p-6 md:w-[450px]">
               <li className="w-56">
-                <NavigationMenuLink>
+                <NavigationMenuLink asChild>
                   <Link
                     className="relative flex h-full w-full select-none flex-col items-end justify-end overflow-clip rounded-md bg-linear-to-b 
                     from-zinc-300/50 to-zinc-300 p-6 px-4 no-underline outline-hidden hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
@@ -46,7 +46,7 @@ export default function NavMenu() {
                 </NavigationMenuLink>
               </li>
               <li className="w-56">
-                <NavigationMenuLink>
+                <NavigationMenuLink asChild>
                   <Link
                     className="relative flex h-full w-full select-none flex-col items-end justify-end overflow-clip rounded-md bg-linear-to-b 
                     from-zinc-300/50 to-zinc-300 p-6 px-4 no-underline outline-hidden hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
