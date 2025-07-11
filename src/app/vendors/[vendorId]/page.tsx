@@ -64,7 +64,7 @@ async function VendorPage(
 
   return (
     <div className="w-full max-w-7xl self-start py-5">
-      <div className="relative w-full shadow-sm">
+      <div className="relative w-full shadow-xs">
         <div className="absolute bottom-5 left-5 flex items-center gap-2 rounded-md bg-zinc-100 pe-2 shadow-xl dark:bg-zinc-950">
           <Image
             className="rounded-lg border-4 border-zinc-100 dark:border-zinc-950 "
@@ -91,7 +91,7 @@ async function VendorPage(
           height={200}
         />
       </div>
-      <p className="rounded-b-md bg-zinc-200 px-3 py-4 text-lg font-medium shadow-sm dark:bg-zinc-800">
+      <p className="rounded-b-md bg-zinc-200 px-3 py-4 text-lg font-medium shadow-xs dark:bg-zinc-800">
         {vendor.description}
       </p>
       <div className="rounded-b-lg bg-zinc-200 py-5 dark:bg-zinc-950">

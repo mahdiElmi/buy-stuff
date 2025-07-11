@@ -216,7 +216,7 @@ CarouselItem.displayName = "CarouselItem";
 const CarouselPrevious = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
->(({ className, variant = "outline", size = "icon", ...props }, ref) => {
+>(({ className, variant = "outline-solid", size = "icon", ...props }, ref) => {
   const { orientation, scrollPrev, canScrollPrev, navButtonPosition } =
     useCarousel();
 
@@ -249,7 +249,7 @@ CarouselPrevious.displayName = "CarouselPrevious";
 const CarouselNext = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
->(({ className, variant = "outline", size = "icon", ...props }, ref) => {
+>(({ className, variant = "outline-solid", size = "icon", ...props }, ref) => {
   const { orientation, scrollNext, canScrollNext, navButtonPosition } =
     useCarousel();
 
@@ -330,7 +330,7 @@ const CarouselThumb = React.forwardRef<HTMLButtonElement, ThumbPropType>(
           priority={true}
           className={cn(
             "aspect-square h-full w-full rounded-lg object-cover object-center",
-            `w-[${width}] h-[${height}]`,
+            `size-[${width}]`,
           )}
         />
       </Button>

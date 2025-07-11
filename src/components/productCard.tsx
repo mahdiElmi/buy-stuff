@@ -40,7 +40,7 @@ export default async function ProductCard({
       >
         {user && (
           <AddFavoriteButton
-            className="absolute right-[2px] top-[2px] z-10 text-white drop-shadow-sm "
+            className="absolute right-[2px] top-[2px] z-10 text-white drop-shadow-xs "
             productId={product.id}
             favoriteInitialState={hasUserAddedToFavorites}
             variant="ghostHoverLess"
@@ -53,7 +53,7 @@ export default async function ProductCard({
           <Image
             width={400}
             height={400}
-            className="aspect-square rounded-sm object-cover"
+            className="aspect-square rounded-xs object-cover"
             src={
               product.images[0] && product.images[0].url
                 ? product.images[0].url
@@ -61,7 +61,7 @@ export default async function ProductCard({
             }
             alt="product Image"
           />
-          <div className="absolute -left-[1px] bottom-0 ">
+          <div className="absolute -left-px bottom-0 ">
             <div
               className="relative z-20 h-full w-full rounded-tr-md bg-zinc-200 px-1 transition-opacity duration-100 first-letter:font-light group-hover:opacity-50 
         @[8rem]/card:px-2 @[8rem]/card:py-[2px] dark:bg-zinc-900"
@@ -79,7 +79,7 @@ export default async function ProductCard({
                     {formatPrice(product.originalPrice)}
                   </span>
                   <span
-                    className="flex -translate-x-[2px] translate-y-1 items-center justify-center rounded-md bg-red-900 p-[1px] px-[3px] text-xs font-medium text-zinc-50 transition-opacity 
+                    className="flex -translate-x-[2px] translate-y-1 items-center justify-center rounded-md bg-red-900 p-px px-[3px] text-xs font-medium text-zinc-50 transition-opacity 
                     duration-100 @[8rem]/card:text-sm"
                   >
                     -{product.discountPercentage}%
@@ -90,7 +90,7 @@ export default async function ProductCard({
           </div>
           {product.stock < 5 && (
             <span
-              className="absolute -right-[1px] bottom-0 min-w-fit rounded-tl-md bg-zinc-200 px-1 text-base font-semibold  transition-opacity duration-100 
+              className="absolute -right-px bottom-0 min-w-fit rounded-tl-md bg-zinc-200 px-1 text-base font-semibold  transition-opacity duration-100 
           group-hover:opacity-50 dark:bg-zinc-900"
             >
               {product.stock > 0 ? (

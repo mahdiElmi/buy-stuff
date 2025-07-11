@@ -8,12 +8,12 @@ function BlogPostCard({ post }: { post: PostDataType }) {
   const { id, title, description, timeToRead } = post;
   const randomImage = faker.image.avatarLegacy();
   return (
-    <div className="flex flex-col overflow-hidden rounded-md border border-zinc-300 bg-zinc-50 @container hover:bg-white hover:shadow-sm dark:border-zinc-700 dark:bg-zinc-950 dark:hover:bg-black">
+    <div className="flex flex-col overflow-hidden rounded-md border border-zinc-300 bg-zinc-50 @container hover:bg-white hover:shadow-xs dark:border-zinc-700 dark:bg-zinc-950 dark:hover:bg-black">
       <Link
         href={`/blog/${id}` as Route}
         className="decoration group space-y-2 decoration-indigo-600 decoration-2 underline-offset-1 @xs:space-y-6 hover:text-indigo-600 hover:underline dark:decoration-indigo-500 dark:hover:text-indigo-500"
       >
-        <div className="relative before:absolute before:h-full before:w-full before:bg-gradient-to-t before:from-zinc-900 before:via-zinc-900/40  before:content-['']">
+        <div className="relative before:absolute before:h-full before:w-full before:bg-linear-to-t before:from-zinc-900 before:via-zinc-900/40  before:content-['']">
           <span className="absolute bottom-3 right-2 flex items-center gap-1 text-xs font-medium text-zinc-300 @xs:text-base">
             <Timer className="h-4 w-4" /> {timeToRead} min read
           </span>

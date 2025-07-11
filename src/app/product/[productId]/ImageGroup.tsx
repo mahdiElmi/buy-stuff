@@ -96,7 +96,7 @@ export default function ImageGroup({ images }: { images: ImageType[] }) {
   //         {images.map((image) => (
   //           <Tab
   //             key={image.id}
-  //             className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-zinc-900 hover:bg-zinc-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+  //             className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-zinc-900 hover:bg-zinc-50 focus:outline-hidden focus:ring-3 focus:ring-opacity-50 focus:ring-offset-4"
   //           >
   //             {({ selected }) => (
   //               <>

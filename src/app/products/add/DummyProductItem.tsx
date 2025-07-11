@@ -21,19 +21,19 @@ export default function DummyProductItem({
     >
       <h2 className="py-2 text-2xl font-bold">Product Card Preview</h2>
       <div
-        className="flex w-full flex-col overflow-hidden rounded-md border-zinc-300 bg-gradient-to-t from-zinc-300 from-20% to-white shadow-md 
-          drop-shadow-sm transition-transform duration-75 @5xl/1:p-6 dark:border-zinc-700 dark:from-zinc-700 dark:to-zinc-950"
+        className="flex w-full flex-col overflow-hidden rounded-md border-zinc-300 bg-linear-to-t from-zinc-300 from-20% to-white shadow-md 
+          drop-shadow-xs transition-transform duration-75 @5xl/1:p-6 dark:border-zinc-700 dark:from-zinc-700 dark:to-zinc-950"
       >
         {product.imgUrls.length > 0 ? (
           <Image
             width={400}
             height={400}
-            className="aspect-square rounded-sm object-cover"
+            className="aspect-square rounded-xs object-cover"
             src={product.imgUrls[0]}
             alt="product Image"
           />
         ) : (
-          <div className="aspect-square bg-gradient-to-tr from-zinc-400/50 to-zinc-600/50"></div>
+          <div className="aspect-square bg-linear-to-tr from-zinc-400/50 to-zinc-600/50"></div>
         )}
         <div className="flex flex-col gap-2 p-2">
           <div className="flex items-center justify-between">
@@ -42,7 +42,7 @@ export default function DummyProductItem({
                 {product.name}
               </h2>
             ) : (
-              <div className="h-6 w-64 rounded-md bg-gradient-to-tr from-zinc-400 to-zinc-600"></div>
+              <div className="h-6 w-64 rounded-md bg-linear-to-tr from-zinc-400 to-zinc-600"></div>
             )}
           </div>
           {product.description !== "" ? (

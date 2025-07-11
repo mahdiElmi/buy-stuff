@@ -34,7 +34,7 @@ export default async function Dashboard() {
           <span className="sr-only">Profile Link</span>
         </Link>
       </div>
-      <div className="grid auto-rows-auto gap-4 lg:grid-cols-[repeat(2,_auto)] lg:divide-x-2 lg:divide-zinc-500/10">
+      <div className="grid auto-rows-auto gap-4 lg:grid-cols-[repeat(2,auto)] lg:divide-x-2 lg:divide-zinc-500/10">
         <ProfileForm user={user} />
         <div className="flex min-w-0 max-w-full flex-col gap-5 lg:pe-5 lg:ps-8">
           <h2 className="text-2xl font-bold">Shipping Addresses</h2>

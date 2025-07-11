@@ -209,7 +209,7 @@ export default async function Product(
                   href="/products"
                   className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300"
                 >
-                  <Home className="h-5 w-5 flex-shrink-0 " aria-hidden="true" />
+                  <Home className="h-5 w-5 shrink-0 " aria-hidden="true" />
                   <span className="sr-only">Home</span>
                 </Link>
               </div>
@@ -217,7 +217,7 @@ export default async function Product(
             <li>
               <div className="flex items-center">
                 <ChevronRight
-                  className="h-5 w-5 flex-shrink-0 text-zinc-400 dark:text-zinc-400"
+                  className="h-5 w-5 shrink-0 text-zinc-400 dark:text-zinc-400"
                   aria-hidden="true"
                 />
                 <Link
@@ -232,7 +232,7 @@ export default async function Product(
               <li>
                 <div className="flex items-center">
                   <ChevronRight
-                    className="h-5 w-5 flex-shrink-0 text-zinc-400 dark:text-zinc-400"
+                    className="h-5 w-5 shrink-0 text-zinc-400 dark:text-zinc-400"
                     aria-hidden="true"
                   />
                   <Link
@@ -396,7 +396,7 @@ export default async function Product(
                         <StarIcon
                           className={cn(
                             count > 0 ? "text-yellow-400" : "text-zinc-300 ",
-                            "h-5 w-5 flex-shrink-0",
+                            "h-5 w-5 shrink-0",
                           )}
                           aria-hidden="true"
                         />

@@ -10,12 +10,12 @@ import {
 export default function AddFavoriteButton({
   favoriteInitialState,
   productId,
-  variant = "outline",
+  variant = "outline-solid",
   className,
 }: {
   favoriteInitialState: boolean;
   productId: string;
-  variant?: "outline" | "ghostHoverLess";
+  variant?: "outline-solid" | "ghostHoverLess";
   className?: string;
 }) {
   const [hasLiked, setHasLiked] = useState(favoriteInitialState);

@@ -100,7 +100,7 @@ export default function BigCart({
           {!isMerging
             ? itemsArr.map((product, productIdx) => (
                 <li key={product.productId} className="flex py-6 sm:py-10">
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <Image
                       width={200}
                       height={200}
@@ -146,12 +146,12 @@ export default function BigCart({
                     <p className="mt-4 flex space-x-2 text-sm text-zinc-700 dark:text-zinc-300">
                       {product.quantity <= product.stock ? (
                         <Check
-                          className="h-5 w-5 flex-shrink-0 text-green-500"
+                          className="h-5 w-5 shrink-0 text-green-500"
                           aria-hidden="true"
                         />
                       ) : (
                         <X
-                          className="h-5 w-5 flex-shrink-0 text-red-500"
+                          className="h-5 w-5 shrink-0 text-red-500"
                           aria-hidden="true"
                         />
                       )}
@@ -196,7 +196,7 @@ export default function BigCart({
               <span>Shipping estimate</span>
               {/* <a
                     href="#"
-                    className="ml-2 flex-shrink-0 text-zinc-400 hover:text-zinc-500"
+                    className="ml-2 shrink-0 text-zinc-400 hover:text-zinc-500"
                   >
                     <span className="sr-only">
                       Learn more about how shipping is calculated
@@ -220,7 +220,7 @@ export default function BigCart({
               <span>Tax estimate</span>
               {/* <a
                     href="#"
-                    className="ml-2 flex-shrink-0 text-zinc-400 hover:text-zinc-500"
+                    className="ml-2 shrink-0 text-zinc-400 hover:text-zinc-500"
                   >
                     <span className="sr-only">
                       Learn more about how tax is calculated
@@ -253,7 +253,7 @@ export default function BigCart({
           <button
             disabled={itemsArr.length <= 0}
             onClick={handleOrderSubmit}
-            className="w-full rounded-md border border-transparent bg-indigo-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
+            className="w-full rounded-md border border-transparent bg-indigo-800 px-4 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
           >
             Checkout
           </button>

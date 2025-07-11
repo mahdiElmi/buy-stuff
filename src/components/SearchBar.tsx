@@ -42,7 +42,7 @@ function SearchBar({ className }: { className?: string }) {
           className="absolute inset-y-0 right-0 flex h-8 w-8 items-center bg-zinc-300 dark:bg-zinc-950"
         >
           <Search
-            className="h-5 w-5 flex-shrink-0 stroke-2 text-zinc-600 dark:text-zinc-400"
+            className="h-5 w-5 shrink-0 stroke-2 text-zinc-600 dark:text-zinc-400"
             aria-hidden="true"
           />
           <span className="sr-only">Search</span>

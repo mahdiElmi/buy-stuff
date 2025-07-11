@@ -116,7 +116,7 @@ export default function ShoppingCart({
                     key={item.productId}
                   >
                     <Link
-                      className="w-fit flex-shrink-0"
+                      className="w-fit shrink-0"
                       href={`/product/${item.productId}`}
                     >
                       <Image
@@ -127,7 +127,7 @@ export default function ShoppingCart({
                         height={36}
                       />
                     </Link>
-                    <div className="flex h-full flex-shrink flex-col justify-between self-start">
+                    <div className="flex h-full shrink flex-col justify-between self-start">
                       <Link
                         href={`/product/${item.productId}`}
                         title={item.name}
@@ -216,7 +216,7 @@ export default function ShoppingCart({
                       className="flex items-center gap-2"
                     >
                       <Link
-                        className="w-fit flex-shrink-0"
+                        className="w-fit shrink-0"
                         href={`/product/${item.productId}`}
                       >
                         <Image
@@ -231,7 +231,7 @@ export default function ShoppingCart({
                         <Link
                           href={`/product/${item.productId}`}
                           title={item.name}
-                          className=" max-w-36 flex-shrink truncate text-xs font-semibold hover:underline"
+                          className=" max-w-36 shrink truncate text-xs font-semibold hover:underline"
                         >
                           {item.name}
                         </Link>

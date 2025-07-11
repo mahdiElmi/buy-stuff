@@ -138,7 +138,7 @@ export default function Footer() {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-500 hover:dark:text-zinc-400"
+                  className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-500 dark:hover:text-zinc-400"
                 >
                   <span className="sr-only">{item.name}</span>
                   <item.icon className="h-6 w-6" aria-hidden="true" />
@@ -157,7 +157,7 @@ export default function Footer() {
                     <li key={item.name}>
                       <Link
                         href={item.href as Route}
-                        className="text-sm leading-6 text-zinc-800 dark:text-zinc-300 hover:dark:text-white"
+                        className="text-sm leading-6 text-zinc-800 dark:text-zinc-300 dark:hover:text-white"
                       >
                         {item.name}
                       </Link>
@@ -174,7 +174,7 @@ export default function Footer() {
                     <li key={item.name}>
                       <Link
                         href={item.href as Route}
-                        className="text-sm leading-6 text-zinc-800 dark:text-zinc-300 hover:dark:text-white"
+                        className="text-sm leading-6 text-zinc-800 dark:text-zinc-300 dark:hover:text-white"
                       >
                         {item.name}
                       </Link>
@@ -193,7 +193,7 @@ export default function Footer() {
                     <li key={item.name}>
                       <Link
                         href={item.href as Route}
-                        className="text-sm leading-6 text-zinc-800 dark:text-zinc-300 hover:dark:text-white"
+                        className="text-sm leading-6 text-zinc-800 dark:text-zinc-300 dark:hover:text-white"
                       >
                         {item.name}
                       </Link>
@@ -210,7 +210,7 @@ export default function Footer() {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm leading-6 text-zinc-800 dark:text-zinc-300 hover:dark:text-white"
+                        className="text-sm leading-6 text-zinc-800 dark:text-zinc-300 dark:hover:text-white"
                       >
                         {item.name}
                       </a>

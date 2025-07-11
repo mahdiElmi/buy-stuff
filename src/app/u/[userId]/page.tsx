@@ -122,7 +122,7 @@ async function page(
 
   return (
     <div
-      className=" mt-5 flex h-[85dvh] w-full max-w-6xl flex-col rounded-lg border-zinc-400 bg-gradient-to-b from-zinc-100 
+      className=" mt-5 flex h-[85dvh] w-full max-w-6xl flex-col rounded-lg border-zinc-400 bg-linear-to-b from-zinc-100 
     to-zinc-200 dark:border-zinc-500 dark:from-zinc-800 dark:to-zinc-900 md:mx-1  "
     >
       <div
@@ -131,7 +131,7 @@ async function page(
       >
         <div
           className={cn(
-            "flex w-fit flex-grow items-end border-b-2 p-3",
+            "flex w-fit grow items-end border-b-2 p-3",
             view === "reviews" && "rounded-br-md border-r-2",
           )}
         >
@@ -179,7 +179,7 @@ async function page(
         >
           Favorites
         </Link>
-        <div className=" flex-shrink border-b-2"></div>
+        <div className=" shrink border-b-2"></div>
       </div>
       <section className="h-full overflow-y-auto rounded-b-lg border-2 border-t-0 border-zinc-600 scrollbar dark:scrollbar-thumb-zinc-700 dark:hover:scrollbar-thumb-zinc-600 dark:active:scrollbar-thumb-zinc-500">
         {view === "reviews" ? (

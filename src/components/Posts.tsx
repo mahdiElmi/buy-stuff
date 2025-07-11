@@ -20,7 +20,7 @@ function Posts() {
   );
 
   return (
-    <section className="flex flex-grow flex-col gap-8">
+    <section className="flex grow flex-col gap-8">
       <label className="relative flex w-full flex-row items-center self-center ">
         <Input
           className="h-14 w-full rounded-lg border-2 border-b-zinc-300 border-t-zinc-100 bg-zinc-200 p-1 ps-11 text-3xl font-medium tracking-tight shadow-inner dark:bg-zinc-800"
@@ -51,7 +51,7 @@ function Posts() {
         {searchInput.length === 0 ? "Latest Articles" : "Search Results"}
       </h1>
 
-      <div className="grid h-full flex-grow grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid h-full grow grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {postElements.length > 0 ? (
           postElements
         ) : (

@@ -78,7 +78,7 @@ function ReviewForm({ user, productId }: { user: User; productId: string }) {
               name="title"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex-grow">
+                <FormItem className="grow">
                   <FormLabel>Title</FormLabel>
 
                   <FormControl>

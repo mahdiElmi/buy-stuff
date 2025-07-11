@@ -112,7 +112,7 @@ export default async function ProductGrid({
   return (
     <div
       className={cn(
-        "relative flex w-full flex-grow flex-col gap-1 py-5 lg:flex-row",
+        "relative flex w-full grow flex-col gap-1 py-5 lg:flex-row",
         className,
       )}
     >

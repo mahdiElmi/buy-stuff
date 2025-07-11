@@ -174,7 +174,7 @@ export default function AddProductForm({
             <FormControl>
               <div className="relative">
                 {/* {productData.imgUrls.length >= 5 && (
-                  <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md font-medium backdrop-blur-sm ">
+                  <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md font-medium backdrop-blur-xs ">
                     You can&apos;t upload more than 5 images.
                   </div>
                 )} */}

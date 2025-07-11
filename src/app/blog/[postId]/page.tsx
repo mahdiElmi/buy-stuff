@@ -30,7 +30,7 @@ async function Post(props: { params: Promise<{ postId: string }> }) {
 
   return (
     <section className="my-10 overflow-hidden rounded-lg border-b border-zinc-950/30 bg-zinc-200 dark:bg-zinc-900 ">
-      <div className="relative before:absolute before:h-full before:w-full before:bg-gradient-to-t before:from-yellow-950/70 before:from-5% before:to-transparent before:content-['']">
+      <div className="relative before:absolute before:h-full before:w-full before:bg-linear-to-t before:from-yellow-950/70 before:from-5% before:to-transparent before:content-['']">
         <Image
           className="bg-zinc-900"
           src={`https://picsum.photos/id/${id + 10}/1300/600.webp`}

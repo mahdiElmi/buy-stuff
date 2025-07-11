@@ -84,7 +84,7 @@ export default function AboutPage() {
         {/* Hero section */}
         <div className="relative isolate -z-10">
           <svg
-            className="absolute inset-x-0 top-0 -z-10 h-[64rem] w-full stroke-zinc-200 [mask-image:radial-gradient(32rem_32rem_at_center,white,transparent)] dark:stroke-zinc-800"
+            className="absolute inset-x-0 top-0 -z-10 h-256 w-full stroke-zinc-200 mask-[radial-gradient(32rem_32rem_at_center,white,transparent)] dark:stroke-zinc-800"
             aria-hidden="true"
           >
             <defs>
@@ -121,7 +121,7 @@ export default function AboutPage() {
             aria-hidden="true"
           >
             <div
-              className="aspect-[801/1036] w-[50.0625rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
+              className="aspect-801/1036 w-200.25 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
               style={{
                 clipPath:
                   "polygon(63.1% 29.5%, 100% 17.1%, 76.6% 3%, 48.4% 0%, 44.6% 4.7%, 54.5% 25.3%, 59.8% 49%, 55.2% 57.8%, 44.4% 57.2%, 27.8% 47.9%, 35.1% 81.5%, 0% 97.7%, 39.2% 100%, 35.2% 81.4%, 97.2% 52.8%, 63.1% 29.5%)",
@@ -145,14 +145,14 @@ export default function AboutPage() {
                   </p>
                 </div>
                 <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
-                  <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
+                  <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-0 xl:pt-80">
                     <div className="relative">
                       <Image
                         height={300}
                         width={200}
                         src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
                         alt=""
-                        className="aspect-[2/3] w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
+                        className="aspect-2/3 w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
                       />
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
                     </div>
@@ -164,7 +164,7 @@ export default function AboutPage() {
                         width={200}
                         src="https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
                         alt=""
-                        className="aspect-[2/3] w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
+                        className="aspect-2/3 w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
                       />
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
                     </div>
@@ -174,7 +174,7 @@ export default function AboutPage() {
                         width={200}
                         src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-x=.4&w=396&h=528&q=80"
                         alt=""
-                        className="aspect-[2/3] w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
+                        className="aspect-2/3 w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
                       />
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
                     </div>
@@ -186,7 +186,7 @@ export default function AboutPage() {
                         width={200}
                         src="https://images.unsplash.com/photo-1670272504528-790c24957dda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=left&w=400&h=528&q=80"
                         alt=""
-                        className="aspect-[2/3] w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
+                        className="aspect-2/3 w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
                       />
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
                     </div>
@@ -196,7 +196,7 @@ export default function AboutPage() {
                         width={200}
                         src="https://images.unsplash.com/photo-1670272505284-8faba1c31f7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&h=528&q=80"
                         alt=""
-                        className="aspect-[2/3] w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
+                        className="aspect-2/3 w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
                       />
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
                     </div>
@@ -267,7 +267,7 @@ export default function AboutPage() {
             height={500}
             src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80"
             alt=""
-            className="aspect-[5/2] w-full object-cover xl:rounded-3xl"
+            className="aspect-5/2 w-full object-cover xl:rounded-3xl"
           />
         </div>
 
@@ -298,9 +298,9 @@ export default function AboutPage() {
 
         {/* Logo cloud */}
         <div className="relative isolate -z-10 mt-32 sm:mt-48">
-          <div className="absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden [mask-image:radial-gradient(50%_45%_at_50%_55%,white,transparent)]">
+          <div className="absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden mask-[radial-gradient(50%_45%_at_50%_55%,white,transparent)]">
             <svg
-              className="h-[40rem] w-[80rem] flex-none stroke-zinc-200 dark:stroke-zinc-800"
+              className="h-160 w-7xl flex-none stroke-zinc-200 dark:stroke-zinc-800"
               aria-hidden="true"
             >
               <defs>
@@ -435,7 +435,7 @@ export default function AboutPage() {
                   alt=""
                   className="absolute inset-0 -z-10 h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 -z-10 bg-gradient-to-t from-zinc-900 via-zinc-900/40" />
+                <div className="absolute inset-0 -z-10 bg-linear-to-t from-zinc-900 via-zinc-900/40" />
                 <div className="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-zinc-900/10" />
 
                 <div className="flex flex-wrap items-center gap-y-1 overflow-hidden text-sm leading-6 text-zinc-300">
