@@ -24,6 +24,7 @@ export const config = {
     "/products/add/:path*",
     "/sign-in/:path*",
     "/product/:path/edit",
+    "/checkout/:path*",
   ],
 };
 

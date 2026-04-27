@@ -6,11 +6,9 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ vendorId: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ vendorId: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
   const { vendorId } = params;
   if (!vendorId) notFound();
@@ -32,12 +30,10 @@ export async function generateMetadata(
   };
 }
 
-async function VendorPage(
-  props: {
-    searchParams: Promise<ParamsType>;
-    params: Promise<{ vendorId: string }>;
-  }
-) {
+async function VendorPage(props: {
+  searchParams: Promise<ParamsType>;
+  params: Promise<{ vendorId: string }>;
+}) {
   const params = await props.params;
   const searchParams = await props.searchParams;
   // console.log(searchParams, params);
@@ -56,7 +52,7 @@ async function VendorPage(
   if (!vendor) {
     return (
       <div className="flex flex-col items-center gap-4 rounded-lg border-2 border-yellow-600 p-5 text-8xl font-semibold tracking-tighter">
-        <AlertTriangle className="h-36 w-36 text-yellow-600" />
+        <AlertTriangle className="size-36 text-yellow-600" />
         Vendor Not Found!
       </div>
     );
@@ -67,7 +63,7 @@ async function VendorPage(
       <div className="relative w-full shadow-xs">
         <div className="absolute bottom-5 left-5 flex items-center gap-2 rounded-md bg-zinc-100 pe-2 shadow-xl dark:bg-zinc-950">
           <Image
-            className="rounded-lg border-4 border-zinc-100 dark:border-zinc-950 "
+            className="rounded-lg border-4 border-zinc-100 dark:border-zinc-950"
             src={
               vendor.imageURL ??
               "https://uploadthing.com/f/cfb6a331-a29c-43b8-ac91-897528dd01cc_download.jpg"
@@ -76,12 +72,12 @@ async function VendorPage(
             width={75}
             height={75}
           />
-          <h1 className="text-4xl font-black capitalize tracking-tight text-black dark:text-white ">
+          <h1 className="text-4xl font-black tracking-tight text-black capitalize dark:text-white">
             {vendor.name}
           </h1>
         </div>
         <Image
-          className="h-52 w-full rounded-t-lg object-cover "
+          className="h-52 w-full rounded-t-lg object-cover"
           src={
             vendor.imageURL ??
             "https://uploadthing.com/f/cfb6a331-a29c-43b8-ac91-897528dd01cc_download.jpg"

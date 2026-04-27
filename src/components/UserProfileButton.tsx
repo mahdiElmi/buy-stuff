@@ -15,7 +15,7 @@ import SignOutButton from "./SignOutButton";
 
 function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
   return (
-    <div className="h-7 w-7">
+    <div className="size-7">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger>
           <Image
@@ -40,21 +40,21 @@ function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem>
             <Link
               href="/dashboard"
               className="flex items-center gap-2 hover:cursor-pointer"
             >
-              <LayoutDashboard className="h-5 w-5" />
+              <LayoutDashboard className="size-5" />
               Dashboard
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem>
             <Link
               href="/dashboard/favorites"
               className="flex items-center gap-2 hover:cursor-pointer"
             >
-              <Heart className="h-5 w-5 fill-current" />
+              <Heart className="size-5 fill-current" />
               Favorites
             </Link>
           </DropdownMenuItem>
@@ -65,7 +65,7 @@ function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
                   href={`/vendors/${user.vendor.id}`}
                   className="flex items-center gap-2 hover:cursor-pointer"
                 >
-                  <PanelTop className="h-5 w-5 " />
+                  <PanelTop className="size-5" />
                   Vendor Page
                 </Link>
               </DropdownMenuItem>
@@ -74,13 +74,13 @@ function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
                   href="/dashboard/vendor-products"
                   className="flex items-center gap-2 hover:cursor-pointer"
                 >
-                  <List className="h-5 w-5 fill-current" />
+                  <List className="size-5 fill-current" />
                   Your Products
                 </Link>
               </DropdownMenuItem>
             </>
           )}
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem className="p-0">
             <SignOutButton />
           </DropdownMenuItem>
         </DropdownMenuContent>

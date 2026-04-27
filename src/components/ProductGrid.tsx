@@ -116,9 +116,9 @@ export default async function ProductGrid({
         className,
       )}
     >
-      <aside className="sticky right-0 top-14 z-40 flex w-full min-w-max items-center gap-2 bg-zinc-50 px-1 py-1 dark:bg-zinc-950 lg:hidden">
+      <aside className="sticky top-14 right-0 z-40 flex w-full min-w-max items-center gap-2 bg-zinc-50 px-1 py-1 lg:hidden dark:bg-zinc-950">
         <FilterBy
-          className="rounded-r-none bg-opacity-0 dark:bg-opacity-0"
+          className="bg-opacity-0 dark:bg-opacity-0 rounded-r-none"
           filters={{
             minPrice: productAggregations._min.price || 0,
             maxPrice: productAggregations._max.price || 0,
@@ -127,12 +127,12 @@ export default async function ProductGrid({
           }}
         />
         <SortBy
-          className="gap-4 rounded-l-none bg-opacity-0 dark:bg-opacity-0"
+          className="bg-opacity-0 dark:bg-opacity-0 gap-4 rounded-l-none"
           currentSort={sort}
         />
       </aside>
       <FilterBy
-        className=" hidden lg:flex"
+        className="hidden lg:flex"
         filters={{
           minPrice: productAggregations._min.price || 0,
           maxPrice: productAggregations._max.price || 0,
@@ -140,7 +140,7 @@ export default async function ProductGrid({
           maxRating: productAggregations._max.averageRating || 5,
         }}
       />
-      <div className="h-full w-full min-w-0 rounded-md bg-zinc-200 p-2 dark:bg-zinc-900">
+      <div className="size-full min-w-0 rounded-md bg-zinc-200 p-2 dark:bg-zinc-900">
         {q ? (
           <h1 className="mb-2 text-3xl font-black">
             Found {productCount} matches for &quot;{q}&quot;
@@ -172,7 +172,7 @@ export function FilteredAndSortedProductList({
         <h1 className="text-5xl font-black tracking-tight md:text-7xl">
           No Products Found!
         </h1>
-        <p className="text-3xl font-bold text-zinc-700 dark:text-zinc-400 md:text-4xl">
+        <p className="text-3xl font-bold text-zinc-700 md:text-4xl dark:text-zinc-400">
           check out our other stuff maybe?
         </p>
       </div>

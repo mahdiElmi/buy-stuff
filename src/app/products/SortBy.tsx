@@ -24,35 +24,35 @@ const sortOptions = [
     name: "Highest Rated",
     hrefParam: "rating",
     Icon: (
-      <Star className="h-6 w-6 rounded-md border border-zinc-300 bg-zinc-50 p-1 dark:border-zinc-800 dark:bg-zinc-950" />
+      <Star className="size-6 rounded-md border border-zinc-300 bg-zinc-50 p-1 dark:border-zinc-800 dark:bg-zinc-950" />
     ),
   },
   {
     name: "New",
     hrefParam: "new",
     Icon: (
-      <ArrowUpWideNarrow className="h-6 w-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
+      <ArrowUpWideNarrow className="size-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
     ),
   },
   {
     name: "Old",
     hrefParam: "old",
     Icon: (
-      <ArrowDownWideNarrow className="h-6 w-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
+      <ArrowDownWideNarrow className="size-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
     ),
   },
   {
     name: "Price: Low to High",
     hrefParam: "price-to-high",
     Icon: (
-      <ArrowUp10 className=" h-6 w-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
+      <ArrowUp10 className="size-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
     ),
   },
   {
     name: "Price: High to Low",
     hrefParam: "price-to-low",
     Icon: (
-      <ArrowDown10 className=" h-6 w-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
+      <ArrowDown10 className="size-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
     ),
   },
 ] as const;
@@ -80,12 +80,12 @@ function SortBy({
   return (
     <aside
       className={cn(
-        "flex h-fit w-fit items-end gap-10 text-nowrap break-keep rounded-md bg-zinc-200 dark:bg-zinc-900 lg:sticky lg:top-16 lg:flex-col lg:items-start lg:gap-0 lg:p-2",
+        "flex size-fit items-end gap-10 rounded-md bg-zinc-200 text-nowrap break-keep lg:sticky lg:top-16 lg:flex-col lg:items-start lg:gap-0 lg:p-2 dark:bg-zinc-900",
         className,
       )}
     >
       <h2 className="mb-1 flex items-start gap-2 text-xl font-bold lg:text-2xl">
-        <ArrowUpDown className=" h-6 w-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950 lg:h-7 lg:w-7" />
+        <ArrowUpDown className="size-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 lg:h-7 lg:w-7 dark:border-zinc-800 dark:bg-zinc-950" />
         Sort
       </h2>
       <div className="hidden lg:block">
@@ -104,7 +104,7 @@ function SortBy({
         ))}
       </div>
       <Select value={currentSort} onValueChange={handleSelectValueChange}>
-        <SelectTrigger className="w-fit lg:hidden ">
+        <SelectTrigger className="w-fit lg:hidden">
           <SelectValue placeholder="Min Price" />
         </SelectTrigger>
         <SelectContent>

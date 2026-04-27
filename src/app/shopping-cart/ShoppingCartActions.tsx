@@ -1,16 +1,70 @@
 "use server";
 
 import { prisma } from "@/lib/db";
-import { LocalShoppingCartItems } from "@/lib/types";
-import { checkAuth } from "@/lib/utils";
+import { LocalShoppingCartItem, LocalShoppingCartItems } from "@/lib/types";
+import { auth } from "@/server/auth";
+import { revalidatePath } from "next/cache";
+
+export default async function addToCart(quantity: number, productId: string) {
+  const session = await auth();
+  if (!session || !session.user) {
+    return { success: false, cause: "User not logged in." };
+  }
+  const userId = session.user.id!;
+
+  const productToAdd = await prisma.product.findUnique({
+    where: { id: productId },
+  });
+  if (!productToAdd) return { success: false, cause: "product doesn't exist." };
+
+  const productAlreadyInCart = await prisma.shoppingCartItem.findUnique({
+    where: { productId_userId: { userId, productId } },
+    select: { quantity: true },
+  });
+  const isProductAlreadyInCart = productAlreadyInCart !== null;
+  if (
+    productToAdd.stock <
+    (isProductAlreadyInCart ? productAlreadyInCart.quantity : 0) + quantity
+  )
+    return { success: false, cause: "Quantity is more than stock available." };
+
+  try {
+    if (isProductAlreadyInCart) {
+      await prisma.shoppingCartItem.update({
+        where: { productId_userId: { userId, productId } },
+        data: {
+          quantity: { increment: quantity },
+        },
+      });
+    } else {
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          shoppingCartItems: {
+            create: {
+              quantity,
+              productId,
+            },
+          },
+        },
+      });
+    }
+  } catch {
+    return { success: false, cause: "Database error." };
+  }
+  revalidatePath("/");
+  return { success: true, cause: "" };
+}
 
 export async function updateShoppingCartItemQuantity(
-  userId: string,
   productId: string,
   isPositive: boolean,
 ) {
-  const { success, cause } = await checkAuth(userId);
-  if (!success) return { success, cause };
+  const session = await auth();
+  if (!session || !session.user) {
+    return { success: false, cause: "User not logged in." };
+  }
+  const userId = session.user.id!;
 
   const productToBeUpdated = await prisma.product.findUnique({
     where: { id: productId },
@@ -40,48 +94,87 @@ export async function updateShoppingCartItemQuantity(
         data: { quantity: isPositive ? { increment: 1 } : { decrement: 1 } },
       });
     }
+
+    revalidatePath("/");
     return { success: true, cause: "" };
   } catch (error) {
     return { success: false, cause: "Database error." };
   }
 }
 
-export async function deleteItemFromCart(userId: string, productId: string) {
-  const { success, cause } = await checkAuth(userId);
-  if (!success) return { success, cause };
+export async function deleteItemFromCart(productId: string) {
+  const session = await auth();
+  if (!session || !session.user) {
+    return { success: false, cause: "User not logged in." };
+  }
+  const userId = session.user.id!;
 
   try {
     await prisma.shoppingCartItem.delete({
       where: { productId_userId: { productId, userId } },
     });
+
+    revalidatePath("/");
     return { success: true, cause: "" };
   } catch (error) {
     return { success: false, cause: "Database error." };
   }
 }
 
-export async function clearCart(userId: string) {
-  const { success, cause } = await checkAuth(userId);
-  if (!success) return { success, cause };
+export async function clearCart() {
+  const session = await auth();
+  if (!session || !session.user) {
+    return { success: false, cause: "User not logged in." };
+  }
+  const userId = session.user.id!;
 
   try {
     await prisma.shoppingCartItem.deleteMany({
       where: { userId: userId },
     });
+
+    revalidatePath("/");
     return { success: true, cause: "" };
   } catch (error) {
     return { success: false, cause: "Database error." };
   }
 }
 
-export async function updateCart(userId: string, cart: LocalShoppingCartItems) {
-  const { success, cause } = await checkAuth(userId);
-  if (!success) return { success, cause };
+export async function updateCart(cart: LocalShoppingCartItems) {
+  const session = await auth();
+  if (!session || !session.user) {
+    return { success: false, cause: "User not logged in." };
+  }
+  const userId = session.user.id!;
 
   try {
     await prisma.shoppingCartItem.deleteMany({
       where: { userId: userId },
     });
+
+    revalidatePath("/");
+    return { success: true, cause: "" };
+  } catch (error) {
+    return { success: false, cause: "Database error." };
+  }
+}
+export async function syncCart(cart: LocalShoppingCartItem[]) {
+  const session = await auth();
+  if (!session || !session.user) {
+    return { success: false, cause: "User not logged in." };
+  }
+  const userId = session.user.id!;
+
+  try {
+    await prisma.shoppingCartItem.createMany({
+      data: cart.map((item) => ({
+        quantity: item.quantity,
+        productId: item.productId,
+        userId,
+      })),
+    });
+
+    revalidatePath("/");
     return { success: true, cause: "" };
   } catch (error) {
     return { success: false, cause: "Database error." };

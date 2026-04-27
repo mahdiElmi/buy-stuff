@@ -6,11 +6,9 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ postId: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ postId: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
   const parsedID = parseInt(params.postId);
   if (posts[parsedID] === undefined) notFound();
@@ -29,7 +27,7 @@ async function Post(props: { params: Promise<{ postId: string }> }) {
   const randomImage = faker.image.avatarLegacy();
 
   return (
-    <section className="my-10 overflow-hidden rounded-lg border-b border-zinc-950/30 bg-zinc-200 dark:bg-zinc-900 ">
+    <section className="my-10 overflow-hidden rounded-lg border-b border-zinc-950/30 bg-zinc-200 dark:bg-zinc-900">
       <div className="relative before:absolute before:h-full before:w-full before:bg-linear-to-t before:from-yellow-950/70 before:from-5% before:to-transparent before:content-['']">
         <Image
           className="bg-zinc-900"
@@ -39,21 +37,21 @@ async function Post(props: { params: Promise<{ postId: string }> }) {
           height={600}
         />
 
-        <h1 className="absolute bottom-2 left-5 mb-3 mt-5 text-xl font-bold text-white sm:text-2xl md:text-3xl lg:text-4xl">
+        <h1 className="absolute bottom-2 left-5 mt-5 mb-3 text-xl font-bold text-white sm:text-2xl md:text-3xl lg:text-4xl">
           {title}
         </h1>
       </div>
       <div className="relative max-w-6xl space-y-5 px-4 py-2 pb-10 font-serif text-xl/8 font-medium xl:mx-auto">
         <div className="flex items-end gap-6 font-sans">
-          <div className=" bottom-3 left-5 mt-8 flex items-center gap-x-4">
+          <div className="bottom-3 left-5 mt-8 flex items-center gap-x-4">
             <Image
               width={50}
               height={50}
               src={randomImage}
               alt=""
-              className="h-10 w-10 rounded-full bg-zinc-100"
+              className="size-10 rounded-full bg-zinc-100"
             />
-            <div className=" text-sm leading-6">
+            <div className="text-sm leading-6">
               <p className="font-semibold text-zinc-900 dark:text-zinc-100">
                 {author.name}
               </p>
@@ -61,10 +59,10 @@ async function Post(props: { params: Promise<{ postId: string }> }) {
             </div>
           </div>
           <span className="flex items-center gap-1 text-lg font-medium tracking-tighter text-zinc-700 dark:text-zinc-300">
-            <Timer className="h-5 w-5" /> {timeToRead} min read
+            <Timer className="size-5" /> {timeToRead} min read
           </span>
         </div>
-        <p className="text-zinc-900 first-letter:float-left first-letter:me-4 first-letter:text-6xl first-letter:font-bold first-letter:text-black first-line:first-letter:capitalize dark:text-zinc-100 dark:first-letter:text-white lg:first-letter:text-8xl ">
+        <p className="text-zinc-900 first-letter:float-left first-letter:me-4 first-letter:text-6xl first-letter:font-bold first-letter:text-black first-line:first-letter:capitalize lg:first-letter:text-8xl dark:text-zinc-100 dark:first-letter:text-white">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur dicta
           ipsum soluta nostrum quidem quasi totam, perspiciatis dolor veritatis,
           dignissimos blanditiis harum nisi, voluptate eaque inventore fugit
@@ -108,7 +106,7 @@ async function Post(props: { params: Promise<{ postId: string }> }) {
           quidem dolorem omnis non! Voluptatum, qui delectus pariatur quas quia
           natus non hic tempora! Cupiditate quasi quas magnam.
         </p>
-        <p className="indent-4 first-line:first-letter:capitalize  ">
+        <p className="indent-4 first-line:first-letter:capitalize">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur dicta
           ipsum soluta nostrum quidem quasi totam, perspiciatis dolor veritatis,
           dignissimos blanditiis harum nisi, voluptate eaque inventore fugit
@@ -152,7 +150,7 @@ async function Post(props: { params: Promise<{ postId: string }> }) {
           width={400}
           height={400}
         />
-        <p className="indent-4 first-line:first-letter:capitalize ">
+        <p className="indent-4 first-line:first-letter:capitalize">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur dicta
           ipsum soluta nostrum quidem quasi totam, perspiciatis dolor veritatis,
           dignissimos blanditiis harum nisi, voluptate eaque inventore fugit

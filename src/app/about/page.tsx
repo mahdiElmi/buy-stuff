@@ -84,7 +84,7 @@ export default function AboutPage() {
         {/* Hero section */}
         <div className="relative isolate -z-10">
           <svg
-            className="absolute inset-x-0 top-0 -z-10 h-256 w-full stroke-zinc-200 mask-[radial-gradient(32rem_32rem_at_center,white,transparent)] dark:stroke-zinc-800"
+            className="absolute inset-x-0 top-0 -z-10 h-256 w-full mask-[radial-gradient(32rem_32rem_at_center,white,transparent)] stroke-zinc-200 dark:stroke-zinc-800"
             aria-hidden="true"
           >
             <defs>
@@ -117,7 +117,7 @@ export default function AboutPage() {
             />
           </svg>
           <div
-            className="absolute left-1/2 right-0 top-0 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
+            className="absolute top-0 right-0 left-1/2 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
             aria-hidden="true"
           >
             <div
@@ -129,13 +129,13 @@ export default function AboutPage() {
             />
           </div>
           <div className="overflow-hidden">
-            <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
+            <div className="mx-auto max-w-7xl px-6 pt-36 pb-32 sm:pt-60 lg:px-8 lg:pt-32">
               <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
                 <div className="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
-                  <h1 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-6xl">
+                  <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-6xl dark:text-zinc-50">
                     We’re changing the way people Buy Stuff.
                   </h1>
-                  <p className="relative mt-6 text-lg leading-8 text-zinc-600 dark:text-zinc-400 sm:max-w-md lg:max-w-none">
+                  <p className="relative mt-6 text-lg leading-8 text-zinc-600 sm:max-w-md lg:max-w-none dark:text-zinc-400">
                     We here at BS believe not being able to Buy Stuff is BS 😉
                     so in 2023 we decided that it&apos;s enough. someone has to
                     make a place for people to buy and sell STUFF and
@@ -154,7 +154,7 @@ export default function AboutPage() {
                         alt=""
                         className="aspect-2/3 w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
                       />
-                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
+                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-zinc-900/10 ring-inset" />
                     </div>
                   </div>
                   <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
@@ -166,7 +166,7 @@ export default function AboutPage() {
                         alt=""
                         className="aspect-2/3 w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
                       />
-                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
+                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-zinc-900/10 ring-inset" />
                     </div>
                     <div className="relative">
                       <Image
@@ -176,7 +176,7 @@ export default function AboutPage() {
                         alt=""
                         className="aspect-2/3 w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
                       />
-                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
+                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-zinc-900/10 ring-inset" />
                     </div>
                   </div>
                   <div className="w-44 flex-none space-y-8 pt-32 sm:pt-0">
@@ -188,7 +188,7 @@ export default function AboutPage() {
                         alt=""
                         className="aspect-2/3 w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
                       />
-                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
+                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-zinc-900/10 ring-inset" />
                     </div>
                     <div className="relative">
                       <Image
@@ -198,7 +198,7 @@ export default function AboutPage() {
                         alt=""
                         className="aspect-2/3 w-full rounded-xl bg-zinc-900/5 object-cover shadow-lg"
                       />
-                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/10" />
+                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-zinc-900/10 ring-inset" />
                     </div>
                   </div>
                 </div>
@@ -210,7 +210,7 @@ export default function AboutPage() {
         {/* Content section */}
         <div className="mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8">
           <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50">
               Our mission
             </h2>
             <div className="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
@@ -274,7 +274,7 @@ export default function AboutPage() {
         {/* Values section */}
         <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8">
           <div className="mx-auto max-w-2xl lg:mx-0">
-            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50">
               Our values
             </h2>
             <p className="mt-6 text-lg leading-8 text-zinc-600 dark:text-zinc-400">
@@ -381,7 +381,7 @@ export default function AboutPage() {
         {/* Team section */}
         <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-48 lg:px-8">
           <div className="mx-auto max-w-2xl lg:mx-0">
-            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50">
               Our team
             </h2>
             <p className="mt-6 text-lg leading-8 text-zinc-600 dark:text-zinc-400">
@@ -399,11 +399,11 @@ export default function AboutPage() {
                 <Image
                   width={100}
                   height={100}
-                  className="mx-auto h-24 w-24 rounded-full"
+                  className="mx-auto size-24 rounded-full"
                   src={person.imageUrl}
                   alt=""
                 />
-                <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-zinc-900 dark:text-zinc-50">
+                <h3 className="mt-6 text-base leading-7 font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
                   {person.name}
                 </h3>
                 <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
@@ -433,7 +433,7 @@ export default function AboutPage() {
                 <Image
                   src={post.imageUrl}
                   alt=""
-                  className="absolute inset-0 -z-10 h-full w-full object-cover"
+                  className="absolute inset-0 -z-10 size-full object-cover"
                 />
                 <div className="absolute inset-0 -z-10 bg-linear-to-t from-zinc-900 via-zinc-900/40" />
                 <div className="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-zinc-900/10" />
@@ -445,7 +445,7 @@ export default function AboutPage() {
                   <div className="-ml-4 flex items-center gap-x-4">
                     <svg
                       viewBox="0 0 2 2"
-                      className="-ml-0.5 h-0.5 w-0.5 flex-none fill-white/50"
+                      className="-ml-0.5 size-0.5 flex-none fill-white/50"
                     >
                       <circle cx={1} cy={1} r={1} />
                     </svg>
@@ -453,7 +453,7 @@ export default function AboutPage() {
                       <Image
                         src={post.author.imageUrl}
                         alt=""
-                        className="h-6 w-6 flex-none rounded-full bg-white/10"
+                        className="size6 flex-none rounded-full bg-white/10"
                       />
                       {post.author.name}
                     </div>

@@ -7,7 +7,7 @@ import { useTransition } from "react";
 import { Button } from "./ui/button";
 import signOut from "@/actions/signOutAction";
 
-export default function SignOutButton() {
+export default function SignOutButton(props: React.ComponentProps<"button">) {
   const [isPending, startTransition] = useTransition();
   const setCartItems = useSetAtom(cartAtom);
 
@@ -26,8 +26,9 @@ export default function SignOutButton() {
       variant="ghostHoverLess"
       size="sm"
       onClick={handleSignOut}
+      {...props}
     >
-      <LogOut className="h-5 w-5" />
+      <LogOut className="size-5" />
       Sign Out
     </Button>
   );

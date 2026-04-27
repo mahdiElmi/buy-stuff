@@ -21,9 +21,9 @@ function Posts() {
 
   return (
     <section className="flex grow flex-col gap-8">
-      <label className="relative flex w-full flex-row items-center self-center ">
+      <label className="relative flex w-full flex-row items-center self-center">
         <Input
-          className="h-14 w-full rounded-lg border-2 border-b-zinc-300 border-t-zinc-100 bg-zinc-200 p-1 ps-11 text-3xl font-medium tracking-tight shadow-inner dark:bg-zinc-800"
+          className="h-14 w-full rounded-lg border-2 border-t-zinc-100 border-b-zinc-300 bg-zinc-200 p-1 ps-11 text-3xl font-medium tracking-tight shadow-inner dark:bg-zinc-800"
           type="text"
           placeholder="Search Blog by title"
           value={searchInput}
@@ -37,7 +37,7 @@ function Posts() {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="absolute left-2 h-8 w-8 stroke-2 opacity-70"
+          className="absolute left-2 size-8 stroke-2 opacity-70"
         >
           <path
             strokeLinecap="round"
@@ -56,7 +56,7 @@ function Posts() {
           postElements
         ) : (
           <div className="col-span-full mt-20 max-w-lg justify-self-center text-center">
-            <h2 className="text-2xl font-semibold text-zinc-800 dark:text-zinc-200 ">
+            <h2 className="text-2xl font-semibold text-zinc-800 dark:text-zinc-200">
               No results found
             </h2>
             <p className="text-xl font-medium text-zinc-600 dark:text-zinc-400">

@@ -44,10 +44,11 @@ export type UserWithShoppingCart = Prisma.UserGetPayload<
 const userWithShoppingCartAndVendor =
   Prisma.validator<Prisma.UserDefaultArgs>()({
     include: {
-      shoppingCartItems: {
-        include: { product: { include: { images: true } } },
+      vendor: {
+        select: {
+          id: true,
+        },
       },
-      vendor: true,
     },
   });
 
@@ -58,15 +59,40 @@ export type UserWithShoppingCartAndVendor = Prisma.UserGetPayload<
 export type LocalShoppingCartItem = {
   productId: string;
   quantity: number;
-  name: string;
-  image: string;
-  price: number;
-  stock: number;
+  // name: string;
+  // image: string;
+  // price: number;
+  // stock: number;
 };
 
 export interface LocalShoppingCartItems {
   [index: string]: LocalShoppingCartItem;
 }
+
+const shoppingCartItemWithProduct =
+  Prisma.validator<Prisma.ShoppingCartItemDefaultArgs>()({
+    select: {
+      product: {
+        select: {
+          id: true,
+          price: true,
+          name: true,
+          stock: true,
+          discountPercentage: true,
+          images: {
+            select: { url: true },
+            take: 1,
+          },
+        },
+      },
+      quantity: true,
+      productId: true,
+    },
+  });
+
+export type ShoppingCartItemWithProduct = Prisma.ShoppingCartItemGetPayload<
+  typeof shoppingCartItemWithProduct
+>;
 
 export type ParamsType = {
   page: string | undefined;

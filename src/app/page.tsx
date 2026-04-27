@@ -38,7 +38,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <section className="flex h-full w-full min-w-0 flex-col items-center justify-center gap-5 px-1 py-10">
+    <section className="flex size-full min-w-0 flex-col items-center justify-center gap-5 px-1 py-10">
       <h1 className="sr-only">Home Page</h1>
       <HomePageCarousel
         headerLink="/products"
@@ -70,7 +70,7 @@ export default async function HomePage() {
               {clotheCategory.name}
             </span>
           </Link>
-          <Link
+          {/* <Link
             className="relative overflow-hidden"
             href={`/products/${electronicsCategory.name}`}
           >
@@ -84,7 +84,7 @@ export default async function HomePage() {
             <span className="absolute bottom-0 left-0 mx-2 my-1 w-fit text-sm font-bold text-slate-950 md:text-2xl">
               {electronicsCategory.name}
             </span>
-          </Link>
+          </Link> */}
         </div>
       </section>
     </section>

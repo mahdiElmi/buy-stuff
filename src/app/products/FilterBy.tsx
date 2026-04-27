@@ -151,20 +151,20 @@ function FilterBy({
   return (
     <aside
       className={cn(
-        "flex h-fit w-full text-nowrap break-keep rounded-md bg-zinc-200 p-2 dark:bg-zinc-900 lg:sticky lg:top-16 lg:w-max lg:flex-col",
+        "flex h-fit w-full rounded-md bg-zinc-200 p-2 text-nowrap break-keep lg:sticky lg:top-16 lg:w-max lg:flex-col dark:bg-zinc-900",
         className,
       )}
     >
       <Drawer>
         <DrawerTrigger className="flex items-center gap-2 text-xl font-bold lg:hidden lg:text-2xl">
-          <Filter className="h-6 w-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950 lg:h-7 lg:w-7" />
+          <Filter className="size-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 lg:h-7 lg:w-7 dark:border-zinc-800 dark:bg-zinc-950" />
           <h2>Filter</h2>
-          <ChevronDown className=" h-4 w-4" />
+          <ChevronDown className="size-4" />
         </DrawerTrigger>
         <DrawerContent className="px-5">
           <DrawerHeader>
-            <DrawerTitle className=" flex items-center justify-center gap-2 text-2xl font-bold">
-              <Filter className="h-7 w-7 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
+            <DrawerTitle className="flex items-center justify-center gap-2 text-2xl font-bold">
+              <Filter className="size-7 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
               <h2>Filter</h2>
             </DrawerTitle>
           </DrawerHeader>
@@ -242,7 +242,7 @@ function FilterBy({
                       isRestedDisabled && "pointer-events-none opacity-50",
                     )}
                   >
-                    <RotateCcw className="me-1 h-4 w-4" /> Reset
+                    <RotateCcw className="me-1 size-4" /> Reset
                   </Link>
                 </Button>
                 <Button type="submit" size="sm" className="mt-3">
@@ -269,7 +269,7 @@ function FilterBy({
                       isRestedDisabled && "pointer-events-none opacity-50",
                     )}
                   >
-                    <RotateCcw className="me-1 h-4 w-4" /> Reset
+                    <RotateCcw className="me-1 size-4" /> Reset
                   </Link>
                 </Button>
               </DrawerClose>
@@ -281,8 +281,8 @@ function FilterBy({
         </DrawerContent>
       </Drawer>
       <div className="mb-3 hidden items-center gap-2 text-2xl font-bold lg:flex">
-        <h2 className=" flex items-center gap-2 text-2xl font-bold">
-          <Filter className="h-7 w-7 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
+        <h2 className="flex items-center gap-2 text-2xl font-bold">
+          <Filter className="size-7 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
           Filter
         </h2>
         <div className="ms-auto flex gap-2 lg:hidden">
@@ -299,7 +299,7 @@ function FilterBy({
                 isRestedDisabled && "pointer-events-none opacity-50",
               )}
             >
-              <RotateCcw className="me-1 h-4 w-4" /> Reset
+              <RotateCcw className="me-1 size-4" /> Reset
             </Link>
           </Button>
           <Button type="submit" size="sm" className="mt-3">
@@ -382,7 +382,7 @@ function FilterBy({
                   isRestedDisabled && "pointer-events-none opacity-50",
                 )}
               >
-                <RotateCcw className="me-1 h-4 w-4" /> Reset
+                <RotateCcw className="me-1 size-4" /> Reset
               </Link>
             </Button>
             <Button type="submit" size="sm" className="mt-3">

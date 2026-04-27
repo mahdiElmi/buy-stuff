@@ -123,13 +123,13 @@ export default function AddProductForm({
               </FormItem>
             )}
           />
-          <div className="flex flex-row items-center space-x-3 ">
+          <div className="flex flex-row items-center space-x-3">
             <FormField
               name="stock"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>stock</FormLabel>
+                  <FormLabel>Stock</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -137,6 +137,7 @@ export default function AddProductForm({
                       min={1}
                       placeholder="Qty"
                       {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
                     />
                   </FormControl>
                   <FormMessage />
@@ -157,8 +158,9 @@ export default function AddProductForm({
                         min={0}
                         placeholder="Price"
                         {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
                       />
-                      <span className=" mb-2 cursor-default select-none self-end text-lg font-medium">
+                      <span className="mb-1 cursor-default self-end text-lg font-medium select-none">
                         $
                       </span>
                     </div>
@@ -181,7 +183,7 @@ export default function AddProductForm({
                 <UploadDropzone
                   className={cn(
                     "border-4 border-dotted border-zinc-300 dark:border-zinc-700",
-                    productData.imgUrls.length >= 5 && " opacity-40 ",
+                    productData.imgUrls.length >= 5 && "opacity-40",
                   )}
                   onBeforeUploadBegin={(files) => {
                     if (productData.imgUrls.length + files.length > 5) {
@@ -227,10 +229,10 @@ export default function AddProductForm({
           >
             {productData.imgUrls.map((imgUrl, i) => (
               <Reorder.Item key={imgUrl} value={imgUrl}>
-                <label className="group relative ">
+                <label className="group relative">
                   <span
                     className={cn(
-                      " absolute hidden w-full -translate-y-5 text-center text-xs font-medium sm:-translate-y-6 sm:text-sm ",
+                      "absolute hidden w-full -translate-y-5 text-center text-xs font-medium sm:-translate-y-6 sm:text-sm",
                       i === 0 && "block",
                     )}
                   >
@@ -239,12 +241,12 @@ export default function AddProductForm({
                   <div className="">
                     <span className="sr-only">Delete product</span>
                     <Button
-                      className="absolute right-[2px] top-[2px] h-6 w-6 cursor-pointer p-[2px]"
+                      className="absolute top-[2px] right-[2px] size-6 cursor-pointer p-[2px]"
                       asChild
                       variant="outline"
                       title="Edit Product"
                     >
-                      <X className="h-2 w-2" />
+                      <X className="size-2" />
                     </Button>
                   </div>
                   <Image

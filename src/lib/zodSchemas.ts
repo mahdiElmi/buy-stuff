@@ -34,8 +34,8 @@ export const productSchema = z.object({
       message: "Category is invalid.",
     },
   ),
-  price: z.coerce.number().finite().nonnegative().max(1000000),
-  stock: z.coerce.number().finite().positive(),
+  price: z.number().nonnegative().max(1000000),
+  stock: z.number().positive(),
   imgUrls: z
     .array(z.string())
     .min(1, "Must upload at least one Image.")

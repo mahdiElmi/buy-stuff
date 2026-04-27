@@ -1,13 +1,19 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { cartAtom } from "@/lib/atoms";
-import { LocalShoppingCartItem, LocalShoppingCartItems } from "@/lib/types";
+import {
+  LocalShoppingCartItem,
+  LocalShoppingCartItems,
+  ShoppingCartItemWithProduct,
+} from "@/lib/types";
 import { useAtom, useSetAtom } from "jotai";
 import {
   Check,
   ChevronLeft,
   ChevronRight,
+  Info,
   Loader,
+  ShoppingBag,
   Trash,
   X,
 } from "lucide-react";
@@ -19,60 +25,63 @@ import { mergeCartItems, formatPrice } from "@/lib/utils";
 import { signIn } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  updateCart,
   clearCart,
   deleteItemFromCart,
   updateShoppingCartItemQuantity,
+  syncCart,
 } from "./ShoppingCartActions";
 
 export default function BigCart({
   cartItemsFromServer,
   userId,
 }: {
-  cartItemsFromServer: LocalShoppingCartItems;
-  userId: string | null;
+  cartItemsFromServer: ShoppingCartItemWithProduct[];
+  userId: string | null | undefined;
 }) {
   const SHIPPING_ESTIMATE = 5.0 as const;
 
   const [items, setItems] = useAtom(cartAtom);
-  const [isMerging, setIsMerging] = useState(true);
-  const [isPending, startTransition] = useTransition();
-
   const itemsArr = useMemo(() => {
     return Object.values(items);
   }, [items]);
 
+  const [isMerging, setIsMerging] = useState(userId && itemsArr.length > 0);
+  const [isPending, startTransition] = useTransition();
+
   const totalPrice = useMemo(() => {
-    return itemsArr.reduce((prevValue, item, i) => {
-      return prevValue + item.price * item.quantity;
+    return cartItemsFromServer.reduce((prevValue, item) => {
+      return prevValue + item.product.price * item.quantity;
     }, 0);
-  }, [itemsArr]);
+  }, [cartItemsFromServer]);
 
   const taxAmount = useMemo(() => {
     return totalPrice * 0.06;
   }, [totalPrice]);
 
-  async function syncCart(newItems: LocalShoppingCartItems) {
-    if (!userId) return;
-    const result = await updateCart(userId, newItems);
-  }
-
   useEffect(() => {
-    if (userId) {
-      const mergedItems = mergeCartItems(cartItemsFromServer, items, "server");
-      setItems((oldItems) => mergedItems);
+    // if (userId) {
+    //   const mergedItems = mergeCartItems(cartItemsFromServer, items, "server");
+    //   setItems((oldItems) => mergedItems);
+    // }
+    // setIsMerging(false);
+
+    if (userId && itemsArr.length > 0) {
+      syncCart(itemsArr).then((result) => {
+        console.log(result);
+        setItems({});
+
+        setIsMerging(false);
+      });
     }
-    setIsMerging(false);
-  }, [cartItemsFromServer, setItems, userId]);
+  }, [userId]);
 
   function handleDeleteAll() {
     if (userId) {
       startTransition(async () => {
-        const result = await clearCart(userId);
-        if (result.success) {
-          setItems({});
-          console.log(result);
-        }
+        // const result = await clearCart();
+        // if (result.success) {
+        //   console.log(result);
+        // }
       });
     } else {
       setItems({});
@@ -87,80 +96,76 @@ export default function BigCart({
   }
 
   return (
-    <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
-      <section aria-labelledby="cart-heading" className="lg:col-span-7">
+    <div className="mt-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+      <section aria-labelledby="cart-heading" className="w-full lg:col-span-7">
         <h2 id="cart-heading" className="sr-only">
           Items in your shopping cart
         </h2>
-
         <ul
           role="list"
-          className="divide-y divide-zinc-200 border-b border-t border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800"
+          className="divide-y divide-zinc-200 border-b border-zinc-800 dark:divide-zinc-800 dark:border-zinc-800"
         >
           {!isMerging
-            ? itemsArr.map((product, productIdx) => (
-                <li key={product.productId} className="flex py-6 sm:py-10">
+            ? cartItemsFromServer.map((item, productIdx) => (
+                <li key={item.productId} className="flex py-6 sm:py-10">
                   <div className="shrink-0">
                     <Image
                       width={200}
                       height={200}
-                      src={product.image}
+                      src={item.product.images[0].url}
                       alt=""
-                      className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
+                      className="size-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
                     />
                   </div>
 
                   <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-                    <div className="relative flex flex-col pr-9 sm:gap-10 ">
+                    <div className="relative flex flex-col pr-9 sm:gap-10">
                       <div>
                         <div className="flex justify-between">
                           <h3 className="text-sm">
                             <Link
-                              href={`/product/${product.productId}`}
+                              href={`/product/${item.productId}`}
                               className="font-medium text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
                             >
-                              {product.name}
+                              {item.product.name}
                             </Link>
                           </h3>
                         </div>
                         <p className="mt-1 text-sm font-medium">
-                          {formatPrice(product.price)}
+                          {formatPrice(item.product.price)}
                         </p>
                       </div>
 
-                      <div className=" mt-4 sm:mt-0 sm:pr-9">
+                      <div className="mt-4 sm:mt-0 sm:pr-9">
                         <label
                           htmlFor={`quantity-${productIdx}`}
                           className="sr-only"
                         >
-                          Quantity, {product.name}
+                          Quantity, {item.product.name}
                         </label>
 
-                        <CartItemCountController
-                          item={product}
-                          userId={userId}
-                        />
+                        <CartItemCountController item={item} userId={userId} />
                       </div>
                     </div>
 
                     <p className="mt-4 flex space-x-2 text-sm text-zinc-700 dark:text-zinc-300">
-                      {product.quantity <= product.stock ? (
+                      {item.quantity <= item.product.stock ? (
                         <Check
-                          className="h-5 w-5 shrink-0 text-green-500"
+                          className="size-5 shrink-0 text-green-500"
                           aria-hidden="true"
                         />
                       ) : (
                         <X
-                          className="h-5 w-5 shrink-0 text-red-500"
+                          className="size-5 shrink-0 text-red-500"
                           aria-hidden="true"
                         />
                       )}
 
                       <span>
-                        {product.quantity <= product.stock
+                        {item.quantity <= item.product.stock
                           ? "In stock"
-                          : product.stock > 0
-                            ? `Only ${product.stock} available`
+                          : item.product.stock > 0
+                            ? `Only ${item.product.stock} available`
                             : "Not In Stock"}
                       </span>
                     </p>
@@ -169,12 +174,26 @@ export default function BigCart({
               ))
             : [1, 2, 3, 4, 5].map((num) => <ItemSkeleton key={num} />)}
         </ul>
+
+        {cartItemsFromServer.length <= 0 && (
+          <div className="my-3 flex w-full flex-col items-center justify-center gap-2 rounded-md bg-zinc-200 py-5 dark:bg-zinc-800">
+            <ShoppingBag className="size-10" />
+            <h3 className="text-2xl font-bold">Cart is empty</h3>
+            <Button
+              variant="outline"
+              className="border-zinc-400 bg-zinc-200 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 hover:dark:bg-zinc-900"
+              asChild
+            >
+              <Link href="/products">Browse Products</Link>
+            </Button>
+          </div>
+        )}
       </section>
 
       {/* Order summary */}
       <section
         aria-labelledby="summary-heading"
-        className="sticky top-16 mt-16 rounded-lg bg-zinc-100 px-4 py-6 dark:bg-zinc-900 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
+        className="sticky top-16 mt-16 w-full rounded-lg bg-zinc-100 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 dark:bg-zinc-900"
       >
         <h2 id="summary-heading" className="text-lg font-medium">
           Order summary
@@ -191,7 +210,7 @@ export default function BigCart({
               <dd className="text-sm font-medium">{formatPrice(totalPrice)}</dd>
             )}
           </div>
-          <div className="flex items-center justify-between border-t border-zinc-200 pt-4">
+          <div className="flex items-center justify-between pt-2">
             <dt className="flex items-center text-sm text-zinc-600 dark:text-zinc-400">
               <span>Shipping estimate</span>
               {/* <a
@@ -202,7 +221,7 @@ export default function BigCart({
                       Learn more about how shipping is calculated
                     </span>
                     <QuestionMarkCircleIcon
-                      className="h-5 w-5"
+                      className="size-5"
                       aria-hidden="true"
                     />
                   </a> */}
@@ -211,11 +230,13 @@ export default function BigCart({
               {isMerging ? (
                 <Skeleton className="h-4 w-10" />
               ) : (
-                formatPrice(itemsArr.length > 0 ? SHIPPING_ESTIMATE : 0)
+                formatPrice(
+                  cartItemsFromServer.length > 0 ? SHIPPING_ESTIMATE : 0,
+                )
               )}
             </dd>
           </div>
-          <div className="flex items-center justify-between border-t border-zinc-200 pt-4">
+          <div className="flex items-center justify-between pt-2">
             <dt className="flex text-sm text-zinc-600 dark:text-zinc-400">
               <span>Tax estimate</span>
               {/* <a
@@ -226,7 +247,7 @@ export default function BigCart({
                       Learn more about how tax is calculated
                     </span>
                     <QuestionMarkCircleIcon
-                      className="h-5 w-5"
+                      className="size-5"
                       aria-hidden="true"
                     />
                   </a> */}
@@ -237,11 +258,13 @@ export default function BigCart({
               <dd className="text-sm font-medium">{formatPrice(taxAmount)}</dd>
             )}
           </div>
-          <div className="flex items-center justify-between border-t border-zinc-200 pt-4">
+          <div className="flex items-center justify-between border-t border-zinc-200 pt-2 dark:border-zinc-800">
             <dt className="text-base font-medium">Order total</dt>
             <dd className="text-base font-medium">
               {isMerging ? (
                 <Skeleton className="h-4 w-10" />
+              ) : cartItemsFromServer.length <= 0 ? (
+                "$0"
               ) : (
                 formatPrice(totalPrice + SHIPPING_ESTIMATE + taxAmount)
               )}
@@ -250,13 +273,14 @@ export default function BigCart({
         </dl>
 
         <div className="mt-6">
-          <button
-            disabled={itemsArr.length <= 0}
-            onClick={handleOrderSubmit}
-            className="w-full rounded-md border border-transparent bg-indigo-800 px-4 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-zinc-50"
+          <Button
+            asChild
+            disabled={cartItemsFromServer.length <= 0}
+            // onClick={handleOrderSubmit}
+            className="w-full"
           >
-            Checkout
-          </button>
+            <Link href={userId ? "/checkout" : "/sign-in"}>Checkout</Link>
+          </Button>
         </div>
       </section>
     </div>
@@ -267,8 +291,8 @@ function CartItemCountController({
   userId,
   item,
 }: {
-  userId: string | null;
-  item: LocalShoppingCartItem;
+  userId: string | null | undefined;
+  item: ShoppingCartItemWithProduct;
 }) {
   const [isPending, startTransition] = useTransition();
   const [currentLoading, setCurrentLoading] = useState<
@@ -280,15 +304,16 @@ function CartItemCountController({
     if (userId) {
       setCurrentLoading("delete");
       startTransition(async () => {
-        const result = await deleteItemFromCart(userId, id);
-        if (result.success) {
-          console.log(result);
-          setItems((oldCart) => {
-            const newCart = { ...oldCart };
-            delete newCart[id];
-            return newCart;
-          });
-        }
+        const result = await deleteItemFromCart(id);
+        // if (result.success) {
+        //   console.log(result);
+        //   setItems((oldCart) => {
+        //     const newCart = { ...oldCart };
+        //     delete newCart[id];
+        //     return newCart;
+        //   });
+        // }
+        console.log(result);
       });
     } else {
       setItems((oldCart) => {
@@ -312,23 +337,19 @@ function CartItemCountController({
     if (userId) {
       setCurrentLoading(isPositive ? "increment" : "decrement");
       startTransition(async () => {
-        const result = await updateShoppingCartItemQuantity(
-          userId,
-          id,
-          isPositive,
-        );
-        if (result.success) {
-          setItems((oldCart) => {
-            return {
-              ...oldCart,
-              [id]: {
-                ...oldCart[id],
-                quantity: oldCart[id].quantity + (isPositive ? 1 : -1),
-              },
-            };
-          });
-          console.log(result);
-        }
+        const result = await updateShoppingCartItemQuantity(id, isPositive);
+        // if (result.success) {
+        //   setItems((oldCart) => {
+        //     return {
+        //       ...oldCart,
+        //       [id]: {
+        //         ...oldCart[id],
+        //         quantity: oldCart[id].quantity + (isPositive ? 1 : -1),
+        //       },
+        //     };
+        //   });
+        //   console.log(result);
+        // }
         console.log(result);
       });
     } else {
@@ -352,7 +373,7 @@ function CartItemCountController({
           onClick={() =>
             handleSelectedQtyChange(false, item.productId, item.quantity)
           }
-          className="h-8 w-8 rounded-r-none"
+          className="size-8 rounded-r-none"
           variant={item.quantity <= 1 ? "destructive" : "ghost"}
           size="icon"
         >
@@ -364,7 +385,7 @@ function CartItemCountController({
             ) : (
               <>
                 <span className="sr-only">Remove item</span>
-                <Trash aria-hidden="true" className="h-5 w-5 " />
+                <Trash aria-hidden="true" className="size-5" />
               </>
             )
           ) : (
@@ -374,15 +395,15 @@ function CartItemCountController({
             </>
           )}
         </Button>
-        <span className=" flex h-8 w-8 items-center justify-center text-lg font-bold">
+        <span className="flex size-8 items-center justify-center text-lg font-bold">
           {item.quantity}
         </span>
         <Button
-          disabled={item.quantity >= item.stock || isPending}
+          disabled={item.quantity >= item.product.stock || isPending}
           onClick={() =>
             handleSelectedQtyChange(true, item.productId, item.quantity)
           }
-          className=" h-8 w-8 rounded-l-none  "
+          className="size-8 rounded-l-none"
           variant="ghost"
           size="icon"
         >
@@ -400,14 +421,14 @@ function CartItemCountController({
         onClick={() => handleDelete(item.productId)}
         variant="ghost"
         size="icon"
-        className="absolute end-0 top-1 h-7 w-7 -translate-y-1"
+        className="absolute end-0 top-1 size-7 -translate-y-1"
       >
         <span className="sr-only">Remove item</span>
         {isPending && currentLoading === "delete" ? (
           <Loader aria-hidden="true" className="animate-spin" />
         ) : (
           <X
-            className="h-5 w-5 text-zinc-700 dark:text-zinc-100 "
+            className="size-5 text-zinc-700 dark:text-zinc-100"
             aria-hidden="true"
           />
         )}
@@ -419,9 +440,9 @@ function CartItemCountController({
 function ItemSkeleton() {
   return (
     <li className="flex w-full py-6 sm:w-[583px] sm:py-10">
-      <Skeleton className="h-24 w-24 sm:h-48 sm:w-48" />
+      <Skeleton className="size-24 sm:h-48 sm:w-48" />
       <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-        <div className="relative flex flex-col pr-9 sm:gap-6 ">
+        <div className="relative flex flex-col pr-9 sm:gap-6">
           <div>
             <Skeleton className="h-6 w-52 md:w-60" />
             <Skeleton className="mt-1 h-4 w-7" />

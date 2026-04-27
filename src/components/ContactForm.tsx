@@ -35,8 +35,8 @@ function ContactForm() {
   }
 
   return didSubmit ? (
-    <section className="flex grow items-center justify-center ">
-      <div className=" flex max-w-lg rounded-md bg-green-100 p-8">
+    <section className="flex grow items-center justify-center">
+      <div className="flex max-w-lg rounded-md bg-green-100 p-8">
         <div className="ml-3 text-center">
           <h3 className="text-4xl font-bold text-green-800">Form Submitted!</h3>
           <div className="mt-2 space-y-5 text-lg font-medium text-green-700">
@@ -49,7 +49,7 @@ function ContactForm() {
                 setDidSubmit(false);
                 setShowError(false);
               }}
-              className="mx-auto block w-fit rounded-md bg-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-green-500 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              className="mx-auto block w-fit rounded-md bg-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 focus-visible:outline-solid"
             >
               Subumit another form
             </button>
@@ -74,7 +74,7 @@ function ContactForm() {
           <div>
             <label
               htmlFor="first-name"
-              className="block text-sm font-semibold leading-6 text-gray-900 after:text-lg after:text-red-600 after:content-['*']"
+              className="block text-sm leading-6 font-semibold text-gray-900 after:text-lg after:text-red-600 after:content-['*']"
             >
               First name
             </label>
@@ -91,14 +91,14 @@ function ContactForm() {
                     firstName: e.target.value,
                   }))
                 }
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
               />
             </div>
           </div>
           <div>
             <label
               htmlFor="last-name"
-              className="block text-sm font-semibold leading-6 text-gray-900 after:text-lg after:text-red-600 after:content-['*']"
+              className="block text-sm leading-6 font-semibold text-gray-900 after:text-lg after:text-red-600 after:content-['*']"
             >
               Last name
             </label>
@@ -115,14 +115,14 @@ function ContactForm() {
                     lastName: e.target.value,
                   }))
                 }
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
               />
             </div>
           </div>
           <div className="sm:col-span-2">
             <label
               htmlFor="company"
-              className="block text-sm font-semibold leading-6 text-gray-900"
+              className="block text-sm leading-6 font-semibold text-gray-900"
             >
               Company
             </label>
@@ -138,14 +138,14 @@ function ContactForm() {
                   }))
                 }
                 autoComplete="organization"
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
               />
             </div>
           </div>
           <div className="sm:col-span-2">
             <label
               htmlFor="email"
-              className="block text-sm font-semibold leading-6 text-gray-900 after:text-lg after:text-red-600 after:content-['*']"
+              className="block text-sm leading-6 font-semibold text-gray-900 after:text-lg after:text-red-600 after:content-['*']"
             >
               Email
             </label>
@@ -162,7 +162,7 @@ function ContactForm() {
                     email: e.target.value,
                   }))
                 }
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -170,7 +170,7 @@ function ContactForm() {
           <div className="sm:col-span-2">
             <label
               htmlFor="message"
-              className="block text-sm font-semibold leading-6 text-gray-900 after:text-lg after:text-red-600 after:content-['*']"
+              className="block text-sm leading-6 font-semibold text-gray-900 after:text-lg after:text-red-600 after:content-['*']"
             >
               Message
             </label>
@@ -180,7 +180,7 @@ function ContactForm() {
                 name="message"
                 id="message"
                 rows={4}
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6"
                 defaultValue={""}
               />
             </div>
@@ -198,22 +198,18 @@ function ContactForm() {
                     didAgreeToPrivacy: !oldData.didAgreeToPrivacy,
                   }))
                 }
-                className={`
-                  ${
-                    formData.didAgreeToPrivacy ? "bg-indigo-600" : "bg-gray-200"
-                  }
-                  flex w-8 flex-none cursor-pointer rounded-full p-px ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+                className={` ${
+                  formData.didAgreeToPrivacy ? "bg-indigo-600" : "bg-gray-200"
+                } flex w-8 flex-none cursor-pointer rounded-full p-px ring-1 ring-gray-900/5 transition-colors duration-200 ease-in-out ring-inset focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid`}
               >
                 <span className="sr-only">Agree to policies</span>
                 <span
                   aria-hidden="true"
-                  className={`
-                    ${
-                      formData.didAgreeToPrivacy
-                        ? "translate-x-3.5"
-                        : "translate-x-0"
-                    }
-                    h-4 w-4 transform rounded-full bg-white shadow-xs ring-1 ring-gray-900/5 transition duration-200 ease-in-out`}
+                  className={` ${
+                    formData.didAgreeToPrivacy
+                      ? "translate-x-3.5"
+                      : "translate-x-0"
+                  } size-4 transform rounded-full bg-white shadow-xs ring-1 ring-gray-900/5 transition duration-200 ease-in-out`}
                 />
               </Switch>
             </div>
@@ -229,7 +225,7 @@ function ContactForm() {
         <div className="mt-10">
           <button
             type="submit"
-            className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 focus-visible:outline-solid"
           >
             Let&apos;s talk
           </button>
@@ -242,7 +238,7 @@ function ContactForm() {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className="h-5 w-5 text-red-400"
+                  className="size-5 text-red-400"
                 >
                   <path
                     fillRule="evenodd"

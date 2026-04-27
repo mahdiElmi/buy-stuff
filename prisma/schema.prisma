@@ -58,6 +58,7 @@ model User {
   image                    String             @default("http://www.gravatar.com/avatar/?d=mp") @db.VarChar(2048)
   reviews                  Review[]
   reviewVotes              Vote[]
+  stripeCustomerId         String?            @unique
   shippingAddresses        ShippingAddress[]  @relation("UserShippingAddresses")
   defaultShippingAddress   ShippingAddress?   @relation("DefaultShippingAddress", fields: [defaultShippingAddressId], references: [id])
   defaultShippingAddressId String?            @unique
@@ -67,6 +68,7 @@ model User {
   vendor                   Vendor?
   favorites                Product[]
   lists                    List[]
+  Order                    Order[]
 }
 
 model List {
@@ -101,6 +103,7 @@ model Vendor {
   bannerImage String?   @db.VarChar(2048)
   createdAt   DateTime  @default(now())
   products    Product[]
+  orders      Order[]
   user        User      @relation(fields: [userId], references: [id])
   userId      String    @unique
 }
@@ -122,6 +125,7 @@ model ShippingAddress {
   isDefault   User?    @relation("DefaultShippingAddress")
 
   // @@index([userId])
+  Order Order[]
 }
 
 model Product {
@@ -142,8 +146,46 @@ model Product {
   shoppingCartItems  ShoppingCartItem[]
   favoritedBy        User[]
   listAssociations   List[]
+  OrderItem          OrderItem[]
 
   // @@index([vendorId])
+}
+
+model Order {
+  id                String          @id @default(cuid())
+  buyer             User            @relation(fields: [userId], references: [id])
+  items             OrderItem[]
+  shippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
+  total             Int
+  state             PackageState
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  userId            String
+  shippingAddressId String
+  Vendor            Vendor?         @relation(fields: [vendorId], references: [id])
+  vendorId          String?
+}
+
+enum PackageState {
+  ORDERED
+  PROCESSING
+  SHIPPED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  RETURNED
+  CANCELLED
+  LOST
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orderId   String
+  productId String
 }
 
 model Image {

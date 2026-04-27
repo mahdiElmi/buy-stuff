@@ -15,15 +15,12 @@ export default function DummyProductItem({
   return (
     <div
       className={cn(
-        "mt-5 w-full max-w-sm justify-self-center @container/1",
+        "@container/1 mt-5 w-full max-w-sm justify-self-center",
         className,
       )}
     >
       <h2 className="py-2 text-2xl font-bold">Product Card Preview</h2>
-      <div
-        className="flex w-full flex-col overflow-hidden rounded-md border-zinc-300 bg-linear-to-t from-zinc-300 from-20% to-white shadow-md 
-          drop-shadow-xs transition-transform duration-75 @5xl/1:p-6 dark:border-zinc-700 dark:from-zinc-700 dark:to-zinc-950"
-      >
+      <div className="flex w-full flex-col overflow-hidden rounded-md border-zinc-300 bg-linear-to-t from-zinc-300 from-20% to-white shadow-md drop-shadow-xs transition-transform duration-75 @5xl/1:p-6 dark:border-zinc-700 dark:from-zinc-700 dark:to-zinc-950">
         {product.imgUrls.length > 0 ? (
           <Image
             width={400}
@@ -38,7 +35,7 @@ export default function DummyProductItem({
         <div className="flex flex-col gap-2 p-2">
           <div className="flex items-center justify-between">
             {product.name !== "" ? (
-              <h2 className="w-96 break-words text-lg font-bold">
+              <h2 className="w-96 text-lg font-bold break-words">
                 {product.name}
               </h2>
             ) : (
@@ -46,7 +43,7 @@ export default function DummyProductItem({
             )}
           </div>
           {product.description !== "" ? (
-            <p className="line-clamp-3 w-full break-words font-medium text-zinc-700 dark:text-zinc-300">
+            <p className="line-clamp-3 w-full font-medium break-words text-zinc-700 dark:text-zinc-300">
               {product.description}
             </p>
           ) : (
@@ -61,7 +58,7 @@ export default function DummyProductItem({
               <span className="text-lg font-medium">Free</span>
             ) : (
               <span className="text-xl font-extrabold tracking-tighter">
-                <span className="text-xs ">$</span>
+                <span className="text-xs">$</span>
                 {formatPrice(product.price)}
               </span>
             )}

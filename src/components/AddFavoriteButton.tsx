@@ -1,21 +1,22 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Heart, Loader2 } from "lucide-react";
+import { HeartIcon, Loader2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import {
   addToFavorites,
   removeFromFavorites,
 } from "../actions/favoritesActions";
+import { VariantProps } from "class-variance-authority";
 export default function AddFavoriteButton({
   favoriteInitialState,
   productId,
-  variant = "outline-solid",
+  variant = "ghostHoverLess",
   className,
 }: {
   favoriteInitialState: boolean;
   productId: string;
-  variant?: "outline-solid" | "ghostHoverLess";
+  variant?: VariantProps<typeof buttonVariants>["variant"];
   className?: string;
 }) {
   const [hasLiked, setHasLiked] = useState(favoriteInitialState);
@@ -51,7 +52,7 @@ export default function AddFavoriteButton({
       {isPending ? (
         <Loader2 className="animate-spin" />
       ) : (
-        <Heart className={cn(hasLiked && "fill-current")} />
+        <HeartIcon className={cn(hasLiked && "fill-current", "size-5")} />
       )}
     </Button>
   );

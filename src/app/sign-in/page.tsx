@@ -5,11 +5,12 @@ import { useEffect, useState, useTransition, use } from "react";
 import logIn from "./logInAction";
 import { toast } from "sonner";
 
-export default function Page(
-  props: {
-    searchParams: Promise<{ callback: string | undefined; error: string | undefined }>;
-  }
-) {
+export default function Page(props: {
+  searchParams: Promise<{
+    callback: string | undefined;
+    error: string | undefined;
+  }>;
+}) {
   const searchParams = use(props.searchParams);
   const [isPending, startTransition] = useTransition();
   const { callback = "/", error: authError } = searchParams;
@@ -33,7 +34,7 @@ export default function Page(
 
   return (
     <section className="flex h-[90dvh] w-full items-center justify-center">
-      <div className="flex max-w-96 flex-col items-center justify-center gap-2 rounded-md border-2 border-zinc-200 bg-zinc-100 p-5 dark:border-zinc-800 dark:bg-zinc-900 ">
+      <div className="flex max-w-96 flex-col items-center justify-center gap-2 rounded-md border-2 border-zinc-200 bg-zinc-100 p-5 dark:border-zinc-800 dark:bg-zinc-900">
         <h1 className="mb-4 text-center text-3xl font-bold tracking-tight">
           Sign In
         </h1>
@@ -74,7 +75,7 @@ export default function Page(
             <Loader2 className="animate-spin" />
           ) : (
             <svg
-              className="h-6 w-6 fill-zinc-50 dark:fill-zinc-950"
+              className="size-6 fill-zinc-50 dark:fill-zinc-950"
               name="google Icon"
               xmlns="http://www.w3.org/2000/svg"
               x="0px"

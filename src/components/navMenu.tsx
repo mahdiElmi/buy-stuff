@@ -10,7 +10,7 @@ import {
   NavigationMenuViewport,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Plug, Shirt } from "lucide-react";
+import { PlugIcon, ShirtIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function NavMenu() {
@@ -23,8 +23,7 @@ export default function NavMenu() {
             <NavigationMenuLink asChild>
               <Link
                 href="/products"
-                className="pattern-dotted relative mx-6 mt-4 flex h-full select-none flex-col items-start justify-end overflow-clip rounded-md bg-linear-to-b from-zinc-300/50 to-zinc-300 
-                p-6 px-4 text-xl font-black no-underline outline-hidden hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
+                className="pattern-dotted relative mx-6 mt-4 flex h-full flex-col items-start justify-end overflow-clip rounded-md bg-linear-to-b from-zinc-300/50 to-zinc-300 p-6 px-4 text-xl font-black no-underline outline-hidden select-none hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
               >
                 All Products
               </Link>
@@ -34,12 +33,11 @@ export default function NavMenu() {
               <li className="w-56">
                 <NavigationMenuLink asChild>
                   <Link
-                    className="relative flex h-full w-full select-none flex-col items-end justify-end overflow-clip rounded-md bg-linear-to-b 
-                    from-zinc-300/50 to-zinc-300 p-6 px-4 no-underline outline-hidden hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
+                    className="relative flex size-full flex-col items-end justify-end overflow-clip rounded-md bg-linear-to-b from-zinc-300/50 to-zinc-300 p-6 px-4 no-underline outline-hidden select-none hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
                     href="/products/clothes"
                   >
-                    <Shirt className="absolute inset-0 h-5/6 w-5/6 -translate-x-1/3 place-self-center stroke-[0.8] opacity-50" />
-                    <div className="mb-2 mt-4 text-xl font-extrabold">
+                    <ShirtIcon className="absolute inset-0 size-5/6 -translate-x-1/3 place-self-center stroke-[0.8] opacity-50" />
+                    <div className="mt-4 mb-2 text-xl font-extrabold">
                       Clothes
                     </div>
                   </Link>
@@ -48,12 +46,11 @@ export default function NavMenu() {
               <li className="w-56">
                 <NavigationMenuLink asChild>
                   <Link
-                    className="relative flex h-full w-full select-none flex-col items-end justify-end overflow-clip rounded-md bg-linear-to-b 
-                    from-zinc-300/50 to-zinc-300 p-6 px-4 no-underline outline-hidden hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
+                    className="relative flex size-full flex-col items-end justify-end overflow-clip rounded-md bg-linear-to-b from-zinc-300/50 to-zinc-300 p-6 px-4 no-underline outline-hidden select-none hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
                     href="/products/electronics"
                   >
-                    <Plug className="absolute inset-0 h-5/6 w-5/6 -translate-x-16 place-self-center stroke-[0.8] opacity-50" />
-                    <div className="mb-2 mt-4 text-xl font-extrabold">
+                    <PlugIcon className="absolute inset-0 size-5/6 -translate-x-16 place-self-center stroke-[0.8] opacity-50" />
+                    <div className="mt-4 mb-2 text-xl font-extrabold">
                       Electronics
                     </div>
                   </Link>

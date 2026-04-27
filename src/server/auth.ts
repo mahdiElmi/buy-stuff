@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { stripe } from "@/lib/stripe";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
@@ -31,4 +32,30 @@ export const {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "database" },
   trustHost: true,
+  // callbacks: {
+  //   session: ({session }) => {
+  //     session.
+  //   }
+  // },
+  events: {
+    createUser: async ({ user }) => {
+      await stripe.customers
+        .create({
+          name: user.name!,
+          email: user.email!,
+          metadata: {
+            userId: user.id!,
+          },
+        })
+        .then(async (customer) => {
+          return prisma.user.update({
+            where: {
+              id: user.id,
+            },
+            data: { stripeCustomerId: customer.id },
+            select: {},
+          });
+        });
+    },
+  },
 });

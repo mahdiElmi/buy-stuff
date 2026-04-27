@@ -30,17 +30,17 @@ export default async function ProductCard({
   const hasUserAddedToFavorites = !!user?.favorites[0];
 
   return (
-    <div className="h-full @container/card">
+    <div className="@container/card h-full">
       <div
         key={product.id}
         className={cn(
-          "relative flex h-full w-full flex-col overflow-hidden rounded-md p-1",
+          "relative flex size-full flex-col overflow-hidden rounded-md p-1",
           product.stock <= 0 && "opacity-70",
         )}
       >
         {user && (
           <AddFavoriteButton
-            className="absolute right-[2px] top-[2px] z-10 text-white drop-shadow-xs "
+            className="absolute top-[2px] right-[2px] z-10 text-white drop-shadow-xs"
             productId={product.id}
             favoriteInitialState={hasUserAddedToFavorites}
             variant="ghostHoverLess"
@@ -61,27 +61,18 @@ export default async function ProductCard({
             }
             alt="product Image"
           />
-          <div className="absolute -left-px bottom-0 ">
-            <div
-              className="relative z-20 h-full w-full rounded-tr-md bg-zinc-200 px-1 transition-opacity duration-100 first-letter:font-light group-hover:opacity-50 
-        @[8rem]/card:px-2 @[8rem]/card:py-[2px] dark:bg-zinc-900"
-            >
+          <div className="absolute bottom-0 -left-px">
+            <div className="relative z-20 size-full rounded-tr-md bg-zinc-200 px-1 transition-opacity duration-100 group-hover:opacity-50 first-letter:font-light @[8rem]/card:px-2 @[8rem]/card:py-[2px] dark:bg-zinc-900">
               <span className="text-xs font-extrabold @[8rem]/card:text-xl">
                 {formatPrice(product.price)}
               </span>
 
               {product.discountPercentage > 0 && (
-                <div
-                  className="absolute left-0 top-0 z-30 flex -translate-y-full  items-center justify-center rounded-r-md transition-opacity duration-100  
-                    group-hover:opacity-50"
-                >
-                  <span className="h-full rounded-tr-md bg-zinc-300 p-[3px] px-[4px] text-xs line-through decoration-black first-letter:font-light dark:bg-zinc-700  dark:decoration-white">
+                <div className="absolute top-0 left-0 z-30 flex -translate-y-full items-center justify-center rounded-r-md transition-opacity duration-100 group-hover:opacity-50">
+                  <span className="h-full rounded-tr-md bg-zinc-300 p-[3px] px-[4px] text-xs line-through decoration-black first-letter:font-light dark:bg-zinc-700 dark:decoration-white">
                     {formatPrice(product.originalPrice)}
                   </span>
-                  <span
-                    className="flex -translate-x-[2px] translate-y-1 items-center justify-center rounded-md bg-red-900 p-px px-[3px] text-xs font-medium text-zinc-50 transition-opacity 
-                    duration-100 @[8rem]/card:text-sm"
-                  >
+                  <span className="flex -translate-x-[2px] translate-y-1 items-center justify-center rounded-md bg-red-900 p-px px-[3px] text-xs font-medium text-zinc-50 transition-opacity duration-100 @[8rem]/card:text-sm">
                     -{product.discountPercentage}%
                   </span>
                 </div>
@@ -89,10 +80,7 @@ export default async function ProductCard({
             </div>
           </div>
           {product.stock < 5 && (
-            <span
-              className="absolute -right-px bottom-0 min-w-fit rounded-tl-md bg-zinc-200 px-1 text-base font-semibold  transition-opacity duration-100 
-          group-hover:opacity-50 dark:bg-zinc-900"
-            >
+            <span className="absolute -right-px bottom-0 min-w-fit rounded-tl-md bg-zinc-200 px-1 text-base font-semibold transition-opacity duration-100 group-hover:opacity-50 dark:bg-zinc-900">
               {product.stock > 0 ? (
                 <span>Only {product.stock} left!</span>
               ) : (
@@ -104,22 +92,22 @@ export default async function ProductCard({
         <div className="flex h-full flex-col justify-between px-1 pt-2">
           <Link
             href={`/product/${product.id}`}
-            className=" decoration-2 underline-offset-2 hover:text-blue-600 hover:underline dark:hover:text-blue-400"
+            className="decoration-2 underline-offset-2 hover:text-blue-600 hover:underline dark:hover:text-blue-400"
           >
-            <h2 className="text-xs font-bold @[8rem]/card:text-lg/5 @md/card:text-xl/6 ">
+            <h2 className="text-xs font-bold @[8rem]/card:text-lg/5 @md/card:text-xl/6">
               {product.name}
             </h2>
           </Link>
           <div className="mt-2 flex items-center gap-1">
             <Link
-              className="me-1 text-xs font-medium text-zinc-600 @[8rem]/card:text-sm hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400 "
+              className="me-1 text-xs font-medium text-zinc-600 hover:text-blue-600 @[8rem]/card:text-sm dark:text-zinc-400 dark:hover:text-blue-400"
               href={`/vendors/${product.vendorId}`}
             >
               {product.vendor.name}
             </Link>
             {product._count.reviews > 0 && (
               <>
-                <Star className="ms-auto h-4 w-4 fill-current " />
+                <Star className="ms-auto size-4 fill-current" />
                 <span className="min-w-fit text-xs font-bold text-zinc-800 @[8rem]/card:text-sm dark:text-zinc-200">
                   {product.averageRating.toFixed(
                     product.averageRating % 1 === 0 ? 0 : 1,
@@ -128,7 +116,7 @@ export default async function ProductCard({
               </>
             )}
           </div>
-          <p className="mb-1 mt-2 line-clamp-2 text-xs font-medium text-zinc-700 @[8rem]/card:text-sm dark:text-zinc-300 md:line-clamp-2">
+          <p className="mt-2 mb-1 line-clamp-2 text-xs font-medium text-zinc-700 md:line-clamp-2 @[8rem]/card:text-sm dark:text-zinc-300">
             {product.description}, Lorem, ipsum dolor sit amet consectetur
             adipisicing elit. A eveniet veniam sunt et atque maiores esse facere
             doloribus, quas nesciunt eius, aliquam deleniti ipsam ad repudiandae

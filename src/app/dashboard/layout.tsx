@@ -21,9 +21,9 @@ async function layout({ children }: { children: React.ReactNode }) {
   });
 
   return (
-    <div className="mx-2 my-5 flex h-fit min-h-screen w-full max-w-8xl flex-row gap-5 self-start rounded-md border-2 bg-zinc-100 pt-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-950 dark:from-zinc-900 dark:to-zinc-950 md:to-30% md:dark:bg-linear-to-r ">
-      <nav className="hidden h-full w-1/5 flex-col gap-2 md:flex ">
-        <h2 className="px-2 text-center text-2xl font-black">Dashboard</h2>
+    <div className="max-w-8xl mx-2 my-5 flex h-fit min-h-screen w-full flex-row gap-5 self-start rounded-md border-2 bg-zinc-100 pt-4 shadow-sm md:to-30% dark:border-zinc-700 dark:bg-zinc-950 dark:from-zinc-900 dark:to-zinc-950 md:dark:bg-linear-to-r">
+      <nav className="hidden h-full w-1/5 flex-col gap-2 md:flex">
+        <h2 className="px-4 text-2xl font-black">Dashboard</h2>
         <Separator className="w-5/6 self-center" />
         <Button
           className="flex w-full justify-start text-xl font-bold hover:bg-zinc-200"
@@ -39,15 +39,15 @@ async function layout({ children }: { children: React.ReactNode }) {
         >
           <Link href="/dashboard/favorites">Favorites</Link>
         </Button>
-        {/* <Link href="/dashboard/purchase-history">
+        <Link href="/dashboard/orders">
           <Button
             className="flex w-full justify-start text-xl font-bold hover:bg-zinc-200"
             variant="ghost"
           >
-            Purchase History
+            Orders
           </Button>
         </Link>
-        <Link href="/dashboard/lists">
+        {/* <Link href="/dashboard/lists">
           <Button
             className="flex w-full justify-start text-xl font-bold hover:bg-zinc-200"
             variant="ghost"
@@ -57,7 +57,7 @@ async function layout({ children }: { children: React.ReactNode }) {
         </Link> */}
         {user && user.vendor && (
           <>
-            <h2 className=" text-center text-2xl font-black text-emerald-500">
+            <h2 className="mt-4 ps-4 text-2xl font-black text-emerald-500">
               Sell Stuff
             </h2>
             <Separator className="w-5/6 self-center" />

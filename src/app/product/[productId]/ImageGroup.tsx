@@ -25,7 +25,7 @@ export default function ImageGroup({ images }: { images: ImageType[] }) {
                 width={image.width || 700}
                 height={image.height || 700}
                 alt=""
-                className=" aspect-square h-full w-full rounded-lg object-cover object-center"
+                className="aspect-square size-full rounded-lg object-cover object-center"
               />
             </CarouselItem>
           ))
@@ -37,7 +37,7 @@ export default function ImageGroup({ images }: { images: ImageType[] }) {
               width={500}
               height={500}
               alt=""
-              className=" aspect-square h-full w-full rounded-lg object-cover object-center"
+              className="aspect-square size-full rounded-lg object-cover object-center"
             />
           </CarouselItem>
         )}
@@ -107,7 +107,7 @@ export default function ImageGroup({ images }: { images: ImageType[] }) {
   //                     width={image.width || 200}
   //                     height={image.height || 200}
   //                     alt=""
-  //                     className=" h-full w-full object-cover object-center"
+  //                     className=" size-full object-cover object-center"
   //                   />
   //                 </span>
   //                 <span

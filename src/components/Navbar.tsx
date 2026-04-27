@@ -21,37 +21,58 @@ async function Navbar() {
           where: { email: session.user.email },
           include: {
             shoppingCartItems: {
-              include: { product: { include: { images: true } } },
+              select: {
+                product: {
+                  select: {
+                    id: true,
+                    price: true,
+                    name: true,
+                    stock: true,
+                    discountPercentage: true,
+                    originalPrice: true,
+                    images: {
+                      select: { url: true },
+                      take: 1,
+                    },
+                  },
+                },
+                quantity: true,
+                productId: true,
+              },
             },
-            vendor: true,
+            vendor: {
+              select: {
+                id: true,
+              },
+            },
           },
         })
       : null;
 
-  const shoppingCartItems: LocalShoppingCartItems = {};
-  if (user) {
-    for (let item of user.shoppingCartItems) {
-      const { productId, quantity, product } = item;
-      shoppingCartItems[productId] = {
-        productId,
-        quantity,
-        name: product.name,
-        image: product.images[0].url,
-        price: product.price,
-        stock: product.stock,
-      };
-    }
-  }
+  // const shoppingCartItems: LocalShoppingCartItems = {};
+  // if (user) {
+  //   for (let item of user.shoppingCartItems) {
+  //     const { productId, quantity, product } = item;
+  //     shoppingCartItems[productId] = {
+  //       productId,
+  //       quantity,
+  //       name: product.name,
+  //       image: product.images[0].url,
+  //       price: product.price,
+  //       stock: product.stock,
+  //     };
+  //   }
+  // }
 
   return (
     <header
       id="navbar"
       className="sticky top-0 z-50 w-full min-w-fit gap-2 bg-zinc-50 px-3 py-1 dark:bg-zinc-950"
     >
-      <nav className="mx-auto flex max-w-8xl flex-row items-center gap-5 py-1">
+      <nav className="max-w-8xl mx-auto flex flex-row items-center gap-5 py-1">
         <Sheet>
           <SheetTrigger className="md:hidden">
-            <Menu className="h-6 w-6" />
+            <Menu className="size-6" />
             <span className="sr-only">Open navigation menu</span>
           </SheetTrigger>
           <SheetContent
@@ -76,7 +97,7 @@ async function Navbar() {
                   variant="ghost"
                 >
                   <Link href="/products/clothes" className="">
-                    <Dot className="h-9 w-9  " /> Clothes
+                    <Dot className="size-9" /> Clothes
                   </Link>
                 </Button>
                 <Button
@@ -85,7 +106,7 @@ async function Navbar() {
                   variant="ghost"
                 >
                   <Link href="/products/electronics" className="">
-                    <Dot className="h-9 w-9  " /> Electronics
+                    <Dot className="size-9" /> Electronics
                   </Link>
                 </Button>
                 <Button
@@ -107,13 +128,13 @@ async function Navbar() {
                   </Link>
                 </Button>
               </div>
-              <ThemeToggle className="absolute bottom-5 right-5 " />
+              <ThemeToggle className="absolute right-5 bottom-5" />
             </>
           </SheetContent>
         </Sheet>
         <Link
           href="/"
-          className="me-auto flex h-min w-min select-none flex-col text-lg font-black leading-none md:me-0 "
+          className="me-auto flex size-min flex-col text-lg leading-none font-black select-none md:me-0"
         >
           <span className="h-min leading-none">BUY!!!</span>
           <span className="-mt-1 h-min leading-none">STUFF</span>
@@ -125,7 +146,7 @@ async function Navbar() {
         <div className="ms-auto flex items-center gap-2 md:gap-5">
           <ThemeToggle className="hidden md:flex" />
           <ShoppingCart
-            cartItemsFromServer={shoppingCartItems}
+            cartItemsFromServer={user ? user.shoppingCartItems : []}
             userId={user && user.id}
           />
           {user ? <UserProfileButton user={user} /> : <SignInButton />}

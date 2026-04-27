@@ -29,7 +29,7 @@ export default function ProductDeleteButton({
   }
   return (
     <Button
-      className="h-8 w-8 p-0"
+      className="size-8 p-0"
       variant="outline"
       title="Delete Product"
       disabled={isPending}
@@ -37,9 +37,9 @@ export default function ProductDeleteButton({
     >
       <span className="sr-only">Delete product</span>
       {isPending ? (
-        <Loader className="h-4 w-4 animate-spin" />
+        <Loader className="size-4 animate-spin" />
       ) : (
-        <Trash className="h-4 w-4" />
+        <Trash className="size-4" />
       )}
     </Button>
   );

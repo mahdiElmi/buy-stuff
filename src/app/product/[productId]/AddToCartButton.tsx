@@ -9,10 +9,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useMemo, useState, useTransition } from "react";
-import addToCart from "./addToCartAction";
 import { LocalShoppingCartItem, ProductWithImages } from "@/lib/types";
 import { cartAtom } from "@/lib/atoms";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import {
   Tooltip,
   TooltipContent,
@@ -21,6 +20,9 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
+import addToCart from "@/app/shopping-cart/ShoppingCartActions";
+import { Serialized } from "@/lib/server-utils";
 
 function AddToCartButton({
   quantity,
@@ -29,9 +31,11 @@ function AddToCartButton({
 }: {
   quantity: number;
   userId: string | null;
-  product: ProductWithImages;
+  product: Serialized<ProductWithImages>;
 }) {
+  console.log("typeof product.createdAt", typeof product.createdAt);
   const [isPending, startTransition] = useTransition();
+
   const [selectedQty, setSelectedQty] = useState("1");
   const [localCart, setLocalCart] = useAtom(cartAtom);
   const productFromCart: LocalShoppingCartItem | undefined = useMemo(
@@ -46,39 +50,15 @@ function AddToCartButton({
   function handleSubmit() {
     const cartLocalStateSnapshot = localCart;
     const selectedQtyNum = parseInt(selectedQty);
-    setLocalCart((oldCart) => {
-      if (productFromCart)
-        return {
-          ...oldCart,
-          [product.id]: {
-            ...oldCart[product.id],
-            quantity: oldCart[product.id].quantity + selectedQtyNum,
-          },
-        };
-      else {
-        return {
-          ...oldCart,
-          [product.id]: {
-            productId: product.id,
-            name: product.name,
-            quantity: selectedQtyNum,
-            image: product.images[0].url,
-            price: product.price,
-            stock: quantity,
-          },
-        };
-      }
-    });
-
-    setSelectedQty("1");
-    toast.success(
-      `added ${selectedQtyNum > 1 ? `(${selectedQtyNum})` : ""} ${product.name} to cart.`,
-    );
     if (userId) {
       startTransition(async () => {
-        const result = await addToCart(userId, selectedQtyNum, product.id);
-        console.log(result);
-        if (!result.success) {
+        const result = await addToCart(selectedQtyNum, product.id);
+        if (result.success) {
+          toast.success(
+            `added ${selectedQtyNum > 1 ? `(${selectedQtyNum})` : ""} ${product.name} to cart.`,
+          );
+          setSelectedQty("1");
+        } else {
           setLocalCart(cartLocalStateSnapshot);
           toast.error(
             `Something went wrong when adding ${selectedQtyNum > 1 ? `(${selectedQtyNum})` : ""} ${product.name} to cart.`,
@@ -86,6 +66,31 @@ function AddToCartButton({
           );
         }
       });
+    } else {
+      setLocalCart((oldCart) => {
+        if (productFromCart)
+          return {
+            ...oldCart,
+            [product.id]: {
+              ...oldCart[product.id],
+              quantity: oldCart[product.id].quantity + selectedQtyNum,
+            },
+          };
+        else {
+          return {
+            ...oldCart,
+            [product.id]: {
+              productId: product.id,
+              name: product.name,
+              quantity: selectedQtyNum,
+              image: product.images[0].url,
+              price: product.price,
+              stock: quantity,
+            },
+          };
+        }
+      });
+      setSelectedQty("1");
     }
   }
 
@@ -109,7 +114,7 @@ function AddToCartButton({
           </SelectContent>
         </Select>
       ) : (
-        <span className="rounded-md border-2 border-red-900  p-1 font-bold text-red-950 dark:text-red-200">
+        <span className="rounded-md border-2 border-red-900 p-1 font-bold text-red-950 dark:text-red-200">
           Out of Stock!
         </span>
       )}
@@ -118,11 +123,12 @@ function AddToCartButton({
           <TooltipTrigger asChild>
             <Button
               onClick={handleSubmit}
-              disabled={cartAdjustedQuantity <= 0}
-              className={cn(" text-base tracking-tight", {
+              disabled={cartAdjustedQuantity <= 0 || isPending}
+              className={cn("text-base tracking-tight transition-all", {
                 "cursor-not-allowed": cartAdjustedQuantity <= 0,
               })}
             >
+              {isPending && <Loader className="me-2 animate-spin" />}
               Add to Cart
             </Button>
           </TooltipTrigger>
@@ -135,9 +141,9 @@ function AddToCartButton({
           )}
         </Tooltip>
       </TooltipProvider>
-      <span className="self-end text-base font-medium tracking-wide text-zinc-700 dark:text-zinc-400">
+      {/* <span className="self-end text-base font-medium tracking-wide text-zinc-700 dark:text-zinc-400">
         {productFromCart !== undefined && `${productFromCart.quantity} in cart`}
-      </span>
+      </span> */}
     </div>
   );
 }

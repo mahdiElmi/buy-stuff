@@ -1,5 +1,3 @@
-// Add this directive at the top to enforce that this module
-// is only ever used on the server.
 import "server-only";
 
 import { auth } from "@/server/auth";
@@ -24,4 +22,23 @@ export async function checkAuth(userId: string) {
   return { success: true, cause: "" };
 }
 
-// You can add any other server-specific utility functions here in the future.
+export type Serialized<T> =
+  // Dates become strings
+  T extends Date
+    ? string
+    : // BigInts become strings
+      T extends bigint
+      ? string
+      : // Arrays get mapped element‑wise
+        T extends Array<infer U>
+        ? Serialized<U>[]
+        : // Objects get mapped property‑wise
+          T extends object
+          ? { [K in keyof T]: Serialized<T[K]> }
+          : // Everything else stays the same
+            T;
+
+export function serialize<T>(obj: T): Serialized<T> {
+  const cloned = JSON.parse(JSON.stringify(obj));
+  return cloned as any; // we use `any` here because TS can’t verify the runtime transform
+}

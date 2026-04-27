@@ -62,7 +62,7 @@ export default function VendorProfileForm({ vendor }: { vendor: Vendor }) {
               className="cursor-pointer"
               asChild
             >
-              <Edit className="h-6 w-6 text-zinc-50" />
+              <Edit className="size-6 text-zinc-50" />
             </Button>
           </div>
         </div>

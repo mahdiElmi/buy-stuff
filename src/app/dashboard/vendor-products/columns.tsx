@@ -79,7 +79,7 @@ export const columns: ColumnDef<Product>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 size-4" />
         </Button>
       );
     },
@@ -93,7 +93,7 @@ export const columns: ColumnDef<Product>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Stock
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 size-4" />
         </Button>
       );
     },
@@ -107,7 +107,7 @@ export const columns: ColumnDef<Product>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Price
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 size-4" />
         </Button>
       );
     },
@@ -125,7 +125,7 @@ export const columns: ColumnDef<Product>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Discount
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 size-4" />
         </Button>
       );
     },
@@ -148,24 +148,24 @@ export const columns: ColumnDef<Product>[] = [
             title="Edit Product"
             asChild
             variant="ghost"
-            className="h-8 w-8 p-0"
+            className="size-8 p-0"
           >
             <Link href={`/product/${product.id}/edit`}>
               <span className="sr-only">Edit product</span>
-              <Pencil className="h-4 w-4" />
+              <Pencil className="size-4" />
             </Link>
           </Button>
           <Button
             onClick={handleDelete}
             variant="ghost"
-            className="h-8 w-8 p-0"
+            className="size-8 p-0"
             disabled={isPending}
           >
             <span className="sr-only">Delete product</span>
             {isPending ? (
-              <Loader className="h-4 w-4 animate-spin" />
+              <Loader className="size-4 animate-spin" />
             ) : (
-              <Trash className="h-4 w-4" />
+              <Trash className="size-4" />
             )}
           </Button>
         </div>

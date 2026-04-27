@@ -148,7 +148,7 @@ export default function EditProductForm({
                 </FormItem>
               )}
             />
-            <div className="flex flex-row items-center space-x-3 ">
+            <div className="flex flex-row items-center space-x-3">
               <FormField
                 name="stock"
                 control={form.control}
@@ -183,7 +183,7 @@ export default function EditProductForm({
                           placeholder="Price"
                           {...field}
                         />
-                        <span className=" mb-2 cursor-default select-none self-end text-lg font-medium">
+                        <span className="mb-2 cursor-default self-end text-lg font-medium select-none">
                           $
                         </span>
                       </div>
@@ -199,7 +199,7 @@ export default function EditProductForm({
               <FormControl>
                 <div className="relative">
                   {productData.imgUrls.length >= 5 && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md font-medium backdrop-blur-xs ">
+                    <div className="absolute inset-0 z-10 flex items-center justify-center rounded-md font-medium backdrop-blur-xs">
                       You can&apos;t upload more than 5 images.
                     </div>
                   )}
@@ -207,7 +207,7 @@ export default function EditProductForm({
                     className={cn(
                       "border-4 border-dotted border-zinc-300 dark:border-zinc-700",
                       productData.imgUrls.length >= 5 &&
-                        "pointer-events-none opacity-40 ",
+                        "pointer-events-none opacity-40",
                     )}
                     config={{ mode: "auto" }}
                     endpoint="imageUploader"
@@ -259,7 +259,7 @@ export default function EditProductForm({
                   <label className="relative">
                     <span
                       className={cn(
-                        " absolute hidden w-full -translate-y-5 text-center text-xs font-medium sm:-translate-y-6 sm:text-sm ",
+                        "absolute hidden w-full -translate-y-5 text-center text-xs font-medium sm:-translate-y-6 sm:text-sm",
                         i === 0 && "block",
                       )}
                     >
@@ -269,7 +269,7 @@ export default function EditProductForm({
                       <span className="sr-only">Delete product</span>
                       <Button
                         className={cn(
-                          "absolute right-[2px] top-[2px] h-6 w-6 cursor-pointer p-[2px]",
+                          "absolute top-[2px] right-[2px] size-6 cursor-pointer p-[2px]",
                           isPending &&
                             "pointer-events-none animate-pulse opacity-80",
                         )}
@@ -278,7 +278,7 @@ export default function EditProductForm({
                         title="Edit Product"
                         onClick={() => handleImageDelete(imgUrl)}
                       >
-                        <X className="h-2 w-2" />
+                        <X className="size-2" />
                       </Button>
                     </div>
                     <Image

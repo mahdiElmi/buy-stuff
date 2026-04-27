@@ -1,7 +1,5 @@
 "use client";
-// name        String    @unique
-// description String
-// imageURL    String?
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -39,10 +37,10 @@ function Page() {
     });
   }
   return (
-    <div>
-      <h1>Welcome to the Vendor Registration Process</h1>
+    <div className="flex h-[90vh] flex-col justify-center gap-5">
+      <h1 className="text-3xl font-bold">Vendor Registration</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="name"

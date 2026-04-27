@@ -30,9 +30,9 @@ function DeleteButton({
       disabled={isPending}
       type="button"
       onClick={handleClick}
-      className=" ml-4 flex items-center justify-center rounded-md px-3 py-3 text-zinc-500  hover:text-zinc-600  dark:hover:text-zinc-400"
+      className="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400"
     >
-      <TrashIcon className="h-6 w-6 shrink-0" aria-hidden="true" />
+      <TrashIcon className="size-6 shrink-0" aria-hidden="true" />
       {/* #TODO add dialog modal thingy to make sure the mf wants to delete */}
       <span className="sr-only">Delete Product</span>
     </Button>
