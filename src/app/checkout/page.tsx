@@ -23,10 +23,7 @@ export default function CheckoutPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        priceId: "price_1PAudG03kyCMDuYDonQYQVDF",
-        quantity: 3,
-      }),
+      body: JSON.stringify({}),
     });
     // console.log(res);
     const data = await res.json();

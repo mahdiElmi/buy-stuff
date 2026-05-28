@@ -1,199 +1,327 @@
-// import { prisma } from "@/lib/db";
-import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
-import { User } from "@prisma/client";
+import fs from "fs";
+import path from "path";
+import { prisma } from "@/lib/db";
 
-const prisma = new PrismaClient();
-
-type fakeStoreProduct = {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: {
-    id: number;
-    name: string;
-    image: string;
-  };
-  images: string[];
-};
+const useLocal = process.env.USE_LOCAL_DATA === "true"; // set this in .env.local
 
 async function main() {
-  const fetchResponse = await fetch("https://api.escuelajs.co/api/v1/products");
-  const fakeProducts: fakeStoreProduct[] = await fetchResponse.json();
-
-  // fetch and dedupe categories
-  // const fetchCategoryResponse = await fetch(
-  //   "https://api.escuelajs.co/api/v1/products",
-  // );
-  // const fakeCategories: { id: number; image: string; name: string }[] =
-  const categoryNames = fakeProducts.map((fakeProduct) => {
-    if (fakeProduct.category.name === "change title") return "furniture";
-    return fakeProduct.category.name;
-  });
-  const uniqueCategories = Array.from(new Set(categoryNames));
-
-  console.log(uniqueCategories);
-
-  // create new categories from fake api
-  const categoriesToFlush = [];
-  for (let categoryName of uniqueCategories) {
-    console.log("pooping");
-    categoriesToFlush.push(
-      prisma.category.create({
-        data: {
-          name: categoryName,
-        },
-      }),
-    );
+  // Load products from local JSON
+  let products: any[];
+  if (useLocal) {
+    console.log("Loading products from local products.json...");
+    const filePath = path.join(__dirname, "products.json");
+    const fileData = fs.readFileSync(filePath, "utf-8");
+    products = JSON.parse(fileData).products;
+  } else {
+    console.log("Fetching products from DummyJSON...");
+    const res = await fetch("https://dummyjson.com/products?limit=100");
+    const data = await res.json();
+    products = data.products;
   }
-  await prisma.$transaction(categoriesToFlush);
+  // ---- Clear all data in correct order (respecting FK constraints) ----
+  console.log("Clearing old data...");
+  await prisma.vote.deleteMany();
+  await prisma.review.deleteMany();
+  await prisma.orderItem.deleteMany();
+  await prisma.order.deleteMany();
+  await prisma.shoppingCartItem.deleteMany();
+  await prisma.list.deleteMany();
+  await prisma.product.deleteMany();
+  await prisma.image.deleteMany();
+  await prisma.category.deleteMany();
+  await prisma.vendor.deleteMany();
+  await prisma.shippingAddress.deleteMany();
+  await prisma.account.deleteMany();
+  await prisma.session.deleteMany();
+  await prisma.user.deleteMany();
 
-  // faker.seed(5);
-  let allUsers: User[] = [];
+  // ---- 1. Categories ----
+  const categoryNames = [...new Set(products.map((p: any) => p.category))];
+  console.log(`Creating ${categoryNames.length} categories...`);
+  const categoryRecords = [];
+  for (const name of categoryNames) {
+    const cat = await prisma.category.create({
+      data: {
+        name: name as string,
+        description: faker.commerce.productDescription(),
+      },
+    });
+    categoryRecords.push(cat);
+  }
 
-  for (let i = 0; i < 15; i++) {
-    console.log(faker.internet.email());
-    const createdAtTime = faker.date.past({ years: 3 });
-    console.log(createdAtTime);
+  // ---- 2. Users & Vendors & Shipping Addresses ----
+  console.log(
+    "Creating 20 users (some vendors, all with shipping addresses)...",
+  );
+  const users = [];
+  for (let i = 0; i < 20; i++) {
+    // Randomly make every 3rd user a vendor (about 7 vendors)
+    const isVendor = i % 3 === 0;
     const user = await prisma.user.create({
-      // where: { id: faker.string.nanoid() },
-      // update: {},
       data: {
         email: faker.internet.email(),
-        name: faker.internet.userName(),
+        name: faker.internet.username(),
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
-        createdAt: createdAtTime,
         image: faker.image.avatar(),
-        vendor:
-          i % 2
-            ? {
-                create: {
-                  name: faker.company.name(),
-                  description: faker.lorem.lines({ min: 1, max: 7 }),
-                  imageURL: faker.image.urlLoremFlickr({
-                    width: 400,
-                    height: 400,
-                    category: "business",
-                  }),
-                  bannerImage: faker.image.urlPicsumPhotos({
-                    width: 1000,
-                    height: 400,
-                  }),
-                },
-              }
-            : undefined,
+        emailVerified: faker.date.past(),
+        // Create vendor if flagged
+        vendor: isVendor
+          ? {
+              create: {
+                name: faker.company.name(),
+                description: faker.company.catchPhrase(),
+                imageURL: faker.image.urlLoremFlickr({ category: "business" }),
+                bannerImage: faker.image.urlLoremFlickr({ category: "nature" }),
+              },
+            }
+          : undefined,
+        // Create 1-3 shipping addresses per user
+        shippingAddresses: {
+          create: Array.from({
+            length: faker.number.int({ min: 1, max: 3 }),
+          }).map(() => ({
+            firstName: faker.person.firstName(),
+            lastName: faker.person.lastName(),
+            country: faker.location.country(),
+            state: faker.location.state(),
+            city: faker.location.city(),
+            address: faker.location.streetAddress(),
+            zip: faker.location.zipCode(),
+            phoneNumber: faker.phone.number(),
+          })),
+        },
       },
-      include: { vendor: true },
+      include: {
+        vendor: true,
+        shippingAddresses: true,
+      },
     });
 
-    allUsers.push(user);
+    // Set one address as default for the user
+    if (user.shippingAddresses.length > 0) {
+      const defaultAddr = user.shippingAddresses[0];
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { defaultShippingAddressId: defaultAddr.id },
+      });
+      // also update the address’s isDefault relation (though not required, good for completeness)
+      // Note: In your schema, ShippingAddress.isDefault is a User? relation; we can't set it directly.
+      // The defaultShippingAddress relation in User is the main link.
+    }
 
-    if (i % 2)
-      for (let j = 0; j < 8; j++) {
-        const currentFakeProduct = fakeProducts[i + j];
-        console.log(currentFakeProduct, "fakeeee");
-        const currentCategory =
-          currentFakeProduct.category.name === "fsdf"
-            ? "Electronics"
-            : currentFakeProduct.category.name === "Okurmen"
-              ? "Clothing"
-              : currentFakeProduct.category.name;
-        const product = await prisma.product.create({
-          // where: { id: faker.string.uuid() },
-          // update: {},
-          data: {
-            name: currentFakeProduct.title,
-            price: currentFakeProduct.price,
-            discountPercentage:
-              j % 3 === 0 ? faker.number.int({ min: 10, max: 50 }) : 0,
-            description: currentFakeProduct.description,
-            stock: faker.number.int({ min: 0, max: 37 }),
-            categories: {
-              connect: {
-                name: currentCategory,
-              },
-            },
-            vendor: {
-              connect: {
-                id: user.vendor?.id,
-              },
-            },
-            images: {
-              createMany: {
-                data: currentFakeProduct.images.map((image) => ({
-                  url: image,
-                })),
-              },
-            },
-          },
-        });
-        const reviewsToFlush = [];
-        for (let j = 0; j < faker.number.int({ max: 10 }); j++) {
-          const randomUser =
-            allUsers[faker.number.int({ max: allUsers.length - 1 })];
-          console.log(
-            randomUser.firstName,
-            "index is: ",
-            i,
-            `the random is ${faker.number.int({ max: Math.min(i, 6) })}`,
-          );
-          reviewsToFlush.push(
-            prisma.review.create({
-              data: {
-                rating: faker.number.int({ min: 1, max: 5 }),
-                title: faker.word.words({ count: { min: 1, max: 6 } }),
-                body: faker.lorem.lines({ min: 1, max: 7 }),
-                createdAt: faker.date.between({
-                  from: createdAtTime,
-                  to: new Date(),
-                }),
-                upvoteCount: faker.number.int({ min: 0, max: 126 }),
-                reviewedBy: {
-                  connect: {
-                    id: randomUser.id,
-                  },
-                },
-                reviewed: {
-                  connect: { id: product.id },
-                },
-              },
-            }),
-          );
-        }
-        await prisma.$transaction(reviewsToFlush);
-      }
+    users.push(user);
   }
-  const products = await prisma.product.findMany({});
-  // const averageRatingsToUpdate = [];
-  let i = 1;
-  for (let product of products) {
-    const reviewAggregation = await prisma.review.aggregate({
-      _avg: { rating: true },
-      where: { productId: product.id },
+
+  const vendors = users.filter((u) => u.vendor).map((u) => u.vendor!);
+
+  // ---- 3. Products & Images ----
+  console.log(`Creating ${products.length} products...`);
+  const createdProducts: any[] = [];
+  for (let i = 0; i < products.length; i++) {
+    const p = products[i];
+    // Distribute products among vendors in round-robin
+    const randomVendor = vendors[i % vendors.length];
+    const product = await prisma.product.create({
+      data: {
+        name: p.title,
+        price: p.price,
+        discountPercentage: Math.round(p.discountPercentage) || 0,
+        description: p.description,
+        stock: p.stock,
+        averageRating: p.rating,
+        categories: { connect: { name: p.category } },
+        vendor: { connect: { id: randomVendor.id } },
+        images: {
+          createMany: {
+            data: p.images.map((url: string) => ({ url })),
+          },
+        },
+      },
     });
-    console.log({ i, name: product.name, reviewAggregation });
-    i++;
-    // averageRatingsToUpdate.push(
-    //   prisma.product.update({
-    //     where: { id: product.id },
-    //     data: { averageRating: reviewAggregation._avg.rating ?? undefined },
-    //   }),
-    // );
+    createdProducts.push(product);
+  }
+
+  // ---- 4. Reviews & Votes ----
+  console.log("Adding reviews and votes...");
+  for (const product of createdProducts) {
+    // Random number of reviews (0-8)
+    const reviewCount = faker.number.int({ min: 0, max: 8 });
+    for (let r = 0; r < reviewCount; r++) {
+      // Pick a random user (not necessarily the vendor)
+      const randomUser = faker.helpers.arrayElement(users);
+      const review = await prisma.review.create({
+        data: {
+          title: faker.lorem.sentence(3),
+          rating: faker.number.int({ min: 1, max: 5 }),
+          body: faker.lorem.paragraph(),
+          upvoteCount: 0, // will be calculated later based on votes
+          reviewedBy: { connect: { id: randomUser.id } },
+          reviewed: { connect: { id: product.id } },
+        },
+      });
+
+      // Add some votes on this review
+      const voteCount = faker.number.int({ min: 0, max: 5 });
+      for (let v = 0; v < voteCount; v++) {
+        const voter = faker.helpers.arrayElement(
+          users.filter((u) => u.id !== randomUser.id), // don't let user vote on own review
+        );
+        if (!voter) continue;
+        // Prevent duplicate votes (unique constraint on userId+reviewId) – use create with try-catch or check
+        try {
+          await prisma.vote.create({
+            data: {
+              isVoteUp: faker.datatype.boolean(),
+              userId: voter.id,
+              reviewId: review.id,
+            },
+          });
+        } catch {
+          // duplicate vote, skip
+        }
+      }
+    }
+
+    // Update upvoteCount on the review based on actual votes (optional, but consistent)
+    const reviews = await prisma.review.findMany({
+      where: { productId: product.id },
+      include: { Vote: true },
+    });
+    for (const rev of reviews) {
+      const upCount = rev.Vote.filter((v) => v.isVoteUp).length;
+      await prisma.review.update({
+        where: { id: rev.id },
+        data: { upvoteCount: upCount },
+      });
+    }
+
+    // Update average rating on product
+    const avgRating = await prisma.review.aggregate({
+      where: { productId: product.id },
+      _avg: { rating: true },
+    });
     await prisma.product.update({
       where: { id: product.id },
-      data: { averageRating: reviewAggregation._avg.rating ?? undefined },
+      data: {
+        averageRating: avgRating._avg.rating ?? product.averageRating,
+      },
     });
   }
-  // await prisma.$transaction(averageRatingsToUpdate);
+
+  // ---- 5. Shopping Cart Items ----
+  console.log("Adding random cart items...");
+  for (const user of users) {
+    const cartItemsCount = faker.number.int({ min: 0, max: 5 });
+    const productsToAdd = faker.helpers.arrayElements(
+      createdProducts,
+      cartItemsCount,
+    );
+    for (const product of productsToAdd) {
+      // Prevent duplicate cart item (unique on productId+userId)
+      try {
+        await prisma.shoppingCartItem.create({
+          data: {
+            quantity: faker.number.int({ min: 1, max: 3 }),
+            user: { connect: { id: user.id } },
+            product: { connect: { id: product.id } },
+          },
+        });
+      } catch {
+        // skip if already exists
+      }
+    }
+  }
+
+  // ---- 6. Lists (Product collections) ----
+  console.log("Creating product lists...");
+  for (let i = 0; i < 10; i++) {
+    const author = faker.helpers.arrayElement(users);
+    const listProducts = faker.helpers.arrayElements(
+      createdProducts,
+      faker.number.int({ min: 1, max: 8 }),
+    );
+    await prisma.list.create({
+      data: {
+        title: faker.lorem.words(3),
+        description: faker.lorem.sentence(),
+        author: { connect: { id: author.id } },
+        products: { connect: listProducts.map((p) => ({ id: p.id })) },
+      },
+    });
+  }
+
+  // ---- 7. Orders & Order Items ----
+  console.log("Creating orders...");
+  for (const user of users) {
+    // Make 0-3 orders per user
+    const orderCount = faker.number.int({ min: 0, max: 3 });
+    for (let o = 0; o < orderCount; o++) {
+      // Pick a random shipping address belonging to this user (if any)
+      const addresses = await prisma.shippingAddress.findMany({
+        where: { userId: user.id },
+      });
+      if (addresses.length === 0) continue;
+      const address = faker.helpers.arrayElement(addresses);
+
+      // Select random products and quantities
+      const itemsCount = faker.number.int({ min: 1, max: 5 });
+      const orderProducts = faker.helpers.arrayElements(
+        createdProducts,
+        itemsCount,
+      );
+      let total = 0;
+      const orderItemsData = orderProducts.map((prod) => {
+        const qty = faker.number.int({ min: 1, max: 3 });
+        const itemTotal = prod.price * qty;
+        total += itemTotal;
+        return {
+          productId: prod.id,
+          quantity: qty,
+        };
+      });
+
+      // Determine a random vendor from the products in the order (just for demo)
+      const randomOrderProduct = orderProducts[0];
+      const vendorId = randomOrderProduct.vendorId;
+
+      // Set a random package state
+      const states = [
+        "ORDERED",
+        "PROCESSING",
+        "SHIPPED",
+        "OUT_FOR_DELIVERY",
+        "DELIVERED",
+        "RETURNED",
+        "CANCELLED",
+        "LOST",
+      ];
+      const state = faker.helpers.arrayElement(states);
+
+      await prisma.order.create({
+        data: {
+          buyer: { connect: { id: user.id } },
+          shippingAddress: { connect: { id: address.id } },
+          total: Math.round(total),
+          state: state as any,
+          Vendor: vendorId ? { connect: { id: vendorId } } : undefined,
+          items: {
+            createMany: { data: orderItemsData },
+          },
+        },
+      });
+    }
+  }
+
+  console.log("✅ Exhaustive seed completed successfully!");
 }
+
 main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
+  .catch((e) => {
     console.error(e);
-    await prisma.$disconnect();
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });

@@ -6,99 +6,42 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const userSession = await auth();
-    if (!userSession) {
+    if (!userSession?.user?.id) {
       return NextResponse.json(
-        { message: "User is not logged in" },
-        { status: 500 },
+        { message: "User not logged in" },
+        { status: 401 },
       );
     }
 
     const cartItems = await prisma.shoppingCartItem.findMany({
-      where: {
-        userId: userSession.user!.id!,
-      },
-      select: {
-        quantity: true,
-        product: {
-          select: {
-            id: true,
-            name: true,
-            price: true,
-            description: true,
-            images: { select: { url: true }, take: 1 },
-          },
+      where: { userId: userSession.user.id },
+      include: { product: { include: { images: { take: 1 } } } },
+    });
+
+    if (cartItems.length === 0) {
+      return NextResponse.json({ message: "Cart is empty" }, { status: 400 });
+    }
+
+    // Dynamically build line items from the database!
+    const line_items = cartItems.map((item) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: item.product.name,
+          description: item.product.description,
+          images: item.product.images.map((img) => img.url),
         },
+        unit_amount: Math.round(item.product.price * 100), // Stripe uses cents ($10 = 1000)
       },
-    });
+      quantity: item.quantity,
+    }));
 
-    if (cartItems.length <= 0) {
-      return NextResponse.json({ message: "Cart is empty." }, { status: 500 });
-    }
-
-    const { priceId, quantity } = await request.json();
-    const query = cartItems.reduce((prev, currentValue, i) => {
-      return (
-        prev +
-        `metadata["product_id"]:"${currentValue.product.id}" ${i < cartItems.length - 1 ? "OR " : ""}`
-      );
-    }, "");
-    console.log("-------------STRIPE QUERY-------------", query);
-    const StripeProducts = await stripe.products.search({
-      query,
-    });
-    // console.log(
-    //   "-------------STRIPE QUERY RESULT-------------",
-    //   StripeProducts,
-    // );
-
-    if (StripeProducts.data.length < cartItems.length) {
-      console.log(
-        "-------------NOT ALL PRODUCTS ARE REGISTERED ON STRIPE-------------",
-      );
-      const productIds = new Set(
-        StripeProducts.data.map(
-          (stripeProduct) => stripeProduct.metadata.product_id,
-        ),
-      );
-      const filteredItems = cartItems.filter(
-        (item) => !productIds.has(item.product.id),
-      );
-      console.log(
-        "-------------Filtered STRIPE PRODUCT IDS (THE ONES NOT REGISTERED)-------------",
-        filteredItems,
-        "=======AMOUNT========",
-        filteredItems.length,
-      );
-      for (let cartItem of filteredItems) {
-        // const [price, decimal] = cartItem.product.price.toString().split(".");
-        const createdProduct = await stripe.products.create({
-          name: cartItem.product.name,
-          description: cartItem.product.description,
-          images: [cartItem.product.images[0].url],
-          metadata: {
-            product_id: cartItem.product.id,
-          },
-          default_price_data: {
-            currency: "USD",
-            unit_amount_decimal: cartItem.product.price.toString(),
-          },
-        });
-        console.log("created this bitch", createdProduct);
-      }
-    }
     const session = await stripe.checkout.sessions.create({
-      metadata: {
-        user_id: userSession.user!.id!,
-      },
-      customer_email: userSession.user!.email!,
+      metadata: { user_id: userSession.user.id },
+      customer_email: userSession.user.email!,
       ui_mode: "embedded",
       payment_method_types: ["card"],
-      line_items: [
-        {
-          price: priceId,
-          quantity,
-        },
-      ],
+      line_items,
       mode: "payment",
       return_url: `${request.headers.get("origin")}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
     });
@@ -108,7 +51,6 @@ export async function POST(request: Request) {
       client_secret: session.client_secret,
     });
   } catch (error: any) {
-    console.error(error);
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

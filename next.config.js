@@ -1,12 +1,11 @@
-
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  typedRoutes: true,
   experimental: {
-    typedRoutes: true,
     // swcPlugins: [["@swc-jotai/react-refresh", {}]],
   },
   // webpack: (config) => {
@@ -79,6 +78,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "cdn.jsdelivr.net",
         pathname: "/gh/faker-js/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.dummyjson.com",
+        pathname: "/**",
       },
     ],
   },
