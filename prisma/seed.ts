@@ -65,7 +65,7 @@ async function main() {
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
         image: faker.image.avatar(),
-        emailVerified: faker.date.past(),
+        emailVerified: faker.datatype.boolean(),
         // Create vendor if flagged
         vendor: isVendor
           ? {

@@ -26,7 +26,7 @@ function UserProfileButton({ user }: { user: UserWithShoppingCartAndVendor }) {
             height={32}
           />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="w-fit">
           <DropdownMenuLabel>
             <div className="flex items-center">
               <div className="">

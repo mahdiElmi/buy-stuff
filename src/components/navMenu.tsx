@@ -1,64 +1,60 @@
 "use client";
+
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { PlugIcon, ShirtIcon } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import type { Category } from "@prisma/client";
+import { title } from "radashi";
 
-export default function NavMenu() {
+export default function NavMenu({ categories }: { categories: Category[] }) {
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+          <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <NavigationMenuLink asChild>
-              <Link
-                href="/products"
-                className="pattern-dotted relative mx-6 mt-4 flex h-full flex-col items-start justify-end overflow-clip rounded-md bg-linear-to-b from-zinc-300/50 to-zinc-300 p-6 px-4 text-xl font-black no-underline outline-hidden select-none hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
-              >
-                All Products
-              </Link>
-            </NavigationMenuLink>
+            <div className="grid w-[700px] grid-cols-1 gap-4 p-6 md:w-[850px] md:grid-cols-4">
+              {/* Featured Banner */}
+              <NavigationMenuLink asChild>
+                <Link
+                  href="/products"
+                  className="flex h-full min-h-[180px] flex-col justify-between rounded-lg bg-gradient-to-br from-indigo-600 to-purple-700 p-5 text-white no-underline outline-none select-none hover:from-indigo-500 hover:to-purple-600 md:col-span-1 dark:from-indigo-500 dark:to-purple-600"
+                >
+                  <ShoppingBag className="size-8 opacity-80" />
+                  <div className="mt-4">
+                    <div className="mb-1 text-lg font-bold">All Products</div>
+                    <p className="text-sm leading-tight opacity-90">
+                      Explore our complete catalog of stuff.
+                    </p>
+                  </div>
+                </Link>
+              </NavigationMenuLink>
 
-            <ul className="flex gap-3 p-6 md:w-[450px]">
-              <li className="w-56">
-                <NavigationMenuLink asChild>
-                  <Link
-                    className="relative flex size-full flex-col items-end justify-end overflow-clip rounded-md bg-linear-to-b from-zinc-300/50 to-zinc-300 p-6 px-4 no-underline outline-hidden select-none hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
-                    href="/products/clothes"
-                  >
-                    <ShirtIcon className="absolute inset-0 size-5/6 -translate-x-1/3 place-self-center stroke-[0.8] opacity-50" />
-                    <div className="mt-4 mb-2 text-xl font-extrabold">
-                      Clothes
-                    </div>
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-              <li className="w-56">
-                <NavigationMenuLink asChild>
-                  <Link
-                    className="relative flex size-full flex-col items-end justify-end overflow-clip rounded-md bg-linear-to-b from-zinc-300/50 to-zinc-300 p-6 px-4 no-underline outline-hidden select-none hover:to-zinc-200 focus:shadow-md dark:from-zinc-700/50 dark:to-zinc-700 dark:hover:to-zinc-600"
-                    href="/products/electronics"
-                  >
-                    <PlugIcon className="absolute inset-0 size-5/6 -translate-x-16 place-self-center stroke-[0.8] opacity-50" />
-                    <div className="mt-4 mb-2 text-xl font-extrabold">
-                      Electronics
-                    </div>
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-            </ul>
+              {/* Categories Grid */}
+              <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 md:col-span-3">
+                {categories.map((category) => (
+                  <NavigationMenuLink key={category.id} asChild>
+                    <Link
+                      href={`/products/${encodeURIComponent(category.name)}`}
+                      className="flex items-center rounded-md p-2.5 text-sm leading-none font-medium text-zinc-700 capitalize no-underline transition-colors outline-none select-none hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                    >
+                      {title(category.name)}
+                    </Link>
+                  </NavigationMenuLink>
+                ))}
+              </div>
+            </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
           <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
             <Link href="/about">About</Link>
