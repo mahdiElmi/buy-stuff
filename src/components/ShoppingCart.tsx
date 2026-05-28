@@ -136,7 +136,7 @@ export default function ShoppingCart({
                       <Link
                         href={`/product/${item.productId}`}
                         title={item.product.name}
-                        className="truncate text-sm font-semibold text-wrap break-words hover:underline"
+                        className="truncate text-sm font-semibold text-wrap wrap-break-word hover:underline"
                       >
                         {item.product.name}
                       </Link>

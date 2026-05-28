@@ -8,7 +8,7 @@ import { Provider as JotaiProvider } from "jotai";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
-import Script from "next/script";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -56,7 +56,7 @@ export default async function RootLayout({
       lang="en"
       className={`${inter.variable} scroll-smooth font-sans`}
     >
-      <body className="scrollbar scrollbar-thumb-zinc-400/40 hover:scrollbar-thumb-zinc-400 active:scrollbar-thumb-zinc-500 dark:scrollbar-thumb-zinc-800/40 dark:hover:scrollbar-thumb-zinc-800 dark:active:scrollbar-thumb-zinc-700 flex min-h-dvh flex-col bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
+      <body className="scrollbar flex min-h-dvh scrollbar-thumb-zinc-400/40 flex-col bg-zinc-50 text-zinc-950 hover:scrollbar-thumb-zinc-400 active:scrollbar-thumb-zinc-500 dark:scrollbar-thumb-zinc-800/40 dark:bg-zinc-950 dark:text-zinc-50 dark:hover:scrollbar-thumb-zinc-800 dark:active:scrollbar-thumb-zinc-700">
         <SessionProvider session={session}>
           <ThemeProvider
             attribute="class"
@@ -71,7 +71,7 @@ export default async function RootLayout({
                 real payment information.
               </div>
               <main className="flex h-full grow items-center justify-center sm:px-6 lg:px-8">
-                {children}
+                <TooltipProvider>{children}</TooltipProvider>
               </main>
             </JotaiProvider>
           </ThemeProvider>

@@ -40,7 +40,7 @@ export default async function ProductCard({
       >
         {user && (
           <AddFavoriteButton
-            className="absolute top-[2px] right-[2px] z-10 text-white drop-shadow-xs"
+            className="absolute top-0.5 right-0.5 z-10 text-white drop-shadow-xs"
             productId={product.id}
             favoriteInitialState={hasUserAddedToFavorites}
             variant="ghostHoverLess"
@@ -53,7 +53,7 @@ export default async function ProductCard({
           <Image
             width={400}
             height={400}
-            className="aspect-square rounded-xs object-cover"
+            className="aspect-square rounded-sm bg-zinc-500/5 object-cover"
             src={
               product.images[0] && product.images[0].url
                 ? product.images[0].url
@@ -62,7 +62,7 @@ export default async function ProductCard({
             alt="product Image"
           />
           <div className="absolute bottom-0 -left-px">
-            <div className="relative z-20 size-full rounded-tr-md bg-zinc-200 px-1 transition-opacity duration-100 group-hover:opacity-50 first-letter:font-light @[8rem]/card:px-2 @[8rem]/card:py-[2px] dark:bg-zinc-900">
+            <div className="relative z-20 size-full rounded-tr-md bg-zinc-200 px-1 transition-opacity duration-100 group-hover:opacity-50 first-letter:font-light @[8rem]/card:px-2 @[8rem]/card:py-0.5 dark:bg-zinc-900">
               <span className="text-xs font-extrabold @[8rem]/card:text-xl">
                 {formatPrice(product.price)}
               </span>
@@ -72,7 +72,7 @@ export default async function ProductCard({
                   <span className="h-full rounded-tr-md bg-zinc-300 p-[3px] px-[4px] text-xs line-through decoration-black first-letter:font-light dark:bg-zinc-700 dark:decoration-white">
                     {formatPrice(product.originalPrice)}
                   </span>
-                  <span className="flex -translate-x-[2px] translate-y-1 items-center justify-center rounded-md bg-red-900 p-px px-[3px] text-xs font-medium text-zinc-50 transition-opacity duration-100 @[8rem]/card:text-sm">
+                  <span className="flex -translate-x-0.5 translate-y-1 items-center justify-center rounded-md bg-red-900 p-px px-[3px] text-xs font-medium text-zinc-50 transition-opacity duration-100 @[8rem]/card:text-sm">
                     -{product.discountPercentage}%
                   </span>
                 </div>

@@ -68,7 +68,7 @@ export default async function HomePage() {
         <h2 className="text-3xl font-extrabold capitalize md:text-4xl">
           Shop By Category
         </h2>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-5">
+        <div className="grid grid-cols-2 gap-5 md:grid-cols-5">
           {categoriesWithImages.map((cat) => (
             <Link
               key={cat.id}
@@ -82,7 +82,7 @@ export default async function HomePage() {
                 alt={title(cat.name)}
                 src={cat.imageUrl}
               />
-              <span className="bg-background absolute bottom-0 left-0 w-full rounded-b-md px-1 py-0.5 text-center text-sm font-semibold md:text-2xl">
+              <span className="bg-muted/50 absolute bottom-0 left-0 w-fit rounded-md px-1 py-0.5 text-center font-semibold backdrop-blur-sm sm:text-sm md:text-2xl">
                 {title(cat.name)}
               </span>
             </Link>

@@ -1,7 +1,5 @@
-import { type ClassValue, clsx } from "clsx";
-import { auth } from "@/server/auth";
+import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { LocalShoppingCartItems } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
