@@ -70,7 +70,8 @@ export async function POST(request: Request) {
         prisma.order.create({
           data: {
             buyer: { connect: { id: userId } },
-            total: session.amount_total!,
+            total: session.amount_total! / 100,
+            state: "ORDERED",
             shippingAddress: {
               create: {
                 ...restOfShippingAddress,

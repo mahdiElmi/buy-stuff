@@ -49,4 +49,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-d;

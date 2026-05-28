@@ -13,16 +13,17 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const session = await auth();
-
+  if (!session) redirect("/sign-in");
   const user = await prisma.user.findUnique({
     where: {
-      email: session?.user?.email!,
+      email: session.user.email,
     },
     include: { vendor: true },
   });
   if (!user) redirect("/sign-in");
   const vendor = user.vendor;
-  if (!vendor) redirect("/dashboard/#become-vendor");
+  if (!vendor) redirect("/dashboard/#become-vendor" as any);
+
   return (
     <div className="h-fit overflow-x-clip px-5">
       <h1 className="me-auto mb-10 self-start text-4xl font-black">

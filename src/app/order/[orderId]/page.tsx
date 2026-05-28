@@ -5,11 +5,9 @@ import Link from "next/link";
 import CopyToClickBoardButton from "./CopyToClickBoardButton";
 import { formatPrice } from "@/lib/utils";
 
-export default async function page(
-  props: {
-    params: Promise<{ orderId: string }>;
-  }
-) {
+export default async function page(props: {
+  params: Promise<{ orderId: string }>;
+}) {
   const params = await props.params;
   const { orderId } = params;
   const order = await prisma.order.findUnique({
@@ -53,9 +51,9 @@ export default async function page(
   return (
     <div className="">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        <h1 className="text-3xl font-bold tracking-tight ">Order Details</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Order Details</h1>
 
-        <div className="mt-2 border-b border-zinc-200 pb-5 text-sm dark:border-zinc-800 sm:flex sm:justify-between">
+        <div className="mt-2 border-b border-zinc-200 pb-5 text-sm sm:flex sm:justify-between dark:border-zinc-800">
           <dl className="flex items-end">
             <dt className="min-w-max text-zinc-500">Order Identifier&nbsp;</dt>
             <dd className="relative flex items-end gap-1 font-medium sm:w-full">
@@ -73,7 +71,7 @@ export default async function page(
                 &middot;
               </span>
             </dt>
-            <dd className="min-w-max font-medium ">
+            <dd className="min-w-max font-medium">
               <time
                 dateTime={formatISO(order.createdAt, {
                   representation: "date",
@@ -116,22 +114,22 @@ export default async function page(
                   </div>
                 </div>
                 <div className="mt-6 sm:col-span-7 sm:mt-0 md:row-end-1">
-                  <h3 className="text-lg font-medium ">
+                  <h3 className="text-lg font-medium">
                     <Link href={`/product/${cartItem.product.id}`}>
                       {cartItem.product.name}
                     </Link>
                   </h3>
-                  <p className="mt-1 font-medium ">
+                  <p className="mt-1 font-medium">
                     {formatPrice(cartItem.product.price)}
                   </p>
                   <p className="mt-3 text-zinc-500">
                     {cartItem.product.description}
                   </p>
                 </div>
-                <div className="sm:col-span-12 md:col-span-7">
-                  <dl className="grid grid-cols-1 gap-y-8 border-b border-zinc-200 py-8 dark:border-zinc-800 sm:grid-cols-2 sm:gap-x-6 sm:py-6 md:py-10">
+                {/*<div className="sm:col-span-12 md:col-span-7">
+                  <dl className="grid grid-cols-1 gap-y-8 border-b border-zinc-200 py-8 sm:grid-cols-2 sm:gap-x-6 sm:py-6 md:py-10 dark:border-zinc-800">
                     <div>
-                      <dt className="font-medium ">Delivery address</dt>
+                      <dt className="font-medium">Delivery address</dt>
                       <dd className="mt-3 text-zinc-500">
                         <span className="block">
                           {order.shippingAddress.city}
@@ -144,21 +142,21 @@ export default async function page(
                         </span>
                       </dd>
                     </div>
-                    {/* <div>
-                        <dt className="font-medium ">Shipping updates</dt>
-                        <dd className="mt-3 space-y-3 text-zinc-500">
-                          <p>{product.email}</p>
-                          <p>{product.phone}</p>
-                          <button
-                            type="button"
-                            className="font-medium text-sky-600 hover:text-sky-500"
-                          >
-                            Edit
-                          </button>
-                        </dd>
-                      </div> */}
+                    <div>
+                      <dt className="font-medium">Shipping updates</dt>
+                      <dd className="mt-3 space-y-3 text-zinc-500">
+                        <p>{product.email}</p>
+                        <p>{product.phone}</p>
+                        <button
+                          type="button"
+                          className="font-medium text-sky-600 hover:text-sky-500"
+                        >
+                          Edit
+                        </button>
+                      </dd>
+                    </div>
                   </dl>
-                  <p className="mt-6 font-medium  md:mt-10">
+                  <p className="mt-6 font-medium md:mt-10">
                     {product.status} on{" "}
                     <time dateTime={product.datetime}>{product.date}</time>
                   </p>
@@ -171,7 +169,7 @@ export default async function page(
                         }}
                       />
                     </div>
-                    <div className="mt-6 hidden grid-cols-4 font-medium text-zinc-600 dark:text-zinc-400 sm:grid">
+                    <div className="mt-6 hidden grid-cols-4 font-medium text-zinc-600 sm:grid dark:text-zinc-400">
                       <div className="text-sky-600">Order placed</div>
                       <div
                         className={cn(
@@ -199,7 +197,7 @@ export default async function page(
                       </div>
                     </div>
                   </div>
-                </div>
+                </div>*/}
               </div>
             ))}
           </div>
@@ -209,10 +207,10 @@ export default async function page(
         <div className="mt-24">
           <h2 className="sr-only">Billing Summary</h2>
 
-          <div className="rounded-lg bg-zinc-100 px-6 py-6 dark:bg-zinc-900 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-0 lg:py-8">
+          <div className="rounded-lg bg-zinc-100 px-6 py-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-0 lg:py-8 dark:bg-zinc-900">
             <dl className="grid grid-cols-1 gap-6 text-sm sm:grid-cols-2 md:gap-x-8 lg:col-span-5 lg:pl-8">
               <div>
-                <dt className="font-medium ">Billing address</dt>
+                <dt className="font-medium">Billing address</dt>
                 <dd className="mt-3 text-zinc-500">
                   <span className="block">Floyd Miles</span>
                   <span className="block">7363 Cynthia Pass</span>
@@ -220,7 +218,7 @@ export default async function page(
                 </dd>
               </div>
               <div>
-                <dt className="font-medium ">Payment information</dt>
+                <dt className="font-medium">Payment information</dt>
                 <dd className="mt-3 flex">
                   <div>
                     <svg
@@ -244,21 +242,21 @@ export default async function page(
               </div>
             </dl>
 
-            <dl className="mt-8 divide-y divide-zinc-200 text-sm dark:divide-zinc-800 lg:col-span-7 lg:mt-0 lg:pr-8">
+            <dl className="mt-8 divide-y divide-zinc-200 text-sm lg:col-span-7 lg:mt-0 lg:pr-8 dark:divide-zinc-800">
               <div className="flex items-center justify-between pb-4">
                 <dt className="text-zinc-600 dark:text-zinc-400">Subtotal</dt>
-                <dd className="font-medium ">$72</dd>
+                <dd className="font-medium">$72</dd>
               </div>
               <div className="flex items-center justify-between py-4">
                 <dt className="text-zinc-600 dark:text-zinc-400">Shipping</dt>
-                <dd className="font-medium ">$5</dd>
+                <dd className="font-medium">$5</dd>
               </div>
               <div className="flex items-center justify-between py-4">
                 <dt className="text-zinc-600 dark:text-zinc-400">Tax</dt>
-                <dd className="font-medium ">$6.16</dd>
+                <dd className="font-medium">$6.16</dd>
               </div>
               <div className="flex items-center justify-between pt-4">
-                <dt className="font-medium ">Order total</dt>
+                <dt className="font-medium">Order total</dt>
                 <dd className="font-medium text-sky-600">$83.16</dd>
               </div>
             </dl>

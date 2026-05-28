@@ -156,10 +156,7 @@ export default async function Product(props: {
                   </Link>
                   {review.reviewedBy.vendor && (
                     <Link href={`/vendors/${review.reviewedBy.vendor.id}`}>
-                      <Badge
-                        variant="simple"
-                        className="min-w-max bg-emerald-200 font-semibold tracking-wide text-emerald-800 dark:bg-emerald-900 dark:text-emerald-50"
-                      >
+                      <Badge className="min-w-max bg-emerald-200 font-semibold tracking-wide text-emerald-800 dark:bg-emerald-900 dark:text-emerald-50">
                         Sells Stuff
                       </Badge>
                     </Link>

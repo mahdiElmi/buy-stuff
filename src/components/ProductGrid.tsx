@@ -59,6 +59,7 @@ export default async function ProductGrid({
       break;
     case "price-to-high":
       orderByObject = { price: "asc" };
+      break;
     case "price-to-low":
       orderByObject = { price: "desc" };
       break;
@@ -140,7 +141,7 @@ export default async function ProductGrid({
           maxRating: productAggregations._max.averageRating || 5,
         }}
       />
-      <div className="size-full min-w-0 rounded-md bg-zinc-200 p-2 dark:bg-zinc-900">
+      <div className="size-full min-w-0 rounded-md p-2">
         {q ? (
           <h1 className="mb-2 text-3xl font-black">
             Found {productCount} matches for &quot;{q}&quot;

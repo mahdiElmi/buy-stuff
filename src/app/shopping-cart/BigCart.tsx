@@ -22,7 +22,6 @@ import Link from "next/link";
 import { useEffect, useMemo, useState, useTransition } from "react";
 
 import { mergeCartItems, formatPrice } from "@/lib/utils";
-import { signIn } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   clearCart,
@@ -87,13 +86,13 @@ export default function BigCart({
       setItems({});
     }
   }
-  function handleOrderSubmit() {
-    if (userId) {
-      handleDeleteAll();
-    } else {
-      signIn();
-    }
-  }
+  // function handleOrderSubmit() {
+  //   if (userId) {
+  //     handleDeleteAll();
+  //   } else {
+  //     signIn();
+  //   }
+  // }
 
   return (
     <div className="mt-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
@@ -421,7 +420,7 @@ function CartItemCountController({
         onClick={() => handleDelete(item.productId)}
         variant="ghost"
         size="icon"
-        className="absolute end-0 top-1 size-7 -translate-y-1"
+        className="absolute inset-e-0 top-1 size-7 -translate-y-1"
       >
         <span className="sr-only">Remove item</span>
         {isPending && currentLoading === "delete" ? (

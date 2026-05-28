@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { LocalShoppingCartItems } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -25,7 +26,7 @@ export function abbrNum(number: number, decPlaces: number) {
       number = Math.round((number * decPlaces) / size) / decPlaces;
 
       // Handle special case where we round up to the next abbreviation
-      if (number == 1000 && i < abbrev.length - 1) {
+      if (number === 1000 && i < abbrev.length - 1) {
         number = 1;
         i++;
       }

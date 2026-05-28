@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { profileSchema } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import Image from "next/image";
 import {
   useCallback,
@@ -20,7 +20,7 @@ import {
   useTransition,
 } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { updateProfile } from "./updateProfileAction";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -36,10 +36,10 @@ export default function ProfileForm({ user }: { user: User }) {
     resolver: zodResolver(profileSchema),
 
     defaultValues: {
-      username: user.name,
+      username: user.name ?? "",
       firstName: user.firstName ?? "",
       lastName: user.lastName ?? "",
-      image: user.image,
+      image: user.image ?? "",
     },
   });
   const [isPending, startTransition] = useTransition();
@@ -56,7 +56,7 @@ export default function ProfileForm({ user }: { user: User }) {
       return url;
     }
     return null;
-  }, [files]);
+  }, [files, form.setValue]);
   ``;
   const { startUpload, routeConfig } = useUploadThing("imageUploader");
 
@@ -102,7 +102,7 @@ export default function ProfileForm({ user }: { user: User }) {
     if (tempImageUrl) {
       URL.revokeObjectURL(tempImageUrl);
       setFiles([]);
-      form.setValue("image", user.image, { shouldDirty: true });
+      form.setValue("image", user.image ?? "", { shouldDirty: true });
     } else {
       form.setValue("image", "", { shouldDirty: true });
     }
@@ -111,7 +111,7 @@ export default function ProfileForm({ user }: { user: User }) {
   return (
     <Form {...form}>
       <form
-        className=" flex flex-col gap-3  "
+        className="flex flex-col gap-3"
         onSubmit={form.handleSubmit(handleFormSubmit)}
       >
         <h2 className="text-2xl font-bold">Update Profile</h2>
@@ -122,7 +122,7 @@ export default function ProfileForm({ user }: { user: User }) {
             <FormItem>
               <FormLabel>Profile Picture</FormLabel>
               <FormControl>
-                <div className="flex items-center gap-5 ">
+                <div className="flex items-center gap-5">
                   <div className="relative shrink-0">
                     <Image
                       className="size-20 rounded-full"
@@ -133,7 +133,7 @@ export default function ProfileForm({ user }: { user: User }) {
                     />
                     {form.getValues("image") !== "" && (
                       <Button
-                        className="absolute end-0 top-0 size-6 rounded-full"
+                        className="absolute inset-e-0 top-0 size-6 rounded-full"
                         variant="secondary"
                         size="icon"
                         onClick={deleteTempImage}
@@ -145,7 +145,7 @@ export default function ProfileForm({ user }: { user: User }) {
                   </div>
                   <div
                     {...getRootProps()}
-                    className="flex h-28 w-64 min-w-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-current opacity-70 hover:opacity-100 "
+                    className="flex h-28 w-64 min-w-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-current opacity-70 hover:opacity-100"
                   >
                     <Input {...rest} {...getInputProps()} />
 

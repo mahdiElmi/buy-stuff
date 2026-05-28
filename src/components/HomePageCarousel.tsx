@@ -20,7 +20,7 @@ export default function HomePageCarousel({
   headerLink: Route;
 }) {
   return (
-    <section className="h-fit w-full space-y-5 rounded-md bg-zinc-200 px-2 py-5 dark:bg-zinc-900 sm:px-5 ">
+    <section className="h-fit w-full space-y-5 rounded-md px-2 py-5 sm:px-5">
       <Link
         href={headerLink}
         className="text-3xl font-extrabold capitalize decoration-4 hover:underline md:text-4xl"
@@ -34,7 +34,7 @@ export default function HomePageCarousel({
         <CarouselContent>
           {products.map((product) => (
             <CarouselItem
-              className=" basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 2xl:basis-1/6"
+              className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 2xl:basis-1/6"
               key={product.id}
             >
               <ProductCard product={product} />

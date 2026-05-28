@@ -2,7 +2,6 @@ import Navbar from "../components/Navbar";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { auth } from "@/server/auth";
-import SessionProvider from "../components/SessionProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { Provider as JotaiProvider } from "jotai";
 import { ThemeProvider } from "@/components/ThemeProvider";

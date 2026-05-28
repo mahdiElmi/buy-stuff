@@ -96,7 +96,7 @@ export default function ShoppingCart({
           <Button variant="ghostHoverLess" className="relative" size="icon">
             <span
               className={cn(
-                "absolute end-0 top-0 flex size-4 items-center justify-center rounded-full bg-zinc-200 p-1 text-xs font-bold dark:bg-zinc-700",
+                "absolute inset-e-0 top-0 flex size-4 items-center justify-center rounded-full bg-zinc-200 p-1 text-xs font-bold dark:bg-zinc-700",
                 isMerging && "animate-pulse",
               )}
             >
@@ -197,7 +197,7 @@ export default function ShoppingCart({
           >
             <span
               className={cn(
-                "absolute end-0 top-0 flex size-4 items-center justify-center rounded-full bg-zinc-200 p-1 text-xs font-bold dark:bg-zinc-700",
+                "absolute inset-e-0 top-0 flex size-4 items-center justify-center rounded-full bg-zinc-200 p-1 text-xs font-bold dark:bg-zinc-700",
                 isMerging && "animate-pulse",
               )}
             >

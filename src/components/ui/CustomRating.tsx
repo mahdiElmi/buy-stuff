@@ -5,20 +5,14 @@ type CustomRatingProps = {
   color?: "gold" | "basic";
 } & ComponentProps<typeof Rating>;
 
-const CustomRating = (
-  {
-    ref,
-    color = "basic",
-    ...otherProps
-  }: CustomRatingProps & {
-    ref: React.RefObject<HTMLDivElement>;
-  }
-) => {
+const CustomRating = ({
+  color = "basic",
+  ...otherProps
+}: CustomRatingProps) => {
   const themeAdjustedFillColor: string =
     color === "basic" ? "rgb(113 113 122)" : "rgb(250 204 21)";
   return (
     <Rating
-      ref={ref}
       itemStyles={{
         itemShapes: ThinRoundedStar,
         activeFillColor: themeAdjustedFillColor,

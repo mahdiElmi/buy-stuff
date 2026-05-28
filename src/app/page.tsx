@@ -64,7 +64,7 @@ export default async function HomePage() {
         headerText="Deals"
       />
 
-      <section className="h-fit w-full space-y-5 rounded-md bg-zinc-200 px-2 py-5 sm:px-5 dark:bg-zinc-900">
+      <section className="h-fit w-full space-y-5 rounded-md px-2 py-5 sm:px-5">
         <h2 className="text-3xl font-extrabold capitalize md:text-4xl">
           Shop By Category
         </h2>

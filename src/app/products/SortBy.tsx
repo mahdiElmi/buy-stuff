@@ -80,7 +80,7 @@ function SortBy({
   return (
     <aside
       className={cn(
-        "flex size-fit items-end gap-10 rounded-md bg-zinc-200 text-nowrap break-keep lg:sticky lg:top-16 lg:flex-col lg:items-start lg:gap-0 lg:p-2 dark:bg-zinc-900",
+        "bg-muted/30 flex size-fit items-end gap-10 rounded-md text-nowrap break-keep lg:sticky lg:top-16 lg:flex-col lg:items-start lg:gap-0 lg:p-2",
         className,
       )}
     >

@@ -16,7 +16,7 @@ export default async function Page() {
     where: { email: session!.user!.email! },
     include: { vendor: { include: { products: true } } },
   });
-  if (!user!.vendor) redirect("/dashboard/#become-vendor");
+  if (!user!.vendor) redirect("/dashboard/#become-vendor" as any);
 
   const { products } = user!.vendor!;
   return (

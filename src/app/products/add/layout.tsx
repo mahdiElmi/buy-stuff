@@ -9,7 +9,7 @@ async function layout({ children }: { children: React.ReactNode }) {
     where: { email: session!.user!.email! },
     include: { vendor: true },
   });
-  if (!user?.vendor) redirect(`/dashboard/#become-vendor`);
+  if (!user?.vendor) redirect(`/dashboard/#become-vendor` as any);
 
   return <>{children}</>;
 }

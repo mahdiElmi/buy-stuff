@@ -2,7 +2,7 @@
 
 import BlogPostCard from "@/components/BlogPostCard";
 import posts from "@/postsData";
-import { useMemo, useState } from "react";
+import { useMemo, useState, JSX } from "react";
 import { Input } from "./ui/input";
 
 function Posts() {

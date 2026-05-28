@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,97 +14,23 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Filter, RotateCcw, Trash } from "lucide-react";
-
+import { ChevronDown, Filter, RotateCcw } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-const FormSchema = z
-  .object({
-    priceFrom: z
-      .string()
-      .transform((val) => {
-        let num = parseFloat(val);
-        if (num <= 0 || isNaN(num)) num = 0;
-        return num;
-      })
-      .or(z.number()),
-    priceTo: z
-      .string()
-      .transform((val) => {
-        let num = parseFloat(val);
-        if (num <= 0 || isNaN(num)) num = Infinity;
-        return num;
-      })
-      .or(z.number()),
-    ratingFrom: z
-      .string()
-      .transform((val) => {
-        let num = parseFloat(val);
-        if (num <= 0 || isNaN(num)) num = 0;
-        return num;
-      })
-      .or(z.number()),
-    ratingTo: z
-      .string()
-      .transform((val) => {
-        let num = parseFloat(val);
-        if (num <= 0 || isNaN(num)) num = 5;
-        return num;
-      })
-      .or(z.number()),
-    price: z.tuple([
-      z
-        .string()
-        .transform((val) => {
-          let num = parseFloat(val);
-          if (num <= 0 || isNaN(num)) num = 0;
-          return num;
-        })
-        .or(z.number()),
-      z
-        .string()
-        .transform((val) => {
-          let num = parseFloat(val);
-          if (num <= 0 || isNaN(num)) num = Infinity;
-          return num;
-        })
-        .or(z.number()),
-    ]),
-    rating: z.tuple([
-      z
-        .string()
-        .transform((val) => {
-          let num = parseFloat(val);
-          if (num <= 0 || isNaN(num)) num = 0;
-          return num;
-        })
-        .or(z.number()),
-      z
-        .string()
-        .transform((val) => {
-          let num = parseFloat(val);
-          if (num <= 0 || isNaN(num)) num = 5;
-          return num;
-        })
-        .or(z.number()),
-    ]),
-  })
-  .transform((obj) => {
-    const newObj = { ...obj };
-    if (obj.priceTo < obj.priceFrom) newObj.priceFrom = obj.priceTo;
-    if (obj.ratingTo < obj.ratingFrom) newObj.ratingFrom = obj.ratingTo;
-    return obj;
-  });
+// ✅ SIMPLIFIED SCHEMA: Strictly numbers, matching the Slider component's output
+const FormSchema = z.object({
+  price: z.tuple([z.number(), z.number()]),
+  rating: z.tuple([z.number(), z.number()]),
+});
 
 function FilterBy({
   filters,
@@ -126,35 +51,46 @@ function FilterBy({
   const searchQueryParam = searchParams.get("q")
     ? `&q=${searchParams.get("q")}`
     : "";
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      priceFrom: minPrice,
-      priceTo: maxPrice,
       price: [minPrice, maxPrice],
       rating: [minRating, maxRating],
-      ratingFrom: minRating,
-      ratingTo: maxRating,
     },
   });
 
-  let isRestedDisabled = false;
-  if (searchParams.get("rating") === null && searchParams.get("price") === null)
-    isRestedDisabled = true;
+  const isRestedDisabled =
+    searchParams.get("rating") === null && searchParams.get("price") === null;
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    // ✅ FIX: Handle inverted slider ranges safely here instead of in Zod
+    const p0 = Math.min(data.price[0], data.price[1]);
+    const p1 = Math.max(data.price[0], data.price[1]);
+    const r0 = Math.min(data.rating[0], data.rating[1]);
+    const r1 = Math.max(data.rating[0], data.rating[1]);
+
     router.push(
-      `?sort=${sortParam}&price=${data.price[0]}to${data.price[1]}&rating=${data.rating[0]}to${data.rating[1]}${searchQueryParam}`,
+      `?sort=${sortParam}&price=${p0}to${p1}&rating=${r0}to${r1}${searchQueryParam}`,
+      { scroll: true },
     );
   }
+
+  const resetAndClearParams = () => {
+    form.reset({
+      price: [minPrice, maxPrice],
+      rating: [minRating, maxRating],
+    });
+  };
 
   return (
     <aside
       className={cn(
-        "flex h-fit w-full rounded-md bg-zinc-200 p-2 text-nowrap break-keep lg:sticky lg:top-16 lg:w-max lg:flex-col dark:bg-zinc-900",
+        "bg-muted/30 flex h-fit w-full rounded-md p-2 text-nowrap break-keep lg:sticky lg:top-16 lg:w-max lg:flex-col",
         className,
       )}
     >
+      {/* MOBILE DRAWER */}
       <Drawer>
         <DrawerTrigger className="flex items-center gap-2 text-xl font-bold lg:hidden lg:text-2xl">
           <Filter className="size-6 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 lg:h-7 lg:w-7 dark:border-zinc-800 dark:bg-zinc-950" />
@@ -171,27 +107,27 @@ function FilterBy({
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex w-full items-stretch justify-stretch gap-4 lg:flex-col lg:gap-5"
+              className="flex w-full flex-col gap-5"
             >
               <FormField
                 control={form.control}
                 name="price"
-                render={({ field: { onChange, ...fields } }) => (
+                render={({ field: { value, onChange } }) => (
                   <FormItem className="w-full">
                     <FormLabel asChild className="text-xl font-semibold">
                       <h3>Price</h3>
                     </FormLabel>
                     <div className="flex justify-between">
                       <span className="text-sm font-medium">
-                        {formatPrice(fields.value[0])}
+                        {formatPrice(value[0])}
                       </span>
                       <span className="text-sm font-medium">
-                        {formatPrice(fields.value[1])}
+                        {formatPrice(value[1])}
                       </span>
                     </div>
                     <FormControl>
                       <Slider
-                        {...fields}
+                        value={value}
                         onValueChange={onChange}
                         min={minPrice}
                         max={maxPrice}
@@ -227,10 +163,13 @@ function FilterBy({
                   </FormItem>
                 )}
               />
-
-              <div className="hidden gap-2 lg:flex">
+            </form>
+          </Form>
+          <DrawerFooter>
+            <div className="ms-auto flex gap-2">
+              <DrawerClose asChild>
                 <Button
-                  onClick={() => form.reset()}
+                  onClick={resetAndClearParams}
                   variant="outline"
                   size="sm"
                   className="mt-3"
@@ -245,93 +184,54 @@ function FilterBy({
                     <RotateCcw className="me-1 size-4" /> Reset
                   </Link>
                 </Button>
-                <Button type="submit" size="sm" className="mt-3">
-                  Apply
-                </Button>
-              </div>
-            </form>
-          </Form>
-          <DrawerFooter>
-            <div className="ms-auto flex gap-2 lg:hidden">
-              <DrawerClose
-                className={cn(isRestedDisabled && "pointer-events-none")}
-              >
+              </DrawerClose>
+              <DrawerClose asChild>
                 <Button
-                  onClick={() => form.reset()}
-                  variant="outline"
+                  type="submit"
                   size="sm"
                   className="mt-3"
-                  asChild
+                  onClick={form.handleSubmit(onSubmit)}
                 >
-                  <Link
-                    href={`?sort=${sortParam}`}
-                    className={cn(
-                      isRestedDisabled && "pointer-events-none opacity-50",
-                    )}
-                  >
-                    <RotateCcw className="me-1 size-4" /> Reset
-                  </Link>
+                  Apply
                 </Button>
               </DrawerClose>
-              <Button type="submit" size="sm" className="mt-3">
-                Apply
-              </Button>
             </div>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
+
+      {/* DESKTOP SIDEBAR */}
       <div className="mb-3 hidden items-center gap-2 text-2xl font-bold lg:flex">
         <h2 className="flex items-center gap-2 text-2xl font-bold">
           <Filter className="size-7 rounded-md border border-zinc-300 bg-zinc-50 fill-inherit p-1 dark:border-zinc-800 dark:bg-zinc-950" />
           Filter
         </h2>
-        <div className="ms-auto flex gap-2 lg:hidden">
-          <Button
-            onClick={() => form.reset()}
-            variant="outline"
-            size="sm"
-            className="mt-3"
-            asChild
-          >
-            <Link
-              href={`?${sortParam}${searchQueryParam}`}
-              className={cn(
-                isRestedDisabled && "pointer-events-none opacity-50",
-              )}
-            >
-              <RotateCcw className="me-1 size-4" /> Reset
-            </Link>
-          </Button>
-          <Button type="submit" size="sm" className="mt-3">
-            Apply
-          </Button>
-        </div>
       </div>
 
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="hidden w-full items-stretch justify-stretch gap-4 lg:flex lg:flex-col lg:gap-5"
+          className="hidden w-full flex-col gap-5 lg:flex"
         >
           <FormField
             control={form.control}
             name="price"
-            render={({ field: { onChange, ...fields } }) => (
+            render={({ field: { value, onChange } }) => (
               <FormItem className="w-full">
                 <FormLabel asChild className="text-xl font-semibold">
                   <h3>Price</h3>
                 </FormLabel>
                 <div className="flex justify-between">
                   <span className="text-sm font-medium">
-                    {formatPrice(fields.value[0])}
+                    {formatPrice(value[0])}
                   </span>
                   <span className="text-sm font-medium">
-                    {formatPrice(fields.value[1])}
+                    {formatPrice(value[1])}
                   </span>
                 </div>
                 <FormControl>
                   <Slider
-                    {...fields}
+                    value={value}
                     onValueChange={onChange}
                     min={minPrice}
                     max={maxPrice}
@@ -368,16 +268,16 @@ function FilterBy({
             )}
           />
 
-          <div className="hidden gap-2 lg:flex">
+          <div className="flex gap-2">
             <Button
-              onClick={() => form.reset()}
+              onClick={resetAndClearParams}
               variant="outline"
               size="sm"
               className="mt-3"
               asChild
             >
               <Link
-                href={`?sort=${sortParam}`}
+                href={`?sort=${sortParam}${searchQueryParam}`}
                 className={cn(
                   isRestedDisabled && "pointer-events-none opacity-50",
                 )}
